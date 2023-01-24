@@ -54,3 +54,42 @@ bool Mult::equals(Expr* e) {
             && rhs->equals(m->rhs));
 }
 
+Var::Var(std::string name)
+{
+    this->name = name ;
+}
+
+bool Var::equals(Expr *e)
+{
+    Var* v = dynamic_cast<Var*>(e);
+    if (v == nullptr)
+        return false;
+    else
+        return name == v->name;
+}
+
+
+//-----------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+TEST_CASE( "equals" ) {
+    CHECK( (new Num(1))->equals(new Num(1)) );
+    CHECK( ! (new Num (1))->equals(new Num(2)) );
+    CHECK( ! (new Num (1))->equals(new Mult(new Num(2), new Num(4))) );
+    CHECK(!(new Num (8))->equals(new Mult(new Num(2), new Num(4))) );
+    CHECK(!(new Num (1))->equals(new Mult(new Num(1), new Num(1))) );
+
+
+    CHECK( (new Var("x"))->equals(new Var("x")) );
+    CHECK( ! (new Var("x"))->equals(new Num(5)) );
+    CHECK( !(new Var("x"))->equals(new Var("y")) );
+
+    
+    CHECK( (new Add(new Num(8), new Num(9)))
+          ->equals(new Add(new Num(8), new Num(9))) );
+    CHECK( ! (new Add (new Num(8), new Num(9)))
+          ->equals(new Add(new Num(8), new Num(10))) );
+    CHECK( ! (new Add (new Num(8), new Num(9)))
+          ->equals(new Add(new Num(10), new Num(9))) );
+    CHECK( ! (new Add(new Num(8), new Num(9)))
+          ->equals(new Num(8)) );
+}

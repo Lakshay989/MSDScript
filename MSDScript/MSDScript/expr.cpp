@@ -93,14 +93,16 @@ TEST_CASE( "equals" ) {
           ->equals(new Add(new Num(10), new Num(9))) );
     CHECK( ! (new Add(new Num(8), new Num(9)))
           ->equals(new Num(8)) );
-}
     
-    TEST_CASE( "equals tests from class" )
-{
-      CHECK( (new Num(1))->equals(new Num(1)) == true );
-      CHECK( (new Var("x"))->equals(new Var("y")) == false );
-      CHECK( (new Add(new Num(2),new Num(3)))->equals(new Add(new Num(2),new Num(3)))==true );
-      CHECK( (new Add(new Num(2),new Num(3)))->equals(new Add(new Num(3),new Num(2)))==false );
-      CHECK( (new Mult(new Num(2),new Num(2)))->equals(new Add(new Num(1),new Num(2)))==false );
+    CHECK( (new Mult(new Num(1),new Num(2)))->equals(new Add(new Num(1),new Num(2)))==false );
+
 }
+    TEST_CASE( "equals (Tests posted on Slack Channel)" )
+{
+        CHECK( (new Num(1))->equals(new Num(1)) == true );
+        CHECK( (new Var("x"))->equals(new Var("y")) == false );
+        CHECK( (new Add(new Num(2),new Num(3)))->equals(new Add(new Num(2),new Num(3)))==true );
+        CHECK( (new Add(new Num(2),new Num(3)))->equals(new Add(new Num(3),new Num(2)))==false );
+        CHECK( (new Mult(new Num(2),new Num(2)))->equals(new Add(new Num(1),new Num(2)))==false );
+    }
     

@@ -47,7 +47,8 @@ void use_arguments(int argc , char* argv[])
         }
         else if(strcmp(argv[i],"--test") == 0)
         {
-            Catch::Session().run(1, argv);
+            if(Catch::Session().run(1, argv) != 0)
+                exit(1);
             cout<<"Tests passed \n";
             test_occured = true;
         }

@@ -2,23 +2,26 @@ CXX=c++
 CFLAGS= -std=c++17
 
 CXXSOURCE= cmdline.cpp  main.cpp expr.cpp
+OBJS = main.o cmdline.o expr.o
 HEADERS= cmdline.hpp expr.hpp
 
 CCOMPILE = -c
 CLINK = -o
 
-#run: msdscript
-#	./msdscript
+msdscript: $(OBJS)
+	$(CXX) $(CFLAGS) main.o cmdline.o expr.o -o msdscript
 
-output: msdscript
+main.o: main.cpp
+	c++ -std=c++17 -c main.cpp
 
-general: $(CXXSOURCE) $(HEADERS)
-	$(CXX) $(CCOMPILE) $(CXXSOURCE)
+cmdline.o: cmdline.cpp cmdline.hpp catch.h
+	c++ -std=c++17 -c cmdline.cpp
 
-
-msdscript: cmdline.o main.o expr.o catch.h
-	$(CXX) cmdline.o main.o expr.o $(CLINK) msdscript
-
+expr.o: expr.hpp catch.h
+	c++ -std=c++17 -c expr.cpp
 clean:
-	rm -rf msdscript *.o
+	rm -f *.o msdscript
 
+.PHONY: test
+test: msdscript
+	./msdscript --test

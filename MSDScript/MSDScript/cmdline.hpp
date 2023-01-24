@@ -8,6 +8,7 @@
 #ifndef cmdline_hpp
 #define cmdline_hpp
 //
+#include "catch.h"
 #include <stdio.h>
 #include <iostream>
 #include <string>

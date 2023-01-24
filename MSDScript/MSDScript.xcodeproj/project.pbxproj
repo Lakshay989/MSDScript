@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E195CD10297E56F900E492CE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E195CD0F297E56F900E492CE /* main.cpp */; };
 		E195CD1C297E58F200E492CE /* cmdline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E195CD1A297E58F200E492CE /* cmdline.cpp */; };
+		E195CD1F297F049400E492CE /* expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E195CD1D297F049400E492CE /* expr.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +29,9 @@
 		E195CD0F297E56F900E492CE /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		E195CD1A297E58F200E492CE /* cmdline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cmdline.cpp; sourceTree = "<group>"; };
 		E195CD1B297E58F200E492CE /* cmdline.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cmdline.hpp; sourceTree = "<group>"; };
+		E195CD1D297F049400E492CE /* expr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = expr.cpp; sourceTree = "<group>"; };
+		E195CD1E297F049400E492CE /* expr.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = expr.hpp; sourceTree = "<group>"; };
+		E195CD20297F85B000E492CE /* catch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = catch.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,9 @@
 			isa = PBXGroup;
 			children = (
 				E195CD0F297E56F900E492CE /* main.cpp */,
+				E195CD1D297F049400E492CE /* expr.cpp */,
+				E195CD20297F85B000E492CE /* catch.h */,
+				E195CD1E297F049400E492CE /* expr.hpp */,
 				E195CD1A297E58F200E492CE /* cmdline.cpp */,
 				E195CD1B297E58F200E492CE /* cmdline.hpp */,
 			);
@@ -126,6 +133,7 @@
 			files = (
 				E195CD1C297E58F200E492CE /* cmdline.cpp in Sources */,
 				E195CD10297E56F900E492CE /* main.cpp in Sources */,
+				E195CD1F297F049400E492CE /* expr.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

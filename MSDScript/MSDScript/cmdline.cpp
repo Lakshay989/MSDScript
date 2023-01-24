@@ -5,6 +5,9 @@
 //  Created by Lakshay Santosh Kucheriya on 1/16/23.
 //
 
+#define CATCH_CONFIG_RUNNER
+
+
 #include "cmdline.hpp"
 //#include <stdio.h>
 //#include <iostream>
@@ -19,7 +22,6 @@ using namespace std ;
 
 void use_arguments(int argc , char* argv[])
 {
-    
     
     if(argc == 1)
     {
@@ -45,6 +47,7 @@ void use_arguments(int argc , char* argv[])
         }
         else if(strcmp(argv[i],"--test") == 0)
         {
+            Catch::Session().run(1, argv);
             cout<<"Tests passed \n";
             test_occured = true;
         }

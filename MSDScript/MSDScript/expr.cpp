@@ -7,6 +7,7 @@
 
 #include "expr.hpp"
 
+#include "catch.h"
 
 Num::Num(int val)
 {
@@ -15,7 +16,7 @@ Num::Num(int val)
 
 bool Num::equals(Expr *e)
 {
-    Num* n = dynamic_cast<Num*>(e);
+    Num *n = dynamic_cast<Num*>(e);
     if (n == NULL)
         return false;
     else
@@ -30,7 +31,7 @@ Add::Add(Expr *lhs, Expr *rhs)
     
 bool Add::equals(Expr *e)
 {
-    Add* a = dynamic_cast<Add*>(e);
+    Add *a = dynamic_cast<Add*>(e);
     if (a == NULL)
         return false;
     else

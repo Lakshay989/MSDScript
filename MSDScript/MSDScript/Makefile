@@ -1,8 +1,8 @@
 CXX=c++
-CFLAGS= -std=c++11
+CFLAGS= -std=c++17
 
-CXXSOURCE= cmdline.cpp  main.cpp
-HEADERS= cmdline.hpp
+CXXSOURCE= cmdline.cpp  main.cpp expr.cpp
+HEADERS= cmdline.hpp expr.hpp
 
 CCOMPILE = -c
 CLINK = -o
@@ -15,8 +15,9 @@ output: msdscript
 general: $(CXXSOURCE) $(HEADERS)
 	$(CXX) $(CCOMPILE) $(CXXSOURCE)
 
-msdscript: cmdline.o main.o
-	$(CXX) cmdline.o main.o $(CLINK) msdscript
+
+msdscript: cmdline.o main.o expr.o catch.h
+	$(CXX) cmdline.o main.o expr.o $(CLINK) msdscript
 
 clean:
 	rm -rf msdscript *.o

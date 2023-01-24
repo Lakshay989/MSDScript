@@ -14,6 +14,6 @@
 int main(int argc, char  **argv) {
     // insert code here...
     use_arguments(argc, argv);
-    Catch::Session().run(argc, argv);
+    Catch::Session().run(1, argv);
     return 0;
 }

@@ -16,8 +16,9 @@
 class Expr
 {
 public:
-    virtual bool equals(Expr *e) = 0;
-    virtual int interp() = 0;
+    virtual bool equals(Expr *e) = 0 ;
+    virtual int interp() = 0 ;
+    virtual bool has_variable() = 0 ;
 };
 
 class Num : public Expr
@@ -28,6 +29,7 @@ public:
     Num(int val);
     bool equals(Expr *e) ;
     int interp();
+    bool has_variable();
 };
 
 class Add : public Expr
@@ -39,6 +41,7 @@ public:
     Add(Expr *lhs, Expr *rhs);
     bool equals(Expr *e) ;
     int interp();
+    bool has_variable();
 
 };
 
@@ -51,7 +54,7 @@ public:
     Mult(Expr *lhs, Expr *rhs);
     bool equals(Expr *e) ;
     int interp();
-
+    bool has_variable();
 };
 
 
@@ -63,6 +66,7 @@ public:
       Var(std::string name);
       bool equals(Expr *e);
       int interp();
+      bool has_variable();
 };
 
 #endif /* expr_hpp */

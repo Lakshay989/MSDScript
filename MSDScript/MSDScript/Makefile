@@ -8,7 +8,7 @@ HEADERS= cmdline.hpp expr.hpp
 CCOMPILE = -c
 CLINK = -o
 
-msdscript: $(OBJS) $(CXXSOURCE)
+msdscript: $(OBJS)
 	$(CXX) $(CFLAGS) main.o cmdline.o expr.o -o msdscript
 
 main.o: main.cpp

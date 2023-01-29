@@ -34,6 +34,11 @@ bool Num::has_variable()
     return false;
 }
 
+Expr* Num::subst(std::string s, Expr* e)
+{
+    return this ;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -65,6 +70,12 @@ bool Add::has_variable()
     return (lhs->has_variable() || rhs->has_variable()) ;
 }
 
+Expr* Add::subst(std::string s, Expr* e)
+{
+    return new Add(lhs->subst(s, e), rhs->subst(s, e));
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -91,6 +102,12 @@ int Mult::interp()
 bool Mult::has_variable()
 {
     return (lhs->has_variable() || rhs->has_variable());
+}
+
+
+Expr* Mult::subst(std::string s, Expr* e)
+{
+    return new Mult(lhs->subst(s, e), rhs->subst(s, e));
 }
 
      
@@ -121,6 +138,18 @@ int Var::interp()
 bool Var::has_variable()
 {
     return true;
+}
+
+Expr* Var::subst(std::string s, Expr* e)
+{
+    if(name == s)
+    {
+        return e ;
+    }
+    else
+    {
+        return this ;
+    }
 }
 
 
@@ -192,4 +221,33 @@ TEST_CASE("Test for has_variable")
     CHECK( (new Var("x"))->has_variable() == true );
     CHECK( (new Add(new Num(5),new Num(6)))->has_variable() == false );
     CHECK( (new Add(new Var("x"),new Var("y")))->has_variable() == true );
-    CHECK( (new Mult(new Num(2),new Var("x")))->has_variable() == true );}
+    CHECK( (new Mult(new Num(2),new Var("x")))->has_variable() == true );
+    
+}
+
+TEST_CASE("Test for subst")
+{
+    CHECK( (new Add(new Var("x"), new Num(7)))
+          ->subst("x", new Var("y"))
+          ->equals(new Add(new Var("y"), new Num(7))) );
+    
+    CHECK( (new Var("x"))
+          ->subst("x", new Add(new Var("y"),new Num(7)))
+          ->equals(new Add(new Var("y"),new Num(7))) );
+    
+    CHECK( (new Num(7))->subst("x", new Var("y"))->equals(new Num(7))==true );
+    CHECK( (new Var("x"))->subst("W", new Var("y"))->equals(new Var("x"))==true );
+    CHECK( (new Add(new Num(8), new Num(2)))->subst("x", new Var("y"))
+          ->equals(new Add(new Num(8), new Num(2)))==true );
+    
+    CHECK( (new Num(10))->subst("MSD", new Num(3))
+          ->equals(new Num(10)) );
+    CHECK( (new Var("CS6014"))->subst("MSD", new Num(3))
+          ->equals(new Var("CS6014")) );
+    CHECK( (new Var("MSD"))->subst("MSD", new Num(3) )
+          ->equals(new Num(3) ) );
+    CHECK( (new Add(new Num(2), new Var("MSD")))->subst("MSD", new Num(3))
+          ->equals(new Add(new Num(2), new Num(3))) );
+    CHECK( (new Mult(new Num(2), new Var("MSD")))->subst("MSD", new Num(3))
+          ->equals(new Mult(new Num(2), new Num(3))) );
+}

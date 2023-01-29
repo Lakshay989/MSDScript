@@ -9,6 +9,7 @@
 
 #include "catch.h"
 
+
 Num::Num(int val)
 {
     this->val = val;
@@ -22,6 +23,17 @@ bool Num::equals(Expr *e)  // Num Equals
     else
         return val == n->val;
 }
+
+
+int Num::interp()
+{
+    return int(val);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 Add::Add(Expr *lhs, Expr *rhs)
 {
@@ -37,7 +49,17 @@ bool Add::equals(Expr *e) // Add Equals
     else
         return (lhs->equals(a->lhs)
                 && rhs->equals(a->rhs));
-    }
+}
+
+int Add::interp()
+{
+    return (int)lhs->interp() + (int)rhs->interp() ;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 Mult::Mult(Expr *lhs, Expr *rhs)
 {
@@ -54,6 +76,17 @@ bool Mult::equals(Expr* e) { // Mult equals
             && rhs->equals(m->rhs));
 }
 
+int Mult::interp()
+{
+    return (int)lhs->interp() * (int)rhs->interp();
+}
+
+     
+     
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+     
+
 Var::Var(std::string name)
 {
     this->name = name ;
@@ -67,6 +100,11 @@ bool Var::equals(Expr *e)  // Var equals
     else
         return name == v->name;
 }
+
+ int Var::interp()
+ {
+     throw std::runtime_error("interp does not work with Variable Expressions !!");
+ }
 
 
 //-----------------------------------------------------------------------------------------------------
@@ -105,4 +143,12 @@ TEST_CASE( "equals" ) {
         CHECK( (new Add(new Num(2),new Num(3)))->equals(new Add(new Num(3),new Num(2)))==false );
         CHECK( (new Mult(new Num(2),new Num(2)))->equals(new Add(new Num(1),new Num(2)))==false );
     }
-    
+
+// ------------------------------------------------------------------------------------------------------------
+
+TEST_CASE("Tests for checking interp")
+{
+    CHECK_THROWS_WITH( (new Var("x"))->interp(), "interp does not work with Variable Expressions !!" );
+    CHECK( (new Mult(new Num(3), new Num(2)))->interp()==6 );
+    CHECK( (new Add(new Add(new Num(10), new Num(15)),new Add(new Num(20),new Num(20))))->interp()==65);
+}

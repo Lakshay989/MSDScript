@@ -17,7 +17,7 @@ main.o: main.cpp
 cmdline.o: cmdline.cpp cmdline.hpp catch.h
 	c++ -std=c++17 -c cmdline.cpp
 
-expr.o: expr.hpp catch.h
+expr.o: expr.cpp expr.hpp catch.h
 	c++ -std=c++17 -c expr.cpp
 clean:
 	rm -f *.o msdscript

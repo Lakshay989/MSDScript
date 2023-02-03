@@ -24,7 +24,7 @@ tests.o: tests.cpp catch.h
 	c++ -std=c++17 -c tests.cpp
 
 clean:
-	rm -f *.o msdscript
+	rm -f *.o *.out
 
 .PHONY: test
 test: msdscript

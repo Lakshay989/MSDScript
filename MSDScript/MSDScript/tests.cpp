@@ -116,3 +116,43 @@ TEST_CASE("Test for subst")
 
 // ------------------------------------------------------------------------------------------------------------
 
+
+
+TEST_CASE("to_string") {
+    SECTION("Test Num to_string") {
+        REQUIRE((new Num(10))->to_string() == "10");
+        REQUIRE((new Num(-1))->to_string() == "-1");
+    }
+    
+    SECTION("Test Add to_string") {
+        Add *add_test1 = new Add(new Num(1), new Num(-1));
+        Add *add_test2 = new Add(add_test1, new Num(3));
+        Add *add_test3 = new Add(new Num(1), new Mult(new Num(1), new Num(2)));
+        Add *add_test4 = new Add(new Num(1), new Var("x"));
+        
+        REQUIRE(add_test1->to_string() == "(1+-1)");
+        REQUIRE(add_test2->to_string() == "((1+-1)+3)");
+        REQUIRE(add_test3->to_string() == "(1+(1*2))");
+        REQUIRE(add_test4->to_string() == "(1+x)");
+    }
+    
+    SECTION("Test Mult to_string") {
+        Mult *mult_test1 = new Mult(new Num(1), new Num(-2));
+        Mult *mult_test2 = new Mult(mult_test1, new Num(3));
+        Mult *mult_test3 = new Mult(new Num(1), new Add(new Num(2), new Num(3)));
+        Mult *mult_test4 = new Mult(new Num(1), new Var("x"));
+        
+        
+        REQUIRE(mult_test1->to_string() == "(1*-2)");
+        REQUIRE(mult_test2->to_string() == "((1*-2)*3)");
+        REQUIRE(mult_test3->to_string() == "(1*(2+3))");
+        REQUIRE(mult_test4->to_string() == "(1*x)");
+        
+    }
+}
+    
+TEST_CASE("to_pretty_string") {
+    SECTION("Test Num to_pretty_string") {
+        REQUIRE((new Num(10))->to_pretty_string() == "10");
+    }
+}

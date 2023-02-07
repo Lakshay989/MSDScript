@@ -8,7 +8,6 @@
 #include "expr.hpp"
 
 
-
 Num::Num(int val)
 {
     this->val = val;
@@ -36,6 +35,14 @@ bool Num::has_variable()
 Expr* Num::subst(std::string s, Expr* e)
 {
     return this ;
+}
+
+void Num::print(std::ostream &out) {
+    out << std::to_string(val);
+}
+
+void Num::pretty_print(std::ostream &out) {
+    out << std::to_string(val);
 }
 
 
@@ -74,6 +81,26 @@ Expr* Add::subst(std::string s, Expr* e)
     return new Add(lhs->subst(s, e), rhs->subst(s, e));
 }
 
+void Add::print(std::ostream &out) {
+    out << "(";
+    this->lhs->print(out);
+    out << "+";
+    this->rhs->print(out);
+    out << ")";
+}
+
+void Add::pretty_print(std::ostream &out) {
+    operator_precedence lhs_precedence = pretty_print_at(this->lhs);
+    if (lhs_precedence == precedence_add) {
+        out << "(";
+        this->lhs->pretty_print(out);
+        out << ")";
+    } else {
+        out << this->lhs->to_pretty_string();
+    }
+    out << " + ";
+    out << this->rhs->to_pretty_string();
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -109,6 +136,33 @@ Expr* Mult::subst(std::string s, Expr* e)
     return new Mult(lhs->subst(s, e), rhs->subst(s, e));
 }
 
+void Mult::print(std::ostream &out) {
+    out << "(";
+    this->lhs->print(out);
+    out << "*";
+    this->rhs->print(out);
+    out << ")";
+}
+
+void Mult::pretty_print(std::ostream &out) {
+    operator_precedence lhs_precedence = pretty_print_at(this->lhs);
+    operator_precedence rhs_precedence = pretty_print_at(this->rhs);
+    if (lhs_precedence >= precedence_add) {
+        out << "(";
+        this->lhs->pretty_print(out);
+        out << ")";
+    } else {
+        this->lhs->pretty_print(out);
+    }
+    out << " * ";
+    if (rhs_precedence == precedence_add) {
+        out << "(";
+        this->rhs->pretty_print(out);
+        out << ")";
+    } else {
+        this->rhs->pretty_print(out);
+    }
+}
      
      
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,5 +204,27 @@ Expr* Var::subst(std::string s, Expr* e)
         return this ;
     }
 }
+
+void Var::print(std::ostream &out) {
+    out << this->name;
+}
+
+void Var::pretty_print(std::ostream &out) {
+    out << this->name;
+}
+
+
+operator_precedence pretty_print_at(Expr *e) {
+    Add *add = dynamic_cast<Add *>(e);
+    if (add != NULL) {
+        return precedence_add;
+    }
+    Mult *mult = dynamic_cast<Mult *>(e);
+    if (mult != NULL) {
+        return precedence_mult;
+    }
+    return precedence_none;
+}
+
 
 

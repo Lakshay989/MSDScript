@@ -85,6 +85,8 @@ TEST_CASE("Test for has_variable")
 
 }
 
+// ------------------------------------------------------------------------------------------------------------
+
 TEST_CASE("Test for subst")
 {
     CHECK( (new Add(new Var("x"), new Num(7)))
@@ -110,4 +112,211 @@ TEST_CASE("Test for subst")
           ->equals(new Add(new Num(2), new Num(3))) );
     CHECK( (new Mult(new Num(2), new Var("MSD")))->subst("MSD", new Num(3))
           ->equals(new Mult(new Num(2), new Num(3))) );
+}
+
+// ------------------------------------------------------------------------------------------------------------
+
+TEST_CASE("to_string") {
+    SECTION("Test Num to_string") {
+        REQUIRE((new Num(10))->to_string() == "10");
+        REQUIRE((new Num(-1))->to_string() == "-1");
+    }
+
+    SECTION("Test Add to_string") {
+        Add *add_num_1_num_neg1 = new Add(new Num(1), new Num(-1));
+        Add *add_add_1_neg1_num_3 = new Add(add_num_1_num_neg1, new Num(3));
+        Add *add_num_1_mult_1_2 = new Add(new Num(1), new Mult(new Num(1), new Num(2)));
+        Add *add_num_1_variable_x = new Add(new Num(1), new Variable("x"));
+
+        REQUIRE(add_num_1_num_neg1->to_string() == "(1+-1)");
+        REQUIRE(add_add_1_neg1_num_3->to_string() == "((1+-1)+3)");
+        REQUIRE(add_num_1_mult_1_2->to_string() == "(1+(1*2))");
+        REQUIRE(add_num_1_variable_x->to_string() == "(1+x)");
+    }
+
+    SECTION("Test Mult to_string") {
+        Mult *mult_num_1_num_neg2 = new Mult(new Num(1), new Num(-2));
+        Mult *mult_mult_1_neg2_num_3 = new Mult(mult_num_1_num_neg2, new Num(3));
+        Mult *mult_num_1_add_2_3 = new Mult(new Num(1), new Add(new Num(2), new Num(3)));
+        Mult *mult_num_1_variable_x = new Mult(new Num(1), new Variable("x"));
+
+        REQUIRE(mult_num_1_num_neg2->to_string() == "(1*-2)");
+        REQUIRE(mult_mult_1_neg2_num_3->to_string() == "((1*-2)*3)");
+        REQUIRE(mult_num_1_add_2_3->to_string() == "(1*(2+3))");
+        REQUIRE(mult_num_1_variable_x->to_string() == "(1*x)");
+    }
+
+    SECTION("Test Variable to_string") {
+        REQUIRE((new Variable("x"))->to_string() == "x");
+    }
+}
+
+
+TEST_CASE("to_pretty_string") {
+    SECTION("Test Num to_pretty_string") {
+        REQUIRE((new Num(10))->to_pretty_string() == "10");
+    }
+
+    SECTION("Test Add to_pretty_string") {
+        // lhs: num
+
+        // num + num
+        Add *add_num_num = new Add(new Num(1), new Num(2));
+        REQUIRE(add_num_num->to_pretty_string() == "1 + 2");
+
+        // num + variable
+        Add *add_num_variable = new Add(new Num(1), new Variable("x"));
+        REQUIRE(add_num_variable->to_pretty_string() == "1 + x");
+
+        // num + add
+        Add *add_num_add = new Add(new Num(1), add_num_num);
+        REQUIRE(add_num_add->to_pretty_string() == "1 + 1 + 2");
+
+        // num + mult
+        Mult *mult_num_num = new Mult(new Num(1), new Num(2));
+        Add *add_num_mult = new Add(new Num(1), mult_num_num);
+        REQUIRE(add_num_mult->to_pretty_string() == "1 + 1 * 2");
+
+        // lhs: variable
+
+        // variable + num
+        Add *add_variable_num = new Add(new Variable("x"), new Num(1));
+        REQUIRE(add_variable_num->to_pretty_string() == "x + 1");
+
+        // variable + variable
+        Add *add_variable_variable = new Add(new Variable("x"), new Variable("y"));
+        REQUIRE(add_variable_variable->to_pretty_string() == "x + y");
+
+        // variable + add
+        Add *add_num_num_2 = new Add(new Num(1), new Num(2));
+        Add *add_variable_add = new Add(new Variable("x"), add_num_num_2);
+        REQUIRE(add_variable_add->to_pretty_string() == "x + 1 + 2");
+
+        // variable + mult
+        Mult *mult_num_num_2 = new Mult(new Num(1), new Num(2));
+        Add *add_variable_mult = new Add(new Variable("x"), mult_num_num_2);
+        REQUIRE(add_variable_mult->to_pretty_string() == "x + 1 * 2");
+
+        // lhs: add
+        Add *add_num_num_lhs = new Add(new Num(1), new Num(2));
+
+        // add + num
+        Add *add_add_num = new Add(add_num_num_lhs, new Num(3));
+        REQUIRE(add_add_num->to_pretty_string() == "(1 + 2) + 3");
+
+        // add + variable
+        Add *add_add_variable = new Add(add_num_num_lhs, new Variable("x"));
+        REQUIRE(add_add_variable->to_pretty_string() == "(1 + 2) + x");
+
+        // add + add
+        Add *add_add_add = new Add(add_num_num_lhs, add_num_num_lhs);
+        REQUIRE(add_add_add->to_pretty_string() == "(1 + 2) + 1 + 2");
+
+        // add + mult
+        Mult *mult_num_num_3 = new Mult(new Num(2), new Num(3));
+        Add *add_add_mult = new Add(add_num_num_lhs, mult_num_num_3);
+        REQUIRE(add_add_mult->to_pretty_string() == "(1 + 2) + 2 * 3");
+
+        // lhs: mult
+        Mult *mult_num_num_lhs = new Mult(new Num(2), new Num(3));
+
+        // mult + num
+        Add *add_mult_num = new Add(mult_num_num_lhs, new Num(1));
+        REQUIRE(add_mult_num->to_pretty_string() == "2 * 3 + 1");
+
+        // mult + variable
+        Add *add_mult_variable = new Add(mult_num_num_lhs, new Variable("x"));
+        REQUIRE(add_mult_variable->to_pretty_string() == "2 * 3 + x");
+
+        // mult + add
+        Add *add_num_num_3 = new Add(new Num(1), new Num(2));
+        Add *add_mult_add = new Add(mult_num_num_lhs, add_num_num_3);
+        REQUIRE(add_mult_add->to_pretty_string() == "2 * 3 + 1 + 2");
+
+        // mult + mult
+        Add *add_mult_mult = new Add(mult_num_num_lhs, mult_num_num_lhs);
+        REQUIRE(add_mult_mult->to_pretty_string() == "2 * 3 + 2 * 3");
+    }
+
+    SECTION("Test Mult to_pretty_string") {
+        // lhs: num
+        // num * num
+        Mult *mult_num_num = new Mult(new Num(1), new Num(2));
+        REQUIRE(mult_num_num->to_pretty_string() == "1 * 2");
+
+        // num * variable
+        Mult *mult_num_variable = new Mult(new Num(1), new Variable("x"));
+        REQUIRE(mult_num_variable->to_pretty_string() == "1 * x");
+
+        // num * add
+        Add *add_num_num = new Add(new Num(1), new Num(2));
+        Mult *mult_num_add = new Mult(new Num(3), add_num_num);
+        REQUIRE(mult_num_add->to_pretty_string() == "3 * (1 + 2)");
+
+        // num * mult
+        Mult *mult_num_mult = new Mult(new Num(3), mult_num_num);
+        REQUIRE(mult_num_mult->to_pretty_string() == "3 * 1 * 2");
+
+        // lhs: variable
+        // variable * num
+        Mult *mult_variable_num = new Mult(new Variable("x"), new Num(1));
+        REQUIRE(mult_variable_num->to_pretty_string() == "x * 1");
+
+        // variable * variable
+        Mult *mult_variable_variable = new Mult(new Variable("x"), new Variable("y"));
+        REQUIRE(mult_variable_variable->to_pretty_string() == "x * y");
+
+        // variable * add
+        Add *add_num_num_2 = new Add(new Num(2), new Num(3));
+        Mult *mult_variable_add = new Mult(new Variable("x"), add_num_num_2);
+        REQUIRE(mult_variable_add->to_pretty_string() == "x * (2 + 3)");
+
+        // variable * mult
+        Mult *mult_variable_mult = new Mult(new Variable("x"), mult_num_num);
+        REQUIRE(mult_variable_mult->to_pretty_string() == "x * 1 * 2");
+
+        // lhs: add
+        Add *add_num_num_lhs = new Add(new Num(1), new Num(2));
+
+        // add * num
+        Mult *mult_add_num = new Mult(add_num_num_lhs, new Num(3));
+        REQUIRE(mult_add_num->to_pretty_string() == "(1 + 2) * 3");
+
+        // add * variable
+        Mult *mult_add_variable = new Mult(add_num_num_lhs, new Variable("x"));
+        REQUIRE(mult_add_variable->to_pretty_string() == "(1 + 2) * x");
+
+        // add * add
+        Mult *mult_add_add = new Mult(add_num_num_lhs, add_num_num_lhs);
+        REQUIRE(mult_add_add->to_pretty_string() == "(1 + 2) * (1 + 2)");
+
+        // add * mult
+        Mult *mult_num_num_3 = new Mult(new Num(2), new Num(3));
+        Mult *mult_add_mult = new Mult(add_num_num_lhs, mult_num_num_3);
+        REQUIRE(mult_add_mult->to_pretty_string() == "(1 + 2) * 2 * 3");
+
+        // lhs: mult
+        Mult *mult_num_num_lhs = new Mult(new Num(2), new Num(3));
+
+        // mult * num
+        Mult *mult_mult_num = new Mult(mult_num_num_lhs, new Num(4));
+        REQUIRE(mult_mult_num->to_pretty_string() == "(2 * 3) * 4");
+
+        // mult * variable
+        Mult *mult_mult_variable = new Mult(mult_num_num_lhs, new Variable("x"));
+        REQUIRE(mult_mult_variable->to_pretty_string() == "(2 * 3) * x");
+
+        // mult * add
+        Add *add_num_num_4 = new Add(new Num(1), new Num(2));
+        Mult *mult_mult_add = new Mult(mult_num_num_lhs, add_num_num_4);
+        REQUIRE(mult_mult_add->to_pretty_string() == "(2 * 3) * (1 + 2)");
+
+        // mult * mult
+        Mult *mult_mult_mult = new Mult(mult_num_num_lhs, mult_num_num_lhs);
+        REQUIRE(mult_mult_mult->to_pretty_string() == "(2 * 3) * 2 * 3");
+    }
+
+    SECTION("Test Variable to_pretty_string") {
+        REQUIRE((new Variable("x"))->to_pretty_string() == "x");
+    }
 }

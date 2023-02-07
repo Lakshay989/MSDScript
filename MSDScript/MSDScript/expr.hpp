@@ -14,15 +14,17 @@
 #include <stdexcept>
 #include <sstream>
 
-class Expr
+
+
+class Expr  // Base class
 {
 public:
-    virtual bool equals(Expr *e) = 0 ;
-    virtual int interp() = 0 ;
-    virtual bool has_variable() = 0 ;
-    virtual Expr* subst(std::string s, Expr* e) = 0;
-    virtual void print(std::ostream &out) = 0;
-    virtual void pretty_print(std::ostream &out) = 0;
+    virtual bool equals(Expr *e) = 0 ;  // This function checks for the equality for the LHS and the RHS.
+    virtual int interp() = 0 ; // This function interprets the value of the expression/variable.
+    virtual bool has_variable() = 0 ; // This function determines if the the expression consists of a variable or not.
+    virtual Expr* subst(std::string s, Expr* e) = 0; // This function substitutes the expression with the combination of sub-expressions if possible.
+    virtual void print(std::ostream &out) = 0; // This function prints the expression.
+    virtual void pretty_print(std::ostream &out) = 0; // This is an extenstion of the print function with minor changes.
     
     std::string to_string() {
         std::stringstream st("");
@@ -39,6 +41,9 @@ public:
     
 };
 
+
+//Derived Class from Expr for representing a number
+
 class Num : public Expr
 {
 public:
@@ -53,6 +58,8 @@ public:
     void pretty_print(std::ostream &out);
 };
 
+
+//Derived Class from Expr to represent an expression that involves addition
 class Add : public Expr
 {
 public:
@@ -69,6 +76,8 @@ public:
     
 };
 
+
+//Derived Class from Expr to represent an expression that involves multiplication
 class Mult : public Expr
 {
 public:
@@ -85,6 +94,8 @@ public:
 };
 
 
+//Derived Class from Expr for representing a variable in an expression
+
 class Var : public Expr
 {
 public:
@@ -100,6 +111,8 @@ public:
       void pretty_print(std::ostream &out);
 };
 
+
+// Enumeration for assigning the precedence of the operators
 enum operator_precedence {
     precedence_none = 0,
     precedence_add = 1,

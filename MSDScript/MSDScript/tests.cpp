@@ -12,6 +12,8 @@
 #include <stdio.h>
 
 
+// This file contains all the tests for the functions in the base class as well as each sub class.
+
 
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
@@ -156,3 +158,8 @@ TEST_CASE("to_pretty_string") {
         REQUIRE((new Num(10))->to_pretty_string() == "10");
     }
 }
+
+//TEST_CASE("Check") {
+//
+//    new Mult( new Mult(new Num(10), new Num(10), new Mult(new Num(10), new Num(10))); // --> (10 * 10) * 10 * 10;
+//    }

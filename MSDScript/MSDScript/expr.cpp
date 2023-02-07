@@ -7,13 +7,13 @@
 
 #include "expr.hpp"
 
-
+//Constructor
 Num::Num(int val)
 {
     this->val = val;
 }
 
-bool Num::equals(Expr *e)  // Num Equals
+bool Num::equals(Expr *e)
 {
     Num *n = dynamic_cast<Num*>(e);
     if (n == NULL)

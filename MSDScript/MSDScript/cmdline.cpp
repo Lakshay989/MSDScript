@@ -9,16 +9,13 @@
 
 
 #include "cmdline.hpp"
-//#include <stdio.h>
-//#include <iostream>
-//#include <string>
+
 using namespace std ;
 
-//cmdline::use_arguments(int argc , char* argv[])
-//{
-//    this->argc = argc ;
-//    this->argv = argv ;
-//}
+
+/* use_arguments( int argc , char* argv[]) identifies the argument given ahead of running the executable
+    on the command line is valid and if it is valid executes the command.
+*/
 
 void use_arguments(int argc , char* argv[])
 {
@@ -33,7 +30,6 @@ void use_arguments(int argc , char* argv[])
     
     for(int i = 1 ; i< argc ; i++)
     {
-        //cout<<argv[i]<<"";
         if(strcmp(argv[i], "--help") == 0)
         {
             cout<<"The command line arguments allowed are : \n --help \n --test \n";

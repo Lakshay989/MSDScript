@@ -5,6 +5,13 @@
 //  Created by Lakshay Santosh Kucheriya on 1/16/23.
 //
 
+/**
+* \file cmdline.cpp
+* \brief Contains the code for  identifiying the argument given ahead of running the executable on the command line is valid and if it is valid executes the command.
+*
+* \author Lakshay Santosh Kucheriya
+*/
+
 #define CATCH_CONFIG_RUNNER
 
 
@@ -17,6 +24,11 @@ using namespace std ;
     on the command line is valid and if it is valid executes the command.
 */
 
+/**
+* \brief Identifies the argument given ahead of running the executable
+* \param argc first parameter, stores the number of command line arguments passed by the user
+* \param argv second parameter, is array of character pointers listing all the arguments.
+*/
 void use_arguments(int argc , char* argv[])
 {
     

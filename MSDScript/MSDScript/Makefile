@@ -29,3 +29,11 @@ clean:
 .PHONY: test
 test: msdscript
 	./msdscript --test
+
+.PHONY: doc
+doc: 
+	cd ../../Documentation/ && doxygen
+
+.PHONY: showdoc
+showdoc:
+	cd ../../Documentation/html && open index.html

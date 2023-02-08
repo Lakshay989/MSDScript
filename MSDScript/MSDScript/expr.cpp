@@ -5,14 +5,29 @@
 //  Created by Lakshay Santosh Kucheriya on 1/23/23.
 //
 
+/**
+* \file expr.cpp
+* \brief Contains expression class definition
+*
+* \author Lakshay Santosh Kucheriya
+*/
+
 #include "expr.hpp"
 
-//Constructor
+/**
+* \brief Constructor
+*/
 Num::Num(int val)
 {
     this->val = val;
 }
 
+
+/**
+* \brief Checks for the equality between the left hand side and the right hand side
+* \param e Expression
+* \return boolean value of LHS = RHS
+*/
 bool Num::equals(Expr *e)
 {
     Num *n = dynamic_cast<Num*>(e);
@@ -22,25 +37,50 @@ bool Num::equals(Expr *e)
         return val == n->val;
 }
 
+
+/**
+* \brief This function interprets the value of the integer
+* \return integer value of the number
+*/
 int Num::interp()
 {
     return int(val);
 }
 
+
+/**
+* \brief This function determines if the the expression consists of a variable or not.
+* \return boolean value for the number has a variable or not
+*/
 bool Num::has_variable()
 {
     return false;
 }
 
+
+/**
+* \brief This function substitutes the expression with the combination of sub-expressions if possible.
+* \param s first argument, string which can be replaced as a part of the expression
+* \param e second argument, Expression
+* \return Expression which is modified if combination of sub expressions was possible
+*/
 Expr* Num::subst(std::string s, Expr* e)
 {
     return this ;
 }
 
+/**
+* \brief Prints the expression
+* \param [out] out output stream
+*/
 void Num::print(std::ostream &out) {
     out << std::to_string(val);
 }
 
+/**
+* \brief Prints the expression with more clarity
+* \param [out] out output stream
+*/
 void Num::pretty_print(std::ostream &out) {
     out << std::to_string(val);
 }
@@ -49,13 +89,21 @@ void Num::pretty_print(std::ostream &out) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
+/**
+* \brief Constructor
+*/
 Add::Add(Expr *lhs, Expr *rhs)
 {
     this->lhs = lhs;
     this->rhs = rhs;
 }
     
+
+/**
+* \brief Checks for the equality between the left hand side and the right hand side
+* \param e Expression
+* \return boolean value of LHS = RHS
+*/
 bool Add::equals(Expr *e) // Add Equals
 {
     Add *a = dynamic_cast<Add*>(e);
@@ -66,21 +114,43 @@ bool Add::equals(Expr *e) // Add Equals
                 && rhs->equals(a->rhs));
 }
 
+
+/**
+* \brief This function interprets the value of the expression
+* \return integer value of the computed expression
+*/
 int Add::interp()
 {
     return (int)lhs->interp() + (int)rhs->interp() ;
 }
 
+
+/**
+* \brief This function determines if the the expression consists of a variable or not.
+* \return boolean value for the expression has a variable or not
+*/
 bool Add::has_variable()
 {
     return (lhs->has_variable() || rhs->has_variable()) ;
 }
 
+
+/**
+* \brief This function substitutes the expression with the combination of sub-expressions if possible.
+* \param s first argument, string which can be replaced as a part of the expression
+* \param e second argument, Expression
+* \return Expression which is modified if combination of sub expressions was possible
+*/
 Expr* Add::subst(std::string s, Expr* e)
 {
     return new Add(lhs->subst(s, e), rhs->subst(s, e));
 }
 
+
+/**
+* \brief Prints the expression
+* \param [out] out output stream
+*/
 void Add::print(std::ostream &out) {
     out << "(";
     this->lhs->print(out);
@@ -89,6 +159,11 @@ void Add::print(std::ostream &out) {
     out << ")";
 }
 
+
+/**
+* \brief Prints the expression with more clarity
+* \param [out] out output stream
+*/
 void Add::pretty_print(std::ostream &out) {
     operator_precedence lhs_precedence = pretty_print_at(this->lhs);
     if (lhs_precedence == precedence_add) {
@@ -104,13 +179,21 @@ void Add::pretty_print(std::ostream &out) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+* \brief Constructor
+*/
 Mult::Mult(Expr *lhs, Expr *rhs)
 {
     this->lhs = lhs;
     this->rhs = rhs;
 }
 
+
+/**
+* \brief Checks for the equality between the left hand side and the right hand side
+* \param e Expression
+* \return boolean value of LHS = RHS
+*/
 bool Mult::equals(Expr* e) { // Mult equals
   Mult* m = dynamic_cast<Mult*>(e);
   if (m == NULL)
@@ -120,22 +203,43 @@ bool Mult::equals(Expr* e) { // Mult equals
             && rhs->equals(m->rhs));
 }
 
+
+/**
+* \brief This function interprets the value of the expression
+* \return integer value of the computed expression
+*/
 int Mult::interp()
 {
     return (int)lhs->interp() * (int)rhs->interp();
 }
 
+
+/**
+* \brief This function determines if the the expression consists of a variable or not.
+* \return boolean value for the expression has a variable or not
+*/
 bool Mult::has_variable()
 {
     return (lhs->has_variable() || rhs->has_variable());
 }
 
 
+/**
+* \brief This function substitutes the expression with the combination of sub-expressions if possible.
+* \param s first argument, string which can be replaced as a part of the expression
+* \param e second argument, Expressiont
+* \return Expression which is modified if combination of sub expressions was possible
+*/
 Expr* Mult::subst(std::string s, Expr* e)
 {
     return new Mult(lhs->subst(s, e), rhs->subst(s, e));
 }
 
+
+/**
+* \brief Prints the expression
+* \param [out] out output stream
+*/
 void Mult::print(std::ostream &out) {
     out << "(";
     this->lhs->print(out);
@@ -144,6 +248,11 @@ void Mult::print(std::ostream &out) {
     out << ")";
 }
 
+
+/**
+* \brief Prints the expression with more clarity
+* \param [out] out output stream
+*/
 void Mult::pretty_print(std::ostream &out) {
     operator_precedence lhs_precedence = pretty_print_at(this->lhs);
     operator_precedence rhs_precedence = pretty_print_at(this->rhs);
@@ -167,12 +276,20 @@ void Mult::pretty_print(std::ostream &out) {
      
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+* \brief Constructor
+*/
 Var::Var(std::string name)
 {
     this->name = name ;
 }
 
+
+/**
+* \brief Checks for the equality between the left hand side and the right hand side
+* \param e Expression
+* \return boolean value of LHS = RHS
+*/
 bool Var::equals(Expr *e)  // Var equals
 {
     Var* v = dynamic_cast<Var*>(e);
@@ -182,16 +299,33 @@ bool Var::equals(Expr *e)  // Var equals
         return name == v->name;
 }
 
+
+/**
+* \brief This function interprets the value of the Variable
+* \return error message as value of the variable cannot be iterpreted
+*/
 int Var::interp()
 {
     throw std::runtime_error("interp does not work with Variable Expressions !!");
 }
 
+
+/**
+* \brief This function determines if the the expression consists of a variable or not.
+* \return boolean value for the variable  is a variable or not
+*/
 bool Var::has_variable()
 {
     return true;
 }
 
+
+/**
+* \brief This function substitutes the expression with the combination of sub-expressions if possible.
+* \param s first argument, string which can be replaced as a part of the expression
+* \param e second argument, Expressiont
+* \return Expression which is modified if combination of sub expressions was possible
+*/
 Expr* Var::subst(std::string s, Expr* e)
 {
     if(name == s)
@@ -204,13 +338,25 @@ Expr* Var::subst(std::string s, Expr* e)
     }
 }
 
+
+/**
+* \brief Prints the expression
+* \param [out] out output stream
+*/
 void Var::print(std::ostream &out) {
     out << this->name;
 }
 
+
+/**
+* \brief Prints the expression with more clarity
+* \param [out] out output stream
+*/
 void Var::pretty_print(std::ostream &out) {
     out << this->name;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 operator_precedence pretty_print_at(Expr *e) {

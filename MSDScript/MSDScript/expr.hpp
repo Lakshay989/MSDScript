@@ -5,6 +5,13 @@
 //  Created by Lakshay Santosh Kucheriya on 1/23/23.
 //
 
+/**
+* \file expr.hpp
+* \brief Header file for expr.cpp file
+*
+* \author Lakshay Santosh Kucheriya
+*/
+
 #ifndef expr_hpp
 #define expr_hpp
 
@@ -15,7 +22,8 @@
 #include <sstream>
 
 
-
+/*! \brief Base Class for representing a expression
+*/
 class Expr  // Base class
 {
 public:
@@ -42,12 +50,12 @@ public:
 };
 
 
-//Derived Class from Expr for representing a number
-
+/*! \brief Derived Class from Expr for representing a number
+*/
 class Num : public Expr
 {
 public:
-    int val;
+    int val; //!< Value of the number
     
     Num(int val);
     bool equals(Expr *e) ;
@@ -59,12 +67,13 @@ public:
 };
 
 
-//Derived Class from Expr to represent an expression that involves addition
+/*! \brief Derived Class from Expr for representing a expression involving addition
+*/
 class Add : public Expr
 {
 public:
-    Expr *lhs;
-    Expr *rhs;
+    Expr *lhs; //!< Left hand side Expression
+    Expr *rhs; //!< Right hand side Expression
     
     Add(Expr *lhs, Expr *rhs);
     bool equals(Expr *e) ;
@@ -77,12 +86,13 @@ public:
 };
 
 
-//Derived Class from Expr to represent an expression that involves multiplication
+/*! \brief Derived Class from Expr for representing a expression involving addition
+*/
 class Mult : public Expr
 {
 public:
-    Expr *lhs;
-    Expr *rhs;
+    Expr *lhs; //!< Left hand side Expression
+    Expr *rhs; //!< Right hand side Expression
     
     Mult(Expr *lhs, Expr *rhs);
     bool equals(Expr *e) ;
@@ -94,13 +104,13 @@ public:
 };
 
 
-//Derived Class from Expr for representing a variable in an expression
-
+/*! \brief Derived Class from Expr for representing a expression involving Variable
+*/
 class Var : public Expr
 {
 public:
 
-      std::string name;
+      std::string name; //!< name of the variable
       Var(std::string name);
     
       bool equals(Expr *e);
@@ -112,7 +122,8 @@ public:
 };
 
 
-// Enumeration for assigning the precedence of the operators
+/*! \brief Enumeration for assigning the precedence of the operators
+*/
 enum operator_precedence {
     precedence_none = 0,
     precedence_add = 1,

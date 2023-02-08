@@ -5,6 +5,13 @@
 //  Created by Lakshay Santosh Kucheriya on 2/2/23.
 //
 
+/**
+* \file tests.cpp
+* \brief contains all the tests forl the methods present in this project
+*
+* \author Lakshay Santosh Kucheriya
+*/
+
 #include "catch.h"
 #include "expr.hpp"
 

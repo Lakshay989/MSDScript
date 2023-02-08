@@ -5,6 +5,13 @@
 //  Created by Lakshay Santosh Kucheriya on 1/16/23.
 //
 
+/**
+* \file cmdline.hpp
+* \brief Header file for cmdline.cpp file
+*
+* \author Lakshay Santosh Kucheriya
+*/
+
 #ifndef cmdline_hpp
 #define cmdline_hpp
 //

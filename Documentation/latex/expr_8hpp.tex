@@ -1,0 +1,48 @@
+\hypertarget{expr_8hpp}{}\doxysection{/\+Users/lakshaysantoshkucheriya/\+Desktop/\+MSD/\+Courses/\+MSDScript/\+MSDScript/\+MSDScript/expr.hpp File Reference}
+\label{expr_8hpp}\index{/Users/lakshaysantoshkucheriya/Desktop/MSD/Courses/MSDScript/MSDScript/MSDScript/expr.hpp@{/Users/lakshaysantoshkucheriya/Desktop/MSD/Courses/MSDScript/MSDScript/MSDScript/expr.hpp}}
+
+
+Header file for \mbox{\hyperlink{expr_8cpp}{expr.\+cpp}} file.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$stdexcept$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_expr}{Expr}}
+\begin{DoxyCompactList}\small\item\em Base Class for representing a expression. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_num}{Num}}
+\begin{DoxyCompactList}\small\item\em Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for representing a number. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_add}{Add}}
+\begin{DoxyCompactList}\small\item\em Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for representing a expression involving addition. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_mult}{Mult}}
+\begin{DoxyCompactList}\small\item\em Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for representing a expression involving addition. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_var}{Var}}
+\begin{DoxyCompactList}\small\item\em Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for representing a expression involving Variable. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{expr_8hpp_a74b58d09f18548f982555266079f6d5f}\label{expr_8hpp_a74b58d09f18548f982555266079f6d5f}} 
+enum \mbox{\hyperlink{expr_8hpp_a74b58d09f18548f982555266079f6d5f}{operator\+\_\+precedence}} \{ {\bfseries precedence\+\_\+none} = 0
+, {\bfseries precedence\+\_\+add} = 1
+, {\bfseries precedence\+\_\+mult} = 2
+ \}
+\begin{DoxyCompactList}\small\item\em Enumeration for assigning the precedence of the operators. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{expr_8hpp_a7b414e1cf7eef22660d470d84460c408}\label{expr_8hpp_a7b414e1cf7eef22660d470d84460c408}} 
+\mbox{\hyperlink{expr_8hpp_a74b58d09f18548f982555266079f6d5f}{operator\+\_\+precedence}} {\bfseries pretty\+\_\+print\+\_\+at} (\mbox{\hyperlink{class_expr}{Expr}} $\ast$e)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for \mbox{\hyperlink{expr_8cpp}{expr.\+cpp}} file. 
+
+\begin{DoxyAuthor}{Author}
+Lakshay Santosh Kucheriya 
+\end{DoxyAuthor}

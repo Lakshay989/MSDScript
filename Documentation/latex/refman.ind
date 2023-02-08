@@ -1,0 +1,127 @@
+\begin{theindex}
+
+  \item {/Users/lakshaysantoshkucheriya/Desktop/MSD/Courses/MSDScript/MSDScript/MSDScript/cmdline.cpp}, 
+		\hyperpage{25}
+  \item {/Users/lakshaysantoshkucheriya/Desktop/MSD/Courses/MSDScript/MSDScript/MSDScript/cmdline.hpp}, 
+		\hyperpage{26, 27}
+  \item {/Users/lakshaysantoshkucheriya/Desktop/MSD/Courses/MSDScript/MSDScript/MSDScript/expr.cpp}, 
+		\hyperpage{27}
+  \item {/Users/lakshaysantoshkucheriya/Desktop/MSD/Courses/MSDScript/MSDScript/MSDScript/expr.hpp}, 
+		\hyperpage{27, 28}
+  \item {/Users/lakshaysantoshkucheriya/Desktop/MSD/Courses/MSDScript/MSDScript/MSDScript/main.cpp}, 
+		\hyperpage{30}
+  \item {/Users/lakshaysantoshkucheriya/Desktop/MSD/Courses/MSDScript/MSDScript/MSDScript/tests.cpp}, 
+		\hyperpage{30}
+
+  \indexspace
+
+  \item {Add}, \hyperpage{9}
+    \subitem {equals}, \hyperpage{10}
+    \subitem {has\_variable}, \hyperpage{10}
+    \subitem {interp}, \hyperpage{11}
+    \subitem {pretty\_print}, \hyperpage{11}
+    \subitem {print}, \hyperpage{11}
+    \subitem {subst}, \hyperpage{12}
+
+  \indexspace
+
+  \item {cmdline.cpp}
+    \subitem {use\_arguments}, \hyperpage{25}
+  \item {cmdline.hpp}
+    \subitem {use\_arguments}, \hyperpage{26}
+
+  \indexspace
+
+  \item {equals}
+    \subitem {Add}, \hyperpage{10}
+    \subitem {Expr}, \hyperpage{13}
+    \subitem {Mult}, \hyperpage{15}
+    \subitem {Num}, \hyperpage{19}
+    \subitem {Var}, \hyperpage{22}
+  \item {Expr}, \hyperpage{12}
+    \subitem {equals}, \hyperpage{13}
+    \subitem {has\_variable}, \hyperpage{13}
+    \subitem {interp}, \hyperpage{13}
+    \subitem {pretty\_print}, \hyperpage{13}
+    \subitem {print}, \hyperpage{14}
+    \subitem {subst}, \hyperpage{14}
+
+  \indexspace
+
+  \item {has\_variable}
+    \subitem {Add}, \hyperpage{10}
+    \subitem {Expr}, \hyperpage{13}
+    \subitem {Mult}, \hyperpage{16}
+    \subitem {Num}, \hyperpage{19}
+    \subitem {Var}, \hyperpage{22}
+
+  \indexspace
+
+  \item {interp}
+    \subitem {Add}, \hyperpage{11}
+    \subitem {Expr}, \hyperpage{13}
+    \subitem {Mult}, \hyperpage{16}
+    \subitem {Num}, \hyperpage{19}
+    \subitem {Var}, \hyperpage{22}
+
+  \indexspace
+
+  \item {Mult}, \hyperpage{14}
+    \subitem {equals}, \hyperpage{15}
+    \subitem {has\_variable}, \hyperpage{16}
+    \subitem {interp}, \hyperpage{16}
+    \subitem {pretty\_print}, \hyperpage{16}
+    \subitem {print}, \hyperpage{17}
+    \subitem {subst}, \hyperpage{17}
+
+  \indexspace
+
+  \item {Num}, \hyperpage{18}
+    \subitem {equals}, \hyperpage{19}
+    \subitem {has\_variable}, \hyperpage{19}
+    \subitem {interp}, \hyperpage{19}
+    \subitem {pretty\_print}, \hyperpage{19}
+    \subitem {print}, \hyperpage{20}
+    \subitem {subst}, \hyperpage{20}
+
+  \indexspace
+
+  \item {pretty\_print}
+    \subitem {Add}, \hyperpage{11}
+    \subitem {Expr}, \hyperpage{13}
+    \subitem {Mult}, \hyperpage{16}
+    \subitem {Num}, \hyperpage{19}
+    \subitem {Var}, \hyperpage{22}
+  \item {print}
+    \subitem {Add}, \hyperpage{11}
+    \subitem {Expr}, \hyperpage{14}
+    \subitem {Mult}, \hyperpage{17}
+    \subitem {Num}, \hyperpage{20}
+    \subitem {Var}, \hyperpage{23}
+
+  \indexspace
+
+  \item {subst}
+    \subitem {Add}, \hyperpage{12}
+    \subitem {Expr}, \hyperpage{14}
+    \subitem {Mult}, \hyperpage{17}
+    \subitem {Num}, \hyperpage{20}
+    \subitem {Var}, \hyperpage{23}
+
+  \indexspace
+
+  \item {use\_arguments}
+    \subitem {cmdline.cpp}, \hyperpage{25}
+    \subitem {cmdline.hpp}, \hyperpage{26}
+
+  \indexspace
+
+  \item {Var}, \hyperpage{21}
+    \subitem {equals}, \hyperpage{22}
+    \subitem {has\_variable}, \hyperpage{22}
+    \subitem {interp}, \hyperpage{22}
+    \subitem {pretty\_print}, \hyperpage{22}
+    \subitem {print}, \hyperpage{23}
+    \subitem {subst}, \hyperpage{23}
+
+\end{theindex}

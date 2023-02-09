@@ -165,7 +165,7 @@ void Add::print(std::ostream &out) {
 * \param [out] out output stream
 */
 void Add::pretty_print(std::ostream &out) {
-    operator_precedence lhs_precedence = pretty_print_at(this->lhs);
+    precedence_t lhs_precedence = pretty_print_at(this->lhs);
     if (lhs_precedence == precedence_add) {
         out << "(";
         this->lhs->pretty_print(out);
@@ -254,8 +254,8 @@ void Mult::print(std::ostream &out) {
 * \param [out] out output stream
 */
 void Mult::pretty_print(std::ostream &out) {
-    operator_precedence lhs_precedence = pretty_print_at(this->lhs);
-    operator_precedence rhs_precedence = pretty_print_at(this->rhs);
+    precedence_t lhs_precedence = pretty_print_at(this->lhs);
+    precedence_t rhs_precedence = pretty_print_at(this->rhs);
     if (lhs_precedence >= precedence_add) {
         out << "(";
         this->lhs->pretty_print(out);
@@ -306,7 +306,7 @@ bool Var::equals(Expr *e)  // Var equals
 */
 int Var::interp()
 {
-    throw std::runtime_error("interp does not work with Variable Expressions !!");
+    throw std::runtime_error("interp does not work with variable expressions !!");
 }
 
 
@@ -359,7 +359,7 @@ void Var::pretty_print(std::ostream &out) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-operator_precedence pretty_print_at(Expr *e) {
+precedence_t pretty_print_at(Expr *e) {
     Add *add = dynamic_cast<Add *>(e);
     if (add != NULL) {
         return precedence_add;

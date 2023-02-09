@@ -349,9 +349,3 @@ TEST_CASE("to_pretty_string again") {
     
 }
 
-
-
-//TEST_CASE("Check") {
-//
-//    new Mult( new Mult(new Num(10), new Num(10), new Mult(new Num(10), new Num(10))); // --> (10 * 10) * 10 * 10;
-//    }

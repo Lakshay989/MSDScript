@@ -124,13 +124,20 @@ public:
 
 /*! \brief Enumeration for assigning the precedence of the operators
 */
-enum operator_precedence {
-    precedence_none = 0,
-    precedence_add = 1,
-    precedence_mult = 2
-};
+//enum operator_precedence {
+//    precedence_none = 0,
+//    precedence_add = 1,
+//    precedence_mult = 2
+//};
+//
+//operator_precedence pretty_print_at(Expr *e);
 
-operator_precedence pretty_print_at(Expr *e);
+typedef enum {
+  precedence_none = 0,
+  precedence_add = 1,
+  precedence_mult = 2,     
+} precedence_t;
 
+precedence_t pretty_print_at(Expr *e);
 
 #endif /* expr_hpp */

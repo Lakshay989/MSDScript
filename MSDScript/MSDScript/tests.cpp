@@ -62,9 +62,9 @@ TEST_CASE( "equals" ) {
 
 TEST_CASE("Tests for checking interp")
 {
-    CHECK_THROWS_WITH( (new Var("x"))->interp(), "interp does not work with Variable Expressions !!" );
-    CHECK_THROWS_WITH( (new Var("x+y"))->interp(), "interp does not work with Variable Expressions !!" );
-    CHECK_THROWS_WITH( (new Var("1"))->interp(), "interp does not work with Variable Expressions !!" );
+    CHECK_THROWS_WITH( (new Var("x"))->interp(), "interp does not work with variable expressions !!" );
+    CHECK_THROWS_WITH( (new Var("x+y"))->interp(), "interp does not work with variable expressions !!" );
+    CHECK_THROWS_WITH( (new Var("1"))->interp(), "interp does not work with variable expressions !!" );
 
     CHECK( (new Add(new Add(new Num(10), new Num(15)),new Add(new Num(20),new Num(20))))->interp()==65);
     CHECK( (new Add(new Add(new Num(5), new Num(5)),new Add(new Num(20),new Num(20))))->interp()!=49);

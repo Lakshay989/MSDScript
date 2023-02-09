@@ -183,16 +183,15 @@ $(function() {
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>};</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="expr_8hpp.html#a74b58d09f18548f982555266079f6d5f">  127</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="expr_8hpp.html#a74b58d09f18548f982555266079f6d5f">operator_precedence</a> {</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    precedence_none = 0,</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    precedence_add = 1,</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    precedence_mult = 2</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>};</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="expr_8hpp.html#a9e5fdf365cd8dc7be4d972daf07f8bdf">  127</a></span><span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  precedence_none = 0,</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  precedence_add = 1,</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  precedence_mult = 2,     </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>} <a class="code hl_enumeration" href="expr_8hpp.html#a9e5fdf365cd8dc7be4d972daf07f8bdf">precedence_t</a>;</div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><a class="code hl_enumeration" href="expr_8hpp.html#a74b58d09f18548f982555266079f6d5f">operator_precedence</a> pretty_print_at(<a class="code hl_class" href="class_expr.html">Expr</a> *e);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><a class="code hl_enumeration" href="expr_8hpp.html#a9e5fdf365cd8dc7be4d972daf07f8bdf">precedence_t</a> pretty_print_at(<a class="code hl_class" href="class_expr.html">Expr</a> *e);</div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="preprocessor">#endif </span><span class="comment">/* expr_hpp */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="preprocessor">#endif </span><span class="comment">/* expr_hpp */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aclass_add_html"><div class="ttname"><a href="class_add.html">Add</a></div><div class="ttdoc">Derived Class from Expr for representing a expression involving addition.</div><div class="ttdef"><b>Definition:</b> expr.hpp:73</div></div>
 <div class="ttc" id="aclass_add_html_a0b2d355c1418fe84010aebdf559a8ed7"><div class="ttname"><a href="class_add.html#a0b2d355c1418fe84010aebdf559a8ed7">Add::pretty_print</a></div><div class="ttdeci">void pretty_print(std::ostream &amp;out)</div><div class="ttdoc">Prints the expression with more clarity.</div><div class="ttdef"><b>Definition:</b> expr.cpp:167</div></div>
 <div class="ttc" id="aclass_add_html_a15ee8d84bb8a04af294732ebe1a8a6c3"><div class="ttname"><a href="class_add.html#a15ee8d84bb8a04af294732ebe1a8a6c3">Add::lhs</a></div><div class="ttdeci">Expr * lhs</div><div class="ttdoc">Left hand side Expression.</div><div class="ttdef"><b>Definition:</b> expr.hpp:75</div></div>
@@ -228,7 +227,7 @@ $(function() {
 <div class="ttc" id="aclass_var_html_ac6df55db7c2447d3090dd99ae247ae80"><div class="ttname"><a href="class_var.html#ac6df55db7c2447d3090dd99ae247ae80">Var::interp</a></div><div class="ttdeci">int interp()</div><div class="ttdoc">This function interprets the value of the Variable.</div><div class="ttdef"><b>Definition:</b> expr.cpp:307</div></div>
 <div class="ttc" id="aclass_var_html_ad112053ba9381eb7b8b26b3c5702410a"><div class="ttname"><a href="class_var.html#ad112053ba9381eb7b8b26b3c5702410a">Var::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">name of the variable</div><div class="ttdef"><b>Definition:</b> expr.hpp:113</div></div>
 <div class="ttc" id="aclass_var_html_aebf7f80c96ac7938fe40617a46cf8574"><div class="ttname"><a href="class_var.html#aebf7f80c96ac7938fe40617a46cf8574">Var::print</a></div><div class="ttdeci">void print(std::ostream &amp;out)</div><div class="ttdoc">Prints the expression.</div><div class="ttdef"><b>Definition:</b> expr.cpp:346</div></div>
-<div class="ttc" id="aexpr_8hpp_html_a74b58d09f18548f982555266079f6d5f"><div class="ttname"><a href="expr_8hpp.html#a74b58d09f18548f982555266079f6d5f">operator_precedence</a></div><div class="ttdeci">operator_precedence</div><div class="ttdoc">Enumeration for assigning the precedence of the operators.</div><div class="ttdef"><b>Definition:</b> expr.hpp:127</div></div>
+<div class="ttc" id="aexpr_8hpp_html_a9e5fdf365cd8dc7be4d972daf07f8bdf"><div class="ttname"><a href="expr_8hpp.html#a9e5fdf365cd8dc7be4d972daf07f8bdf">precedence_t</a></div><div class="ttdeci">precedence_t</div><div class="ttdoc">Enumeration for assigning the precedence of the operators.</div><div class="ttdef"><b>Definition:</b> expr.hpp:127</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

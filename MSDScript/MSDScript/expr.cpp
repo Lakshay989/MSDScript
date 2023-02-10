@@ -82,6 +82,10 @@ void Num::print(std::ostream &out) {
 * \param [out] out output stream
 */
 void Num::pretty_print(std::ostream &out) {
+    this->pretty_print_at(out, precedence_none);
+}
+
+void Num::pretty_print_at(std::ostream &out, precedence_t precedence) {
     out << std::to_string(val);
 }
 
@@ -165,16 +169,19 @@ void Add::print(std::ostream &out) {
 * \param [out] out output stream
 */
 void Add::pretty_print(std::ostream &out) {
-    precedence_t lhs_precedence = pretty_print_at(this->lhs);
-    if (lhs_precedence == precedence_add) {
-        out << "(";
-        this->lhs->pretty_print(out);
-        out << ")";
-    } else {
-        out << this->lhs->to_pretty_string();
-    }
+    this->lhs->pretty_print_at(out, precedence_add);
     out << " + ";
-    out << this->rhs->to_pretty_string();
+    this->rhs->pretty_print_at(out, precedence_none);
+}
+
+void Add::pretty_print_at(std::ostream &out, precedence_t precedence) {
+    if (precedence >= precedence_add) {
+        out << "(";
+    }
+    out << this->lhs->to_pretty_string() << " + " << this->rhs->to_pretty_string();
+    if (precedence >= precedence_add) {
+        out << ")";
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,22 +261,18 @@ void Mult::print(std::ostream &out) {
 * \param [out] out output stream
 */
 void Mult::pretty_print(std::ostream &out) {
-    precedence_t lhs_precedence = pretty_print_at(this->lhs);
-    precedence_t rhs_precedence = pretty_print_at(this->rhs);
-    if (lhs_precedence >= precedence_add) {
-        out << "(";
-        this->lhs->pretty_print(out);
-        out << ")";
-    } else {
-        this->lhs->pretty_print(out);
-    }
+    this->lhs->pretty_print_at(out, precedence_mult);
     out << " * ";
-    if (rhs_precedence == precedence_add) {
+    this->rhs->pretty_print_at(out, precedence_add);
+}
+
+void Mult::pretty_print_at(std::ostream &out, precedence_t precedence) {
+    if (precedence >= precedence_mult) {
         out << "(";
-        this->rhs->pretty_print(out);
+    }
+    out << this->lhs->to_pretty_string() << " * " << this->rhs->to_pretty_string();
+    if (precedence >= precedence_mult) {
         out << ")";
-    } else {
-        this->rhs->pretty_print(out);
     }
 }
      
@@ -353,23 +356,27 @@ void Var::print(std::ostream &out) {
 * \param [out] out output stream
 */
 void Var::pretty_print(std::ostream &out) {
+    this->pretty_print_at(out, precedence_none);
+}
+
+void Var::pretty_print_at(std::ostream &out, precedence_t precedence) {
     out << this->name;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-precedence_t pretty_print_at(Expr *e) {
-    Add *add = dynamic_cast<Add *>(e);
-    if (add != NULL) {
-        return precedence_add;
-    }
-    Mult *mult = dynamic_cast<Mult *>(e);
-    if (mult != NULL) {
-        return precedence_mult;
-    }
-    return precedence_none;
-}
+//precedence_t pretty_print_at(Expr *e) {
+//    Add *add = dynamic_cast<Add *>(e);
+//    if (add != NULL) {
+//        return precedence_add;
+//    }
+//    Mult *mult = dynamic_cast<Mult *>(e);
+//    if (mult != NULL) {
+//        return precedence_mult;
+//    }
+//    return precedence_none;
+//}
 
 
 

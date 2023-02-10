@@ -22,6 +22,15 @@
 #include <sstream>
 
 
+/*! \brief Enumeration for assigning the precedence of the operators
+*/
+typedef enum {
+  precedence_none = 0,
+  precedence_add = 1,
+  precedence_mult = 2,
+} precedence_t;
+
+
 /*! \brief Base Class for representing a expression
 */
 class Expr  // Base class
@@ -32,7 +41,8 @@ public:
     virtual bool has_variable() = 0 ; // This function determines if the the expression consists of a variable or not.
     virtual Expr* subst(std::string s, Expr* e) = 0; // This function substitutes the expression with the combination of sub-expressions if possible.
     virtual void print(std::ostream &out) = 0; // This function prints the expression.
-    virtual void pretty_print(std::ostream &out) = 0; // This is an extenstion of the print function with minor changes.
+    virtual void pretty_print(std::ostream &out) = 0;
+    virtual void pretty_print_at(std::ostream &out, precedence_t precedence) = 0; // This is an extenstion of the print function with minor changes.
     
     std::string to_string() {
         std::stringstream st("");
@@ -64,6 +74,7 @@ public:
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence);
 };
 
 
@@ -82,6 +93,7 @@ public:
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence);
     
 };
 
@@ -101,6 +113,7 @@ public:
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence);
 };
 
 
@@ -109,27 +122,28 @@ public:
 class Var : public Expr
 {
 public:
-
-      std::string name; //!< name of the variable
-      Var(std::string name);
     
-      bool equals(Expr *e);
-      int interp();
-      bool has_variable();
-      Expr* subst(std::string s, Expr* e) ;
-      void print(std::ostream &out);
-      void pretty_print(std::ostream &out);
+    std::string name; //!< name of the variable
+    Var(std::string name);
+    
+    bool equals(Expr *e);
+    int interp();
+    bool has_variable();
+    Expr* subst(std::string s, Expr* e) ;
+    void print(std::ostream &out);
+    void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence);
 };
 
 
-/*! \brief Enumeration for assigning the precedence of the operators
-*/
-typedef enum {
-  precedence_none = 0,
-  precedence_add = 1,
-  precedence_mult = 2,     
-} precedence_t;
+///*! \brief Enumeration for assigning the precedence of the operators
+//*/
+//typedef enum {
+//  precedence_none = 0,
+//  precedence_add = 1,
+//  precedence_mult = 2,
+//} precedence_t;
 
-precedence_t pretty_print_at(Expr *e);
+//precedence_t pretty_print_at(Expr *e);
 
 #endif /* expr_hpp */

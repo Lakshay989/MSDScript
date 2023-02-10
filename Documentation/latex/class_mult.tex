@@ -32,7 +32,9 @@ bool \mbox{\hyperlink{class_mult_ab53cc8634d4ebad5aaa2dc818c0de598}{has\+\_\+var
 void \mbox{\hyperlink{class_mult_aa8c2b9721e4c8db8a3358ebaa30e2cf0}{print}} (std\+::ostream \&out)
 \begin{DoxyCompactList}\small\item\em Prints the expression. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_mult_a90ef421de3c46fb55ee9e82198f2e06d}{pretty\+\_\+print}} (std\+::ostream \&out)
-\begin{DoxyCompactList}\small\item\em Prints the expression with more clarity. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Prints the expression with more clarity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_mult_af9c024cd2f933609a9902e3c74695802}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}} precedence)
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_expr}{Expr}}}
 \begin{DoxyCompactItemize}
 \item 
@@ -47,6 +49,9 @@ virtual \mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_expr_a
 virtual void \mbox{\hyperlink{class_expr_a25b84618e82e7b1205afee21bfc6c948}{print}} (std\+::ostream \&out)=0
 \item 
 virtual void \mbox{\hyperlink{class_expr_ab777e5c814a5d154a6bdf0a1543a6e93}{pretty\+\_\+print}} (std\+::ostream \&out)=0
+\item 
+\mbox{\Hypertarget{class_expr_ad18d8a44c1456898b311f27dd08d93e3}\label{class_expr_ad18d8a44c1456898b311f27dd08d93e3}} 
+virtual void {\bfseries pretty\+\_\+print\+\_\+at} (std\+::ostream \&out, \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}} precedence)=0
 \item 
 \mbox{\Hypertarget{class_expr_abe130f37bd185ec13c5113de16fc7bf7}\label{class_expr_abe130f37bd185ec13c5113de16fc7bf7}} 
 std\+::string {\bfseries to\+\_\+string} ()
@@ -140,6 +145,16 @@ Prints the expression with more clarity.
 \mbox{\texttt{ out}}  & {\em out} & output stream \\
 \hline
 \end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_mult_af9c024cd2f933609a9902e3c74695802}\label{class_mult_af9c024cd2f933609a9902e3c74695802}} 
+\index{Mult@{Mult}!pretty\_print\_at@{pretty\_print\_at}}
+\index{pretty\_print\_at@{pretty\_print\_at}!Mult@{Mult}}
+\doxysubsubsection{\texorpdfstring{pretty\_print\_at()}{pretty\_print\_at()}}
+{\footnotesize\ttfamily void Mult\+::pretty\+\_\+print\+\_\+at (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{\mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}}}]{precedence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
 
 
 Implements \mbox{\hyperlink{class_expr}{Expr}}.

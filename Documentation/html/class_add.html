@@ -115,6 +115,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0b2d355c1418fe84010aebdf559a8ed7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_add.html#a0b2d355c1418fe84010aebdf559a8ed7">pretty_print</a> (std::ostream &amp;out)</td></tr>
 <tr class="memdesc:a0b2d355c1418fe84010aebdf559a8ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the expression with more clarity.  <br /></td></tr>
 <tr class="separator:a0b2d355c1418fe84010aebdf559a8ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24a8835fc6534a71c2ad807eb9ceef43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_add.html#a24a8835fc6534a71c2ad807eb9ceef43">pretty_print_at</a> (std::ostream &amp;out, <a class="el" href="expr_8hpp.html#a9e5fdf365cd8dc7be4d972daf07f8bdf">precedence_t</a> precedence)</td></tr>
+<tr class="separator:a24a8835fc6534a71c2ad807eb9ceef43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_expr"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_expr')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_expr.html">Expr</a></td></tr>
 <tr class="memitem:abf9cdb765fb84304881789d273d7594f inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#abf9cdb765fb84304881789d273d7594f">equals</a> (<a class="el" href="class_expr.html">Expr</a> *e)=0</td></tr>
 <tr class="separator:abf9cdb765fb84304881789d273d7594f inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,6 +130,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a25b84618e82e7b1205afee21bfc6c948 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab777e5c814a5d154a6bdf0a1543a6e93 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#ab777e5c814a5d154a6bdf0a1543a6e93">pretty_print</a> (std::ostream &amp;out)=0</td></tr>
 <tr class="separator:ab777e5c814a5d154a6bdf0a1543a6e93 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad18d8a44c1456898b311f27dd08d93e3 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top"><a id="ad18d8a44c1456898b311f27dd08d93e3" name="ad18d8a44c1456898b311f27dd08d93e3"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>pretty_print_at</b> (std::ostream &amp;out, <a class="el" href="expr_8hpp.html#a9e5fdf365cd8dc7be4d972daf07f8bdf">precedence_t</a> precedence)=0</td></tr>
+<tr class="separator:ad18d8a44c1456898b311f27dd08d93e3 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe130f37bd185ec13c5113de16fc7bf7 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top"><a id="abe130f37bd185ec13c5113de16fc7bf7" name="abe130f37bd185ec13c5113de16fc7bf7"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_string</b> ()</td></tr>
 <tr class="separator:abe130f37bd185ec13c5113de16fc7bf7 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -277,6 +282,44 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Implements <a class="el" href="class_expr.html">Expr</a>.</p>
+
+</div>
+</div>
+<a id="a24a8835fc6534a71c2ad807eb9ceef43" name="a24a8835fc6534a71c2ad807eb9ceef43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24a8835fc6534a71c2ad807eb9ceef43">&#9670;&#160;</a></span>pretty_print_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Add::pretty_print_at </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="expr_8hpp.html#a9e5fdf365cd8dc7be4d972daf07f8bdf">precedence_t</a>&#160;</td>
+          <td class="paramname"><em>precedence</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 <p>Implements <a class="el" href="class_expr.html">Expr</a>.</p>
 

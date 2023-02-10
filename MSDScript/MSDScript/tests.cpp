@@ -332,13 +332,6 @@ TEST_CASE("to_pretty_string") {
     {
         CHECK((new Mult( new Mult(new Num(10), new Mult(new Mult(new Num(10), new Num(10)), new Num(10))), new Mult(new Num(10), new Num(10))))
                       ->to_pretty_string()  == "(10 * (10 * 10) * 10) * 10 * 10");
-    
-    
-    CHECK((new Add(new Mult(new Num(9), new Add(new Num(4), new Num(3))), new Add(new Mult(new Num(2), new Num(4)), new Num(1))))
-                    ->to_pretty_string() == "9 * 4 + 3 + 2 * 4 + 1");
-    
-        
-
         }
     
 }

@@ -365,18 +365,17 @@ void Var::pretty_print_at(std::ostream &out, precedence_t precedence) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+Let::Let(Var *lhs, Expr *rhs, Expr *body)
+{
+    this->lhs = lhs ;
+    this->rhs = rhs ;
+    this->body = body ;
+}
 
-//precedence_t pretty_print_at(Expr *e) {
-//    Add *add = dynamic_cast<Add *>(e);
-//    if (add != NULL) {
-//        return precedence_add;
-//    }
-//    Mult *mult = dynamic_cast<Mult *>(e);
-//    if (mult != NULL) {
-//        return precedence_mult;
-//    }
-//    return precedence_none;
+//bool Let::equals( Expr *e)
+//{
+//
 //}
-
+//
 
 

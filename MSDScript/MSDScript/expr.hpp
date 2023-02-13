@@ -136,14 +136,26 @@ public:
 };
 
 
-///*! \brief Enumeration for assigning the precedence of the operators
-//*/
-//typedef enum {
-//  precedence_none = 0,
-//  precedence_add = 1,
-//  precedence_mult = 2,
-//} precedence_t;
-
-//precedence_t pretty_print_at(Expr *e);
+/*! \brief Derived Class from Expr for the purpose of assigning a value to the objects of the variable class
+*/
+class Let : public Expr
+{
+public:
+    
+    Var *lhs ;
+    Expr *rhs ;
+    Expr *body ;
+    
+    Let(Var *lhs, Expr *rhs, Expr *body) ;
+    
+    bool equals(Expr *e);
+    int interp();
+    bool has_variable();
+    Expr* subst(std::string s, Expr* e) ;
+    void print(std::ostream &out);
+    void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence);
+    
+};
 
 #endif /* expr_hpp */

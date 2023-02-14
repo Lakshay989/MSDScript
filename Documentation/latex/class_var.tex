@@ -31,9 +31,9 @@ bool \mbox{\hyperlink{class_var_a6083356e4955e1edfb76b8432672c93e}{has\+\_\+vari
 \begin{DoxyCompactList}\small\item\em This function substitutes the expression with the combination of sub-\/expressions if possible. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_var_aebf7f80c96ac7938fe40617a46cf8574}{print}} (std\+::ostream \&out)
 \begin{DoxyCompactList}\small\item\em Prints the expression. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_var_a9ad0dc208b5d9b1aae8c16a6186fb3d4}{pretty\+\_\+print}} (std\+::ostream \&out)
+void \mbox{\hyperlink{class_var_ab0d0f1be63b5b1876a280d9d5d6d1c56}{pretty\+\_\+print}} (std\+::ostream \&out, int position=0)
 \begin{DoxyCompactList}\small\item\em Prints the expression with more clarity. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_var_a89e191183a8f5abebfc0f72a0ec13f36}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}} precedence)
+void \mbox{\hyperlink{class_var_a4180e1576b65fb3a25b59f255e973130}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}} precedence, bool parenthesis, int position=0)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_expr}{Expr}}}
 \begin{DoxyCompactItemize}
@@ -48,16 +48,16 @@ virtual \mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_expr_a
 \item 
 virtual void \mbox{\hyperlink{class_expr_a25b84618e82e7b1205afee21bfc6c948}{print}} (std\+::ostream \&out)=0
 \item 
-virtual void \mbox{\hyperlink{class_expr_ab777e5c814a5d154a6bdf0a1543a6e93}{pretty\+\_\+print}} (std\+::ostream \&out)=0
+virtual void \mbox{\hyperlink{class_expr_aa56927ec43fa7b2b57ae576ed1a06fae}{pretty\+\_\+print}} (std\+::ostream \&out, int position=0)=0
 \item 
-\mbox{\Hypertarget{class_expr_ad18d8a44c1456898b311f27dd08d93e3}\label{class_expr_ad18d8a44c1456898b311f27dd08d93e3}} 
-virtual void {\bfseries pretty\+\_\+print\+\_\+at} (std\+::ostream \&out, \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}} precedence)=0
+\mbox{\Hypertarget{class_expr_a52d0169655b81540f004f569f1c6db17}\label{class_expr_a52d0169655b81540f004f569f1c6db17}} 
+virtual void {\bfseries pretty\+\_\+print\+\_\+at} (std\+::ostream \&out, \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}} precedence, bool parenthesis, int position=0)=0
 \item 
 \mbox{\Hypertarget{class_expr_abe130f37bd185ec13c5113de16fc7bf7}\label{class_expr_abe130f37bd185ec13c5113de16fc7bf7}} 
 std\+::string {\bfseries to\+\_\+string} ()
 \item 
-\mbox{\Hypertarget{class_expr_a6ad7c18234f22d96d6917089b5bd7caa}\label{class_expr_a6ad7c18234f22d96d6917089b5bd7caa}} 
-std\+::string {\bfseries to\+\_\+pretty\+\_\+string} ()
+\mbox{\Hypertarget{class_expr_a369e6c8c6450e9f32e57554b02e7cf93}\label{class_expr_a369e6c8c6450e9f32e57554b02e7cf93}} 
+std\+::string {\bfseries to\+\_\+pretty\+\_\+string} (int position=0)
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -127,11 +127,11 @@ error message as value of the variable cannot be iterpreted
 
 Implements \mbox{\hyperlink{class_expr}{Expr}}.
 
-\mbox{\Hypertarget{class_var_a9ad0dc208b5d9b1aae8c16a6186fb3d4}\label{class_var_a9ad0dc208b5d9b1aae8c16a6186fb3d4}} 
+\mbox{\Hypertarget{class_var_ab0d0f1be63b5b1876a280d9d5d6d1c56}\label{class_var_ab0d0f1be63b5b1876a280d9d5d6d1c56}} 
 \index{Var@{Var}!pretty\_print@{pretty\_print}}
 \index{pretty\_print@{pretty\_print}!Var@{Var}}
 \doxysubsubsection{\texorpdfstring{pretty\_print()}{pretty\_print()}}
-{\footnotesize\ttfamily void Var\+::pretty\+\_\+print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Var\+::pretty\+\_\+print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{int}]{position = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -141,16 +141,18 @@ Prints the expression with more clarity.
 \begin{DoxyParams}[1]{Parameters}
 \mbox{\texttt{ out}}  & {\em out} & output stream \\
 \hline
+ & {\em position} & second argument, position to track the alignment \\
+\hline
 \end{DoxyParams}
 
 
 Implements \mbox{\hyperlink{class_expr}{Expr}}.
 
-\mbox{\Hypertarget{class_var_a89e191183a8f5abebfc0f72a0ec13f36}\label{class_var_a89e191183a8f5abebfc0f72a0ec13f36}} 
+\mbox{\Hypertarget{class_var_a4180e1576b65fb3a25b59f255e973130}\label{class_var_a4180e1576b65fb3a25b59f255e973130}} 
 \index{Var@{Var}!pretty\_print\_at@{pretty\_print\_at}}
 \index{pretty\_print\_at@{pretty\_print\_at}!Var@{Var}}
 \doxysubsubsection{\texorpdfstring{pretty\_print\_at()}{pretty\_print\_at()}}
-{\footnotesize\ttfamily void Var\+::pretty\+\_\+print\+\_\+at (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{\mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}}}]{precedence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Var\+::pretty\+\_\+print\+\_\+at (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{\mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}}}]{precedence,  }\item[{bool}]{parenthesis,  }\item[{int}]{position = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 

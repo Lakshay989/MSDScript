@@ -69,19 +69,23 @@ $(function() {
 
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">Expr Member List</div></div>
+  <div class="headertitle"><div class="title">Let Member List</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="class_expr.html">Expr</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="class_let.html">Let</a>, including all inherited members.</p>
 <table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>equals</b>(Expr *e)=0 (defined in <a class="el" href="class_expr.html">Expr</a>)</td><td class="entry"><a class="el" href="class_expr.html">Expr</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>has_variable</b>()=0 (defined in <a class="el" href="class_expr.html">Expr</a>)</td><td class="entry"><a class="el" href="class_expr.html">Expr</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>interp</b>()=0 (defined in <a class="el" href="class_expr.html">Expr</a>)</td><td class="entry"><a class="el" href="class_expr.html">Expr</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>pretty_print</b>(std::ostream &amp;out, int position=0)=0 (defined in <a class="el" href="class_expr.html">Expr</a>)</td><td class="entry"><a class="el" href="class_expr.html">Expr</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>pretty_print_at</b>(std::ostream &amp;out, precedence_t precedence, bool parenthesis, int position=0)=0 (defined in <a class="el" href="class_expr.html">Expr</a>)</td><td class="entry"><a class="el" href="class_expr.html">Expr</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>print</b>(std::ostream &amp;out)=0 (defined in <a class="el" href="class_expr.html">Expr</a>)</td><td class="entry"><a class="el" href="class_expr.html">Expr</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>subst</b>(std::string s, Expr *e)=0 (defined in <a class="el" href="class_expr.html">Expr</a>)</td><td class="entry"><a class="el" href="class_expr.html">Expr</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_let.html#a02e437c5e8a492f222d0f92294b86249">body</a></td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_let.html#ac7d4ef3628d2cf94a6eea15b46ff9c9d">equals</a>(Expr *e)</td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_let.html#af219be6d0668d3ec3b6197707dbcb8c8">has_variable</a>()</td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_let.html#a6a6f8ddabaf1e92682f9bf4630908990">interp</a>()</td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_let.html#a1cf608426b7ae0f78658acb379547b54">Let</a>(Var *lhs, Expr *rhs, Expr *body)</td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_let.html#a878d83ae5a9787e26df012b42a75c41e">lhs</a></td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_let.html#a5f75237048b391d72e63f2ff2410ddfd">pretty_print</a>(std::ostream &amp;out, int position=0)</td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>pretty_print_at</b>(std::ostream &amp;out, precedence_t precedence, bool parenthesis, int position) (defined in <a class="el" href="class_let.html">Let</a>)</td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_let.html#a7b7bae5dbdab951c2cd2bbe3e832ce3e">print</a>(std::ostream &amp;out)</td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_let.html#a4b5ea4d414ccf1cd0a4b524458938164">rhs</a></td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_let.html#aa9a89ea42e60bdcba33241cda74ed744">subst</a>(std::string s, Expr *e)</td><td class="entry"><a class="el" href="class_let.html">Let</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>to_pretty_string</b>(int position=0) (defined in <a class="el" href="class_expr.html">Expr</a>)</td><td class="entry"><a class="el" href="class_expr.html">Expr</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>to_string</b>() (defined in <a class="el" href="class_expr.html">Expr</a>)</td><td class="entry"><a class="el" href="class_expr.html">Expr</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->

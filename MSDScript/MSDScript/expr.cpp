@@ -80,12 +80,13 @@ void Num::print(std::ostream &out) {
 /**
 * \brief Prints the expression with more clarity
 * \param [out] out output stream
+* \param position second argument, position to track the alignment
 */
-void Num::pretty_print(std::ostream &out) {
-    this->pretty_print_at(out, precedence_none);
+void Num::pretty_print(std::ostream &out, int position) {
+    this->pretty_print_at(out, precedence_none, false);
 }
 
-void Num::pretty_print_at(std::ostream &out, precedence_t precedence) {
+void Num::pretty_print_at(std::ostream &out, precedence_t precedence, bool paranthesis, int position) {
     out << std::to_string(val);
 }
 
@@ -167,18 +168,19 @@ void Add::print(std::ostream &out) {
 /**
 * \brief Prints the expression with more clarity
 * \param [out] out output stream
+* \param position second argument, position to track the alignment
 */
-void Add::pretty_print(std::ostream &out) {
-    this->lhs->pretty_print_at(out, precedence_add);
+void Add::pretty_print(std::ostream &out, int position) {
+    this->lhs->pretty_print_at(out, precedence_add, true, position);
     out << " + ";
-    this->rhs->pretty_print_at(out, precedence_none);
+    this->rhs->pretty_print_at(out, precedence_none, false, position);
 }
 
-void Add::pretty_print_at(std::ostream &out, precedence_t precedence) {
+void Add::pretty_print_at(std::ostream &out, precedence_t precedence, bool paranthesis, int position) {
     if (precedence >= precedence_add) {
         out << "(";
     }
-    out << this->lhs->to_pretty_string() << " + " << this->rhs->to_pretty_string();
+    out << this->lhs->to_pretty_string(position) << " + " << this->rhs->to_pretty_string(position);
     if (precedence >= precedence_add) {
         out << ")";
     }
@@ -259,18 +261,19 @@ void Mult::print(std::ostream &out) {
 /**
 * \brief Prints the expression with more clarity
 * \param [out] out output stream
+* \param position second argument, position to track the alignment
 */
-void Mult::pretty_print(std::ostream &out) {
-    this->lhs->pretty_print_at(out, precedence_mult);
+void Mult::pretty_print(std::ostream &out, int position) {
+    this->lhs->pretty_print_at(out, precedence_mult, true, position);
     out << " * ";
-    this->rhs->pretty_print_at(out, precedence_add);
+    this->rhs->pretty_print_at(out, precedence_add, false, position);
 }
 
-void Mult::pretty_print_at(std::ostream &out, precedence_t precedence) {
+void Mult::pretty_print_at(std::ostream &out, precedence_t precedence, bool paranthesis, int position) {
     if (precedence >= precedence_mult) {
         out << "(";
     }
-    out << this->lhs->to_pretty_string() << " * " << this->rhs->to_pretty_string();
+    out << this->lhs->to_pretty_string(position) << " * " << this->rhs->to_pretty_string(position);
     if (precedence >= precedence_mult) {
         out << ")";
     }
@@ -354,17 +357,22 @@ void Var::print(std::ostream &out) {
 /**
 * \brief Prints the expression with more clarity
 * \param [out] out output stream
+* \param position second argument, position to track the alignment
 */
-void Var::pretty_print(std::ostream &out) {
-    this->pretty_print_at(out, precedence_none);
+void Var::pretty_print(std::ostream &out, int position) {
+    this->pretty_print_at(out, precedence_none, false);
 }
 
-void Var::pretty_print_at(std::ostream &out, precedence_t precedence) {
+void Var::pretty_print_at(std::ostream &out, precedence_t precedence, bool paranthesis, int position) {
     out << this->name;
 }
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+* \brief Constructor
+*/
 Let::Let(Var *lhs, Expr *rhs, Expr *body)
 {
     this->lhs = lhs ;
@@ -372,10 +380,108 @@ Let::Let(Var *lhs, Expr *rhs, Expr *body)
     this->body = body ;
 }
 
-//bool Let::equals( Expr *e)
-//{
-//
-//}
-//
+
+/**
+* \brief Checks for the equality between the left hand side and the right hand side
+* \param e Expression
+* \return boolean value of LHS = RHS
+*/
+bool Let::equals( Expr *e)
+{
+    Let* let = dynamic_cast<Let*>(e);
+    
+    if(let == nullptr)
+    {
+        return false;
+    }
+    else
+    {
+        return (let->lhs == this->lhs && let->rhs->equals(this->rhs) && let->body->equals(this->body) ) ;
+    }
+}
+
+
+/**
+* \brief This function interprets the value of the Variable
+* \return value of the variable assigned using Let
+*/
+int Let::interp()
+{
+    return this->body->subst(this->lhs->to_string(), this->rhs)->interp();;
+}
+
+
+/**
+* \brief This function determines if the the expression consists of a variable or not.
+* \return boolean value for the expression has a variable or not
+*/
+bool Let::has_variable()
+{
+    return (this->rhs->has_variable() || this->body->has_variable()) ;
+}
+
+
+/**
+* \brief This function substitutes the expression with the combination of sub-expressions if possible.
+* \param subt first argument, string which can be replaced as a part of the expression
+* \param exp second argument, Expression
+* \return Expression which is modified if combination of sub expressions was possible
+*/
+Expr* Let::subst(std::string subt, Expr* exp)
+{
+    if( this->lhs->name == subt )
+    {
+        return new Let(this->lhs, this->rhs, this->body);
+    }
+    else
+    {
+        return new Let(this->lhs, this->rhs, this->body->subst(subt, exp));  // ->subst(subt, exp)
+    }
+}
+
+
+/**
+* \brief Prints the expression
+* \param [out] out output stream
+*/
+void Let::print(std::ostream &out)
+{
+    out<< "(_let " << this->lhs->to_string() << "=" << this->rhs->to_string() << " _in " << this->body->to_string() << ")" ;
+}
+
+
+/**
+* \brief Prints the expression with more clarity
+* \param [out] out first argument, output stream
+* \param position second argument, position to track the alignment
+*/
+void Let::pretty_print(std::ostream &out, int position)
+{
+    this->pretty_print_at(out, precedence_none, false, position);
+}
+
+void Let::pretty_print_at(std::ostream &out, precedence_t precedence, bool parentheses, int position)
+{
+    if (parentheses) {
+            out << "(";
+            position += 1;
+        }
+        out << "_let " << this->lhs->to_pretty_string() << " = " << this->rhs->to_pretty_string() << "\n";
+        int letLine_position = out.tellp();
+
+        for (int i = 0; i < position; i++) {
+            out << " ";
+        }
+        out << "_in  ";
+        int inLine_position = out.tellp();
+        out << this->body->to_pretty_string(inLine_position - letLine_position);
+        if (parentheses) {
+            out << ")";
+        }
+}
+
+
+
+
 
 

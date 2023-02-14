@@ -331,8 +331,139 @@ TEST_CASE("to_pretty_string") {
     SECTION("Universal Examples")
     {
         CHECK((new Mult( new Mult(new Num(10), new Mult(new Mult(new Num(10), new Num(10)), new Num(10))), new Mult(new Num(10), new Num(10))))
-                      ->to_pretty_string()  == "(10 * (10 * 10) * 10) * 10 * 10");
+              ->to_pretty_string()  == "(10 * (10 * 10) * 10) * 10 * 10");
         }
     
+}
+
+TEST_CASE(" let ")
+{
+    SECTION("General Examples for Let to_pretty_string")
+    {
+        
+        CHECK((new Let(new Var("x"), new Num(5), new Add(new Let(new Var("y"), new Num(3), new Add(new Var("y"), new Num(2))), new Var("x"))))
+              ->to_pretty_string() == "_let x = 5\n_in  (_let y = 3\n      _in  y + 2) + x") ;
+        
+        
+        CHECK((new Mult(new Mult(new Num (2), new Let(new Var("x"), new Num(5), new Add(new Var("x") , new Num(1)))), new Num(3)))
+              ->to_pretty_string() == "(2 * _let x = 5\n_in  x + 1) * 3") ;
+        
+        
+        Let *expression1 = new Let(new Var("x"), new Num(5), new Add(new Let(new Var("y"), new Num(3), new Add(new Var("y"), new Num(2))), new Var("x"))) ;
+        
+        Let *expression2 = new Let(new Var("z"), new Num(9), new Add(expression1, new Var("z"))) ;
+        
+        CHECK(expression2->to_pretty_string() == "_let z = 9\n_in  (_let x = 5\n      _in  (_let y = 3\n            _in  y + 2) + x) + z") ;
+    }
+    
+    
+    SECTION("Test LetBinding equals")
+    {
+        Let *expression1 = new Let(new Var("x"), new Num(2), new Add(new Var("x"), new Num(1)));
+
+        REQUIRE(expression1->equals(new Num(2)) == false);
+        REQUIRE(expression1->equals(new Mult(new Var("x"), new Num(1))) == false);
+
+        Add *expression2 = new Add(new Var("x"), new Num(3));
+        Let *expression3 = new Let(new Var("x"), new Num(2), expression2) ;
+        
+        REQUIRE(expression2->equals(new Add(new Var("x"), new Num(3))) == true);
+        REQUIRE(expression3->equals(new Mult(new Var("x"), new Num(1))) == false);
+        
+    }
+    
+    SECTION("Test LetBinding interp") {
+            /*
+             * 5 * (_let x = 5
+                _in  x) + 1
+             */
+            Let *expression1 = new Let(new Var("x"), new Num(5), new Var("x"));
+        
+            Add *expression2 = new Add(new Mult(new Num(5), expression1), new Num(1));
+
+            REQUIRE(expression1->interp() == 5);
+            REQUIRE(expression2->interp() == 26);
+
+        
+            /*
+             5 * _let x = 5
+            _in  x + 1
+             */
+
+            Let *expression3 = new Let(new Var("x"), new Num(5), new Add(new Var("x"), new Num(1)));
+            Mult *expression4 = new Mult(new Num(5), expression3);
+            REQUIRE(expression4->interp() == 30);
+
+
+            // subst interp
+            Add *add = new Add(new Var("x"), new Var("y"));
+            Let *expression5 = new Let(new Var("x"), new Num(3), add);
+            REQUIRE(expression5->subst("y", new Num(4))->interp() == 7);
+
+        }
+
+    SECTION("Test LetBinding has_variable") {
+        Var *lhs = new Var("x");
+
+        Num *num = new Num(2);
+        Add *exp = new Add(new Num(1), new Var("y"));
+        Var *variable = new Var("z");
+
+        Num *num_body = new Num(2);
+        Add *exp_body = new Add(new Num(1), new Var("x"));
+        Var *variable_body = new Var("x");
+
+        // rhs: number
+        REQUIRE((new Let(lhs, num, num_body))->has_variable() == false);
+        REQUIRE((new Let(lhs, num, exp_body))->has_variable());
+        REQUIRE((new Let(lhs, num, variable_body))->has_variable());
+
+        // rhs: expression has variable
+        REQUIRE((new Let(lhs, exp, num_body))->has_variable());
+        REQUIRE((new Let(lhs, exp, exp_body))->has_variable());
+        REQUIRE((new Let(lhs, exp, variable_body))->has_variable());
+
+        // rhs: rhs is a variable
+        REQUIRE((new Let(lhs, variable, num_body))->has_variable());
+        REQUIRE((new Let(lhs, variable, exp_body))->has_variable());
+        REQUIRE((new Let(lhs, variable, variable_body))->has_variable());
+    }
+
+    SECTION("Test LetBinding subst") {
+
+        /*   y = 4
+          _let x = 3
+         _in x + y
+         */
+        
+        Let *expression1 = new Let(new Var("x"), new Num(3), new Add(new Var("x"), new Var("y")));
+        Let *expression2 = new Let(new Var("x"), new Num(3), new Add(new Var("x"), new Num(4)));
+
+        //CHECK(expression1->subst("y", new Num(4))->equals(expression2) == true);
+        
+        CHECK(expression1->subst("y", new Num(4))->to_pretty_string() == expression2->to_pretty_string()) ;
+
+        /* subst x with 5
+         _let x = 6
+        _in x + 1)
+        */
+        Let *expression3 = new Let(new Var("x"), new Num(6),
+                                                    new Add(new Var("x"), new Num(1)));
+        
+        REQUIRE(expression3->subst("x", new Num(5))->equals(expression3));
+    }
+
+    SECTION("Test LetBinding to_string")
+    {
+        
+        Let *expression1 = new Let(new Var("y"), new Num(3), new Add(new Var("y"), new Num(2)));
+        
+        Let *expression2 = new Let(new Var("x"), new Num(5),new Add(expression1, new Var("x")));
+        
+        
+        REQUIRE(expression1->to_string() == "(_let y=3 _in (y+2))");
+        REQUIRE(expression2->to_string() == "(_let x=5 _in ((_let y=3 _in (y+2))+x))");
+    }
+
 }
 

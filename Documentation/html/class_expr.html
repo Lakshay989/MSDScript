@@ -87,9 +87,10 @@ Inheritance diagram for Expr:</div>
   <img src="class_expr.png" usemap="#Expr_map" alt=""/>
   <map id="Expr_map" name="Expr_map">
 <area href="class_add.html" title="Derived Class from Expr for representing a expression involving addition." alt="Add" shape="rect" coords="0,56,38,80"/>
-<area href="class_mult.html" title="Derived Class from Expr for representing a expression involving addition." alt="Mult" shape="rect" coords="48,56,86,80"/>
-<area href="class_num.html" title="Derived Class from Expr for representing a number." alt="Num" shape="rect" coords="96,56,134,80"/>
-<area href="class_var.html" title="Derived Class from Expr for representing a expression involving Variable." alt="Var" shape="rect" coords="144,56,182,80"/>
+<area href="class_let.html" title="Derived Class from Expr for the purpose of assigning a value to the objects of the variable class." alt="Let" shape="rect" coords="48,56,86,80"/>
+<area href="class_mult.html" title="Derived Class from Expr for representing a expression involving addition." alt="Mult" shape="rect" coords="96,56,134,80"/>
+<area href="class_num.html" title="Derived Class from Expr for representing a number." alt="Num" shape="rect" coords="144,56,182,80"/>
+<area href="class_var.html" title="Derived Class from Expr for representing a expression involving Variable." alt="Var" shape="rect" coords="192,56,230,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -105,17 +106,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7b1962354ae431ccb7b7e0ad3f164887"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25b84618e82e7b1205afee21bfc6c948"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#a25b84618e82e7b1205afee21bfc6c948">print</a> (std::ostream &amp;out)=0</td></tr>
 <tr class="separator:a25b84618e82e7b1205afee21bfc6c948"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab777e5c814a5d154a6bdf0a1543a6e93"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#ab777e5c814a5d154a6bdf0a1543a6e93">pretty_print</a> (std::ostream &amp;out)=0</td></tr>
-<tr class="separator:ab777e5c814a5d154a6bdf0a1543a6e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad18d8a44c1456898b311f27dd08d93e3"><td class="memItemLeft" align="right" valign="top"><a id="ad18d8a44c1456898b311f27dd08d93e3" name="ad18d8a44c1456898b311f27dd08d93e3"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>pretty_print_at</b> (std::ostream &amp;out, <a class="el" href="expr_8hpp.html#a9e5fdf365cd8dc7be4d972daf07f8bdf">precedence_t</a> precedence)=0</td></tr>
-<tr class="separator:ad18d8a44c1456898b311f27dd08d93e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa56927ec43fa7b2b57ae576ed1a06fae"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#aa56927ec43fa7b2b57ae576ed1a06fae">pretty_print</a> (std::ostream &amp;out, int position=0)=0</td></tr>
+<tr class="separator:aa56927ec43fa7b2b57ae576ed1a06fae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52d0169655b81540f004f569f1c6db17"><td class="memItemLeft" align="right" valign="top"><a id="a52d0169655b81540f004f569f1c6db17" name="a52d0169655b81540f004f569f1c6db17"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>pretty_print_at</b> (std::ostream &amp;out, <a class="el" href="expr_8hpp.html#a9e5fdf365cd8dc7be4d972daf07f8bdf">precedence_t</a> precedence, bool parenthesis, int position=0)=0</td></tr>
+<tr class="separator:a52d0169655b81540f004f569f1c6db17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe130f37bd185ec13c5113de16fc7bf7"><td class="memItemLeft" align="right" valign="top"><a id="abe130f37bd185ec13c5113de16fc7bf7" name="abe130f37bd185ec13c5113de16fc7bf7"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_string</b> ()</td></tr>
 <tr class="separator:abe130f37bd185ec13c5113de16fc7bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ad7c18234f22d96d6917089b5bd7caa"><td class="memItemLeft" align="right" valign="top"><a id="a6ad7c18234f22d96d6917089b5bd7caa" name="a6ad7c18234f22d96d6917089b5bd7caa"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_pretty_string</b> ()</td></tr>
-<tr class="separator:a6ad7c18234f22d96d6917089b5bd7caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a369e6c8c6450e9f32e57554b02e7cf93"><td class="memItemLeft" align="right" valign="top"><a id="a369e6c8c6450e9f32e57554b02e7cf93" name="a369e6c8c6450e9f32e57554b02e7cf93"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_pretty_string</b> (int position=0)</td></tr>
+<tr class="separator:a369e6c8c6450e9f32e57554b02e7cf93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base Class for representing a expression. </p>
@@ -144,7 +145,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_pretty_stri
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num.html#a3bf692f7d3fc54e016affbe618ec11e4">Num</a>, <a class="el" href="class_add.html#abf7aaca3dc46de4409fe80bd829e1da1">Add</a>, <a class="el" href="class_mult.html#a01e8b8d819db386b353d7191424cc97e">Mult</a>, and <a class="el" href="class_var.html#a36314fbf7736f619da64b854f4437949">Var</a>.</p>
+<p>Implemented in <a class="el" href="class_num.html#a3bf692f7d3fc54e016affbe618ec11e4">Num</a>, <a class="el" href="class_add.html#abf7aaca3dc46de4409fe80bd829e1da1">Add</a>, <a class="el" href="class_mult.html#a01e8b8d819db386b353d7191424cc97e">Mult</a>, <a class="el" href="class_var.html#a36314fbf7736f619da64b854f4437949">Var</a>, and <a class="el" href="class_let.html#ac7d4ef3628d2cf94a6eea15b46ff9c9d">Let</a>.</p>
 
 </div>
 </div>
@@ -171,7 +172,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_pretty_stri
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num.html#ad0ce114704933a1ebe4629848d3e2d6d">Num</a>, <a class="el" href="class_add.html#a882db0df18673599f4d1248e17fb24cb">Add</a>, <a class="el" href="class_mult.html#ab53cc8634d4ebad5aaa2dc818c0de598">Mult</a>, and <a class="el" href="class_var.html#a6083356e4955e1edfb76b8432672c93e">Var</a>.</p>
+<p>Implemented in <a class="el" href="class_num.html#ad0ce114704933a1ebe4629848d3e2d6d">Num</a>, <a class="el" href="class_add.html#a882db0df18673599f4d1248e17fb24cb">Add</a>, <a class="el" href="class_mult.html#ab53cc8634d4ebad5aaa2dc818c0de598">Mult</a>, <a class="el" href="class_var.html#a6083356e4955e1edfb76b8432672c93e">Var</a>, and <a class="el" href="class_let.html#af219be6d0668d3ec3b6197707dbcb8c8">Let</a>.</p>
 
 </div>
 </div>
@@ -198,12 +199,12 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_pretty_stri
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num.html#a24f8a1c7ccad82bf7ed1080b59cda6dd">Num</a>, <a class="el" href="class_add.html#a63c445ae0ea8ecc0d0765378e630a06f">Add</a>, <a class="el" href="class_mult.html#a7d3fba024174b294a7e1c145485b9d38">Mult</a>, and <a class="el" href="class_var.html#ac6df55db7c2447d3090dd99ae247ae80">Var</a>.</p>
+<p>Implemented in <a class="el" href="class_num.html#a24f8a1c7ccad82bf7ed1080b59cda6dd">Num</a>, <a class="el" href="class_add.html#a63c445ae0ea8ecc0d0765378e630a06f">Add</a>, <a class="el" href="class_mult.html#a7d3fba024174b294a7e1c145485b9d38">Mult</a>, <a class="el" href="class_var.html#ac6df55db7c2447d3090dd99ae247ae80">Var</a>, and <a class="el" href="class_let.html#a6a6f8ddabaf1e92682f9bf4630908990">Let</a>.</p>
 
 </div>
 </div>
-<a id="ab777e5c814a5d154a6bdf0a1543a6e93" name="ab777e5c814a5d154a6bdf0a1543a6e93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab777e5c814a5d154a6bdf0a1543a6e93">&#9670;&#160;</a></span>pretty_print()</h2>
+<a id="aa56927ec43fa7b2b57ae576ed1a06fae" name="aa56927ec43fa7b2b57ae576ed1a06fae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa56927ec43fa7b2b57ae576ed1a06fae">&#9670;&#160;</a></span>pretty_print()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -215,8 +216,18 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_pretty_stri
           <td class="memname">virtual void Expr::pretty_print </td>
           <td>(</td>
           <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>position</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -226,7 +237,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_pretty_stri
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num.html#a1f1d301e8c768aea8cced0366c78f8d1">Num</a>, <a class="el" href="class_add.html#a0b2d355c1418fe84010aebdf559a8ed7">Add</a>, <a class="el" href="class_mult.html#a90ef421de3c46fb55ee9e82198f2e06d">Mult</a>, and <a class="el" href="class_var.html#a9ad0dc208b5d9b1aae8c16a6186fb3d4">Var</a>.</p>
+<p>Implemented in <a class="el" href="class_num.html#aa12feff5a6167970738ca8607e9e6907">Num</a>, <a class="el" href="class_add.html#ac19e5aa27186a28bc7a64bd2870ba2ed">Add</a>, <a class="el" href="class_mult.html#a48f11a34ff01d7163f40c5074865bd9b">Mult</a>, <a class="el" href="class_var.html#ab0d0f1be63b5b1876a280d9d5d6d1c56">Var</a>, and <a class="el" href="class_let.html#a5f75237048b391d72e63f2ff2410ddfd">Let</a>.</p>
 
 </div>
 </div>
@@ -254,7 +265,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_pretty_stri
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num.html#a09bc7906c366957248045b211bfa5db0">Num</a>, <a class="el" href="class_add.html#aa008ba963d7a3bd4bef81e976bcf09c9">Add</a>, <a class="el" href="class_mult.html#aa8c2b9721e4c8db8a3358ebaa30e2cf0">Mult</a>, and <a class="el" href="class_var.html#aebf7f80c96ac7938fe40617a46cf8574">Var</a>.</p>
+<p>Implemented in <a class="el" href="class_num.html#a09bc7906c366957248045b211bfa5db0">Num</a>, <a class="el" href="class_add.html#aa008ba963d7a3bd4bef81e976bcf09c9">Add</a>, <a class="el" href="class_mult.html#aa8c2b9721e4c8db8a3358ebaa30e2cf0">Mult</a>, <a class="el" href="class_var.html#aebf7f80c96ac7938fe40617a46cf8574">Var</a>, and <a class="el" href="class_let.html#a7b7bae5dbdab951c2cd2bbe3e832ce3e">Let</a>.</p>
 
 </div>
 </div>
@@ -292,7 +303,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_pretty_stri
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num.html#a883b6034a7eb7308d580e3161d1cff18">Num</a>, <a class="el" href="class_add.html#a65218c5ab4b4738d5b132f9a0addeb82">Add</a>, <a class="el" href="class_mult.html#a7c4e022d07fe8c8cfa8ffff69018f969">Mult</a>, and <a class="el" href="class_var.html#a13b3c99f4a0d38643f30116b51b55b95">Var</a>.</p>
+<p>Implemented in <a class="el" href="class_num.html#a883b6034a7eb7308d580e3161d1cff18">Num</a>, <a class="el" href="class_add.html#a65218c5ab4b4738d5b132f9a0addeb82">Add</a>, <a class="el" href="class_mult.html#a7c4e022d07fe8c8cfa8ffff69018f969">Mult</a>, <a class="el" href="class_var.html#a13b3c99f4a0d38643f30116b51b55b95">Var</a>, and <a class="el" href="class_let.html#aa9a89ea42e60bdcba33241cda74ed744">Let</a>.</p>
 
 </div>
 </div>

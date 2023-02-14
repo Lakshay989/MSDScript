@@ -26,8 +26,9 @@
 */
 typedef enum {
   precedence_none = 0,
-  precedence_add = 1,
-  precedence_mult = 2,
+//  precedence_let_ = 1,
+  precedence_add = 2,
+  precedence_mult = 3,
 } precedence_t;
 
 
@@ -41,8 +42,8 @@ public:
     virtual bool has_variable() = 0 ; // This function determines if the the expression consists of a variable or not.
     virtual Expr* subst(std::string s, Expr* e) = 0; // This function substitutes the expression with the combination of sub-expressions if possible.
     virtual void print(std::ostream &out) = 0; // This function prints the expression.
-    virtual void pretty_print(std::ostream &out) = 0;
-    virtual void pretty_print_at(std::ostream &out, precedence_t precedence) = 0; // This is an extenstion of the print function with minor changes.
+    virtual void pretty_print(std::ostream &out, int position = 0) = 0;
+    virtual void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0) = 0; // This is an extenstion of the print function with minor changes.
     
     std::string to_string() {
         std::stringstream st("");
@@ -51,9 +52,9 @@ public:
     }
     
     
-    std::string to_pretty_string() {
+    std::string to_pretty_string(int position = 0) {
         std::stringstream st("");
-        this->pretty_print(st);
+        this->pretty_print(st, position);
         return st.str();
     }
     
@@ -73,8 +74,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence);
+    void pretty_print(std::ostream &out, int position = 0);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0);
 };
 
 
@@ -92,8 +93,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence);
+    void pretty_print(std::ostream &out, int position = 0);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0 );
     
 };
 
@@ -112,8 +113,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence);
+    void pretty_print(std::ostream &out, int position = 0);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0);
 };
 
 
@@ -131,8 +132,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence);
+    void pretty_print(std::ostream &out, int position = 0);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0);
 };
 
 
@@ -142,9 +143,9 @@ class Let : public Expr
 {
 public:
     
-    Var *lhs ;
-    Expr *rhs ;
-    Expr *body ;
+    Var *lhs ; //!< Variable on the lhs of the expression
+    Expr *rhs ; //!< Expression on the rhs of the variable
+    Expr *body ; //!< body of the rhs
     
     Let(Var *lhs, Expr *rhs, Expr *body) ;
     
@@ -153,8 +154,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence);
+    void pretty_print(std::ostream &out, int position = 0);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position);
     
 };
 

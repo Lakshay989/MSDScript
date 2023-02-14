@@ -1,0 +1,215 @@
+\hypertarget{class_let}{}\doxysection{Let Class Reference}
+\label{class_let}\index{Let@{Let}}
+
+
+Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for the purpose of assigning a value to the objects of the variable class.  
+
+
+
+
+{\ttfamily \#include $<$expr.\+hpp$>$}
+
+Inheritance diagram for Let\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_let}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_let_a1cf608426b7ae0f78658acb379547b54}\label{class_let_a1cf608426b7ae0f78658acb379547b54}} 
+{\bfseries Let} (\mbox{\hyperlink{class_var}{Var}} $\ast$\mbox{\hyperlink{class_let_a878d83ae5a9787e26df012b42a75c41e}{lhs}}, \mbox{\hyperlink{class_expr}{Expr}} $\ast$\mbox{\hyperlink{class_let_a4b5ea4d414ccf1cd0a4b524458938164}{rhs}}, \mbox{\hyperlink{class_expr}{Expr}} $\ast$\mbox{\hyperlink{class_let_a02e437c5e8a492f222d0f92294b86249}{body}})
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_let_ac7d4ef3628d2cf94a6eea15b46ff9c9d}{equals}} (\mbox{\hyperlink{class_expr}{Expr}} $\ast$e)
+\begin{DoxyCompactList}\small\item\em Checks for the equality between the left hand side and the right hand side. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_let_a6a6f8ddabaf1e92682f9bf4630908990}{interp}} ()
+\begin{DoxyCompactList}\small\item\em This function interprets the value of the Variable. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_let_af219be6d0668d3ec3b6197707dbcb8c8}{has\+\_\+variable}} ()
+\begin{DoxyCompactList}\small\item\em This function determines if the the expression consists of a variable or not. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_let_aa9a89ea42e60bdcba33241cda74ed744}{subst}} (std\+::string s, \mbox{\hyperlink{class_expr}{Expr}} $\ast$e)
+\begin{DoxyCompactList}\small\item\em This function substitutes the expression with the combination of sub-\/expressions if possible. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_let_a7b7bae5dbdab951c2cd2bbe3e832ce3e}{print}} (std\+::ostream \&out)
+\begin{DoxyCompactList}\small\item\em Prints the expression. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_let_a5f75237048b391d72e63f2ff2410ddfd}{pretty\+\_\+print}} (std\+::ostream \&out, int position=0)
+\begin{DoxyCompactList}\small\item\em Prints the expression with more clarity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_let_a31a5e68abcb3000d67ce389617b53b6f}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}} precedence, bool parenthesis, int position)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_expr}{Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool \mbox{\hyperlink{class_expr_abf9cdb765fb84304881789d273d7594f}{equals}} (\mbox{\hyperlink{class_expr}{Expr}} $\ast$e)=0
+\item 
+virtual int \mbox{\hyperlink{class_expr_aeba8585d8225419d49166371306542c1}{interp}} ()=0
+\item 
+virtual bool \mbox{\hyperlink{class_expr_a92dc26078993a4b9721ea732274a435c}{has\+\_\+variable}} ()=0
+\item 
+virtual \mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_expr_a7b1962354ae431ccb7b7e0ad3f164887}{subst}} (std\+::string s, \mbox{\hyperlink{class_expr}{Expr}} $\ast$e)=0
+\item 
+virtual void \mbox{\hyperlink{class_expr_a25b84618e82e7b1205afee21bfc6c948}{print}} (std\+::ostream \&out)=0
+\item 
+virtual void \mbox{\hyperlink{class_expr_aa56927ec43fa7b2b57ae576ed1a06fae}{pretty\+\_\+print}} (std\+::ostream \&out, int position=0)=0
+\item 
+\mbox{\Hypertarget{class_expr_a52d0169655b81540f004f569f1c6db17}\label{class_expr_a52d0169655b81540f004f569f1c6db17}} 
+virtual void {\bfseries pretty\+\_\+print\+\_\+at} (std\+::ostream \&out, \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}} precedence, bool parenthesis, int position=0)=0
+\item 
+\mbox{\Hypertarget{class_expr_abe130f37bd185ec13c5113de16fc7bf7}\label{class_expr_abe130f37bd185ec13c5113de16fc7bf7}} 
+std\+::string {\bfseries to\+\_\+string} ()
+\item 
+\mbox{\Hypertarget{class_expr_a369e6c8c6450e9f32e57554b02e7cf93}\label{class_expr_a369e6c8c6450e9f32e57554b02e7cf93}} 
+std\+::string {\bfseries to\+\_\+pretty\+\_\+string} (int position=0)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_let_a878d83ae5a9787e26df012b42a75c41e}\label{class_let_a878d83ae5a9787e26df012b42a75c41e}} 
+\mbox{\hyperlink{class_var}{Var}} $\ast$ {\bfseries lhs}
+\begin{DoxyCompactList}\small\item\em Variable on the lhs of the expression. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_let_a4b5ea4d414ccf1cd0a4b524458938164}\label{class_let_a4b5ea4d414ccf1cd0a4b524458938164}} 
+\mbox{\hyperlink{class_expr}{Expr}} $\ast$ {\bfseries rhs}
+\begin{DoxyCompactList}\small\item\em Expression on the rhs of the variable. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_let_a02e437c5e8a492f222d0f92294b86249}\label{class_let_a02e437c5e8a492f222d0f92294b86249}} 
+\mbox{\hyperlink{class_expr}{Expr}} $\ast$ {\bfseries body}
+\begin{DoxyCompactList}\small\item\em body of the rhs \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for the purpose of assigning a value to the objects of the variable class. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_let_ac7d4ef3628d2cf94a6eea15b46ff9c9d}\label{class_let_ac7d4ef3628d2cf94a6eea15b46ff9c9d}} 
+\index{Let@{Let}!equals@{equals}}
+\index{equals@{equals}!Let@{Let}}
+\doxysubsubsection{\texorpdfstring{equals()}{equals()}}
+{\footnotesize\ttfamily bool Let\+::equals (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Checks for the equality between the left hand side and the right hand side. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & Expression \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean value of LHS = RHS 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_let_af219be6d0668d3ec3b6197707dbcb8c8}\label{class_let_af219be6d0668d3ec3b6197707dbcb8c8}} 
+\index{Let@{Let}!has\_variable@{has\_variable}}
+\index{has\_variable@{has\_variable}!Let@{Let}}
+\doxysubsubsection{\texorpdfstring{has\_variable()}{has\_variable()}}
+{\footnotesize\ttfamily bool Let\+::has\+\_\+variable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+This function determines if the the expression consists of a variable or not. 
+
+\begin{DoxyReturn}{Returns}
+boolean value for the expression has a variable or not 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_let_a6a6f8ddabaf1e92682f9bf4630908990}\label{class_let_a6a6f8ddabaf1e92682f9bf4630908990}} 
+\index{Let@{Let}!interp@{interp}}
+\index{interp@{interp}!Let@{Let}}
+\doxysubsubsection{\texorpdfstring{interp()}{interp()}}
+{\footnotesize\ttfamily int Let\+::interp (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+This function interprets the value of the Variable. 
+
+\begin{DoxyReturn}{Returns}
+value of the variable assigned using \mbox{\hyperlink{class_let}{Let}} 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_let_a5f75237048b391d72e63f2ff2410ddfd}\label{class_let_a5f75237048b391d72e63f2ff2410ddfd}} 
+\index{Let@{Let}!pretty\_print@{pretty\_print}}
+\index{pretty\_print@{pretty\_print}!Let@{Let}}
+\doxysubsubsection{\texorpdfstring{pretty\_print()}{pretty\_print()}}
+{\footnotesize\ttfamily void Let\+::pretty\+\_\+print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{int}]{position = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Prints the expression with more clarity. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ out}}  & {\em out} & first argument, output stream \\
+\hline
+ & {\em position} & second argument, position to track the alignment \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_let_a31a5e68abcb3000d67ce389617b53b6f}\label{class_let_a31a5e68abcb3000d67ce389617b53b6f}} 
+\index{Let@{Let}!pretty\_print\_at@{pretty\_print\_at}}
+\index{pretty\_print\_at@{pretty\_print\_at}!Let@{Let}}
+\doxysubsubsection{\texorpdfstring{pretty\_print\_at()}{pretty\_print\_at()}}
+{\footnotesize\ttfamily void Let\+::pretty\+\_\+print\+\_\+at (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{\mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}}}]{precedence,  }\item[{bool}]{parenthesis,  }\item[{int}]{position }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_let_a7b7bae5dbdab951c2cd2bbe3e832ce3e}\label{class_let_a7b7bae5dbdab951c2cd2bbe3e832ce3e}} 
+\index{Let@{Let}!print@{print}}
+\index{print@{print}!Let@{Let}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily void Let\+::print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Prints the expression. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ out}}  & {\em out} & output stream \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_let_aa9a89ea42e60bdcba33241cda74ed744}\label{class_let_aa9a89ea42e60bdcba33241cda74ed744}} 
+\index{Let@{Let}!subst@{subst}}
+\index{subst@{subst}!Let@{Let}}
+\doxysubsubsection{\texorpdfstring{subst()}{subst()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_expr}{Expr}} $\ast$ Let\+::subst (\begin{DoxyParamCaption}\item[{std\+::string}]{subt,  }\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{exp }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+This function substitutes the expression with the combination of sub-\/expressions if possible. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em subt} & first argument, string which can be replaced as a part of the expression \\
+\hline
+{\em exp} & second argument, Expression \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Expression which is modified if combination of sub expressions was possible 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/lakshaysantoshkucheriya/\+Desktop/\+MSD/\+Courses/\+MSDScript/\+MSDScript/\+MSDScript/\mbox{\hyperlink{expr_8hpp}{expr.\+hpp}}\item 
+/\+Users/lakshaysantoshkucheriya/\+Desktop/\+MSD/\+Courses/\+MSDScript/\+MSDScript/\+MSDScript/\mbox{\hyperlink{expr_8cpp}{expr.\+cpp}}\end{DoxyCompactItemize}

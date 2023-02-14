@@ -22,14 +22,16 @@ class \mbox{\hyperlink{class_add}{Add}}
 class \mbox{\hyperlink{class_mult}{Mult}}
 \begin{DoxyCompactList}\small\item\em Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for representing a expression involving addition. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{class_var}{Var}}
-\begin{DoxyCompactList}\small\item\em Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for representing a expression involving Variable. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for representing a expression involving Variable. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_let}{Let}}
+\begin{DoxyCompactList}\small\item\em Derived Class from \mbox{\hyperlink{class_expr}{Expr}} for the purpose of assigning a value to the objects of the variable class. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}\label{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}} 
 enum \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\+\_\+t}} \{ {\bfseries precedence\+\_\+none} = 0
-, {\bfseries precedence\+\_\+add} = 1
-, {\bfseries precedence\+\_\+mult} = 2
+, {\bfseries precedence\+\_\+add} = 2
+, {\bfseries precedence\+\_\+mult} = 3
  \}
 \begin{DoxyCompactList}\small\item\em Enumeration for assigning the precedence of the operators. \end{DoxyCompactList}\end{DoxyCompactItemize}
 

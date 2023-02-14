@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['var_0',['Var',['../class_var.html#a3877eef2e9fcd8413fa5127f1ab6d861',1,'Var']]]
+  ['use_5farguments_0',['use_arguments',['../cmdline_8cpp.html#a46e33ce73464b70883e2088378349d1a',1,'use_arguments(int argc, char *argv[]):&#160;cmdline.cpp'],['../cmdline_8hpp.html#a46e33ce73464b70883e2088378349d1a',1,'use_arguments(int argc, char *argv[]):&#160;cmdline.cpp']]]
 ];

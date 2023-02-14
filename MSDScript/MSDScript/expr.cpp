@@ -405,9 +405,9 @@ bool Let::equals( Expr *e)
 * \brief This function interprets the value of the Variable
 * \return value of the variable assigned using Let
 */
-int Let::interp()
+int Let::interp() // More Testing rhs->interp()
 {
-    return this->body->subst(this->lhs->to_string(), this->rhs)->interp();;
+    return this->body->subst(this->lhs->to_string(), this->rhs)->interp();
 }
 
 
@@ -431,11 +431,11 @@ Expr* Let::subst(std::string subt, Expr* exp)
 {
     if( this->lhs->name == subt )
     {
-        return new Let(this->lhs, this->rhs, this->body);
+        return new Let(this->lhs, this->rhs->subst(subt, exp), this->body);
     }
     else
     {
-        return new Let(this->lhs, this->rhs, this->body->subst(subt, exp));  // ->subst(subt, exp)
+        return new Let(this->lhs, this->rhs->subst(subt, exp), this->body->subst(subt, exp));  // ->subst(subt, exp)
     }
 }
 

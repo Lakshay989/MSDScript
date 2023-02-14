@@ -26,7 +26,7 @@
 */
 typedef enum {
   precedence_none = 0,
-//  precedence_let_ = 1,
+//precedence__let = 1,
   precedence_add = 2,
   precedence_mult = 3,
 } precedence_t;

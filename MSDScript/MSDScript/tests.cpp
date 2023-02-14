@@ -390,9 +390,9 @@ TEST_CASE(" let ")
             _in  x + 1
              */
 
-            Let *expression3 = new Let(new Var("x"), new Num(5), new Add(new Var("x"), new Num(1)));
+            Let *expression3 = new Let(new Var("x"), new Add(new Num(5), new Num(2)), new Add(new Var("x"), new Num(1)));
             Mult *expression4 = new Mult(new Num(5), expression3);
-            REQUIRE(expression4->interp() == 30);
+            REQUIRE(expression4->interp() == 40);
 
 
             // subst interp

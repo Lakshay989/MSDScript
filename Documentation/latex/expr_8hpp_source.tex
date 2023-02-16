@@ -21,7 +21,7 @@
 \DoxyCodeLine{00024\ }
 \DoxyCodeLine{00027\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
 \DoxyCodeLine{00028\ \ \ precedence\_none\ =\ 0,}
-\DoxyCodeLine{00029\ \textcolor{comment}{//\ \ precedence\_let\_\ =\ 1,}}
+\DoxyCodeLine{00029\ \textcolor{comment}{//precedence\_\_let\ =\ 1,}}
 \DoxyCodeLine{00030\ \ \ precedence\_add\ =\ 2,}
 \DoxyCodeLine{00031\ \ \ precedence\_mult\ =\ 3,}
 \DoxyCodeLine{00032\ \}\ \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\_t}};}
@@ -35,8 +35,8 @@
 \DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ has\_variable()\ =\ 0\ ;\ \textcolor{comment}{//\ This\ function\ determines\ if\ the\ the\ expression\ consists\ of\ a\ variable\ or\ not.}}
 \DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_expr}{Expr}}*\ subst(std::string\ s,\ \mbox{\hyperlink{class_expr}{Expr}}*\ e)\ =\ 0;\ \textcolor{comment}{//\ This\ function\ substitutes\ the\ expression\ with\ the\ combination\ of\ sub-\/expressions\ if\ possible.}}
 \DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ print(std::ostream\ \&out)\ =\ 0;\ \textcolor{comment}{//\ This\ function\ prints\ the\ expression.}}
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ pretty\_print(std::ostream\ \&out,\ \textcolor{keywordtype}{int}\ position\ =\ 0)\ =\ 0;}
-\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ pretty\_print\_at(std::ostream\ \&out,\ \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\_t}}\ precedence,\ \textcolor{keywordtype}{bool}\ parenthesis,\ \textcolor{keywordtype}{int}\ position\ =\ 0)\ =\ 0;\ \textcolor{comment}{//\ This\ is\ an\ extenstion\ of\ the\ print\ function\ with\ minor\ changes.}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ pretty\_print(std::ostream\ \&out,\ \textcolor{keywordtype}{int}\ position\ =\ 0)\ =\ 0;\ \textcolor{comment}{//\ This\ is\ an\ extenstion\ of\ the\ print\ function\ with\ minor\ changes.}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ pretty\_print\_at(std::ostream\ \&out,\ \mbox{\hyperlink{expr_8hpp_a9e5fdf365cd8dc7be4d972daf07f8bdf}{precedence\_t}}\ precedence,\ \textcolor{keywordtype}{bool}\ parenthesis,\ \textcolor{keywordtype}{int}\ position\ =\ 0)\ =\ 0;\ \textcolor{comment}{//\ Helper\ for\ pretty\_print()}}
 \DoxyCodeLine{00047\ \ \ \ \ }
 \DoxyCodeLine{00048\ \ \ \ \ std::string\ to\_string()\ \{}
 \DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ std::stringstream\ st(\textcolor{stringliteral}{"{}"{}});}
@@ -45,9 +45,9 @@
 \DoxyCodeLine{00052\ \ \ \ \ \}}
 \DoxyCodeLine{00053\ \ \ \ \ }
 \DoxyCodeLine{00054\ \ \ \ \ }
-\DoxyCodeLine{00055\ \ \ \ \ std::string\ to\_pretty\_string(\textcolor{keywordtype}{int}\ position\ =\ 0)\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ std::string\ to\_pretty\_string()\ \{}
 \DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ std::stringstream\ st(\textcolor{stringliteral}{"{}"{}});}
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ this-\/>pretty\_print(st,\ position);}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ this-\/>pretty\_print(st);}
 \DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st.str();}
 \DoxyCodeLine{00059\ \ \ \ \ \}}
 \DoxyCodeLine{00060\ \ \ \ \ }
@@ -126,11 +126,11 @@
 \DoxyCodeLine{00143\ \{}
 \DoxyCodeLine{00144\ \textcolor{keyword}{public}:}
 \DoxyCodeLine{00145\ \ \ \ \ }
-\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{class_var}{Var}}\ *\mbox{\hyperlink{class_let_a878d83ae5a9787e26df012b42a75c41e}{lhs}}\ ;\ }
+\DoxyCodeLine{00146\ \ \ \ \ std::string\ \mbox{\hyperlink{class_let_a5912c19b29d2672ce455845a82d01da1}{lhs}}\ ;\ }
 \DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{class_expr}{Expr}}\ *\mbox{\hyperlink{class_let_a4b5ea4d414ccf1cd0a4b524458938164}{rhs}}\ ;\ }
 \DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{class_expr}{Expr}}\ *\mbox{\hyperlink{class_let_a02e437c5e8a492f222d0f92294b86249}{body}}\ ;\ }
 \DoxyCodeLine{00149\ \ \ \ \ }
-\DoxyCodeLine{00150\ \ \ \ \ \mbox{\hyperlink{class_let}{Let}}(\mbox{\hyperlink{class_var}{Var}}\ *\mbox{\hyperlink{class_let_a878d83ae5a9787e26df012b42a75c41e}{lhs}},\ \mbox{\hyperlink{class_expr}{Expr}}\ *\mbox{\hyperlink{class_let_a4b5ea4d414ccf1cd0a4b524458938164}{rhs}},\ \mbox{\hyperlink{class_expr}{Expr}}\ *\mbox{\hyperlink{class_let_a02e437c5e8a492f222d0f92294b86249}{body}})\ ;}
+\DoxyCodeLine{00150\ \ \ \ \ \mbox{\hyperlink{class_let}{Let}}(std::string\ \mbox{\hyperlink{class_let_a5912c19b29d2672ce455845a82d01da1}{lhs}},\ \mbox{\hyperlink{class_expr}{Expr}}\ *\mbox{\hyperlink{class_let_a4b5ea4d414ccf1cd0a4b524458938164}{rhs}},\ \mbox{\hyperlink{class_expr}{Expr}}\ *\mbox{\hyperlink{class_let_a02e437c5e8a492f222d0f92294b86249}{body}})\ ;}
 \DoxyCodeLine{00151\ \ \ \ \ }
 \DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_let_ac7d4ef3628d2cf94a6eea15b46ff9c9d}{equals}}(\mbox{\hyperlink{class_expr}{Expr}}\ *e);}
 \DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_let_a6a6f8ddabaf1e92682f9bf4630908990}{interp}}();}

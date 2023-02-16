@@ -29,8 +29,47 @@ contains all the tests forl the methods present in this project
 \mbox{\Hypertarget{tests_8cpp_a4391df22e5499fbe49747eccb464228c}\label{tests_8cpp_a4391df22e5499fbe49747eccb464228c}} 
 {\bfseries TEST\+\_\+\+CASE} (\char`\"{}to\+\_\+pretty\+\_\+string\char`\"{})
 \item 
-\mbox{\Hypertarget{tests_8cpp_a94b3566245a61a73849c929a480ad843}\label{tests_8cpp_a94b3566245a61a73849c929a480ad843}} 
-{\bfseries TEST\+\_\+\+CASE} (\char`\"{} let \char`\"{})
+\mbox{\Hypertarget{tests_8cpp_a93b68d571f8f6b6b435efaec1b507410}\label{tests_8cpp_a93b68d571f8f6b6b435efaec1b507410}} 
+{\bfseries TEST\+\_\+\+CASE} (\char`\"{} Tests for \mbox{\hyperlink{class_let}{Let}} class written by me\char`\"{})
+\item 
+\mbox{\Hypertarget{tests_8cpp_a9a68aaa4019ddab6159d5dad16f71fff}\label{tests_8cpp_a9a68aaa4019ddab6159d5dad16f71fff}} 
+new {\bfseries Let} (\char`\"{}x\char`\"{}, new \mbox{\hyperlink{class_num}{Num}}(5), new \mbox{\hyperlink{class_add}{Add}}(new \mbox{\hyperlink{class_var}{Var}}(\char`\"{}x\char`\"{}), new \mbox{\hyperlink{class_num}{Num}}(1)))) -\/$>$ pretty\+\_\+print(out)
+\item 
+\mbox{\Hypertarget{tests_8cpp_ac7751e0eb46a1b2a1bae8ccbdd6bab33}\label{tests_8cpp_ac7751e0eb46a1b2a1bae8ccbdd6bab33}} 
+{\bfseries CHECK} (out.\+str()==\char`\"{}\+\_\+let x = 5\textbackslash{}n\char`\"{} \char`\"{}\+\_\+in  x + 1\char`\"{})
+\item 
+\mbox{\Hypertarget{tests_8cpp_ab83cb628c93f39be111bc8da74969635}\label{tests_8cpp_ab83cb628c93f39be111bc8da74969635}} 
+out {\bfseries str} (std\+::string())
+\item 
+\mbox{\Hypertarget{tests_8cpp_a35f6ff1f71a036fbbaaa0d6696c07d91}\label{tests_8cpp_a35f6ff1f71a036fbbaaa0d6696c07d91}} 
+new {\bfseries Add} (new \mbox{\hyperlink{class_let}{Let}}(\char`\"{}x\char`\"{}, new \mbox{\hyperlink{class_num}{Num}}(5), new \mbox{\hyperlink{class_var}{Var}}(\char`\"{}x\char`\"{})), new \mbox{\hyperlink{class_num}{Num}}(1))) -\/$>$ pretty\+\_\+print(out)
+\item 
+\mbox{\Hypertarget{tests_8cpp_a01ab3625c4472a03cd87e575f5dd2d12}\label{tests_8cpp_a01ab3625c4472a03cd87e575f5dd2d12}} 
+new {\bfseries Mult} (new \mbox{\hyperlink{class_num}{Num}}(5), new \mbox{\hyperlink{class_let}{Let}}(\char`\"{}x\char`\"{}, new \mbox{\hyperlink{class_num}{Num}}(5), new \mbox{\hyperlink{class_add}{Add}}(new \mbox{\hyperlink{class_var}{Var}}(\char`\"{}x\char`\"{}), new \mbox{\hyperlink{class_num}{Num}}(1))))) -\/$>$ pretty\+\_\+print(out)
+\item 
+\mbox{\Hypertarget{tests_8cpp_a7a68256c1da9cc17673181f476b99bc2}\label{tests_8cpp_a7a68256c1da9cc17673181f476b99bc2}} 
+new {\bfseries Add} (new \mbox{\hyperlink{class_mult}{Mult}}(new \mbox{\hyperlink{class_num}{Num}}(5), new \mbox{\hyperlink{class_let}{Let}}(\char`\"{}x\char`\"{}, new \mbox{\hyperlink{class_num}{Num}}(5), new \mbox{\hyperlink{class_var}{Var}}(\char`\"{}x\char`\"{}))), new \mbox{\hyperlink{class_num}{Num}}(1))) -\/$>$ pretty\+\_\+print(out)
+\item 
+\mbox{\Hypertarget{tests_8cpp_ac33866b23bff1dc9e2df0d20bd74f9bc}\label{tests_8cpp_ac33866b23bff1dc9e2df0d20bd74f9bc}} 
+new {\bfseries Let} (\char`\"{}x\char`\"{}, new \mbox{\hyperlink{class_num}{Num}}(5), new \mbox{\hyperlink{class_add}{Add}}(new \mbox{\hyperlink{class_let}{Let}}(\char`\"{}y\char`\"{}, new \mbox{\hyperlink{class_num}{Num}}(3), new \mbox{\hyperlink{class_add}{Add}}(new \mbox{\hyperlink{class_var}{Var}}(\char`\"{}y\char`\"{}), new \mbox{\hyperlink{class_num}{Num}}(2))), new \mbox{\hyperlink{class_var}{Var}}(\char`\"{}x\char`\"{})))) -\/$>$ pretty\+\_\+print(out)
+\item 
+\mbox{\Hypertarget{tests_8cpp_a9a6562b5a8ed272a1bf5a5abc8fafd01}\label{tests_8cpp_a9a6562b5a8ed272a1bf5a5abc8fafd01}} 
+new {\bfseries Let} (\char`\"{}x\char`\"{}, new \mbox{\hyperlink{class_let}{Let}}(\char`\"{}y\char`\"{}, new \mbox{\hyperlink{class_num}{Num}}(6), new \mbox{\hyperlink{class_mult}{Mult}}(new \mbox{\hyperlink{class_var}{Var}}(\char`\"{}y\char`\"{}), new \mbox{\hyperlink{class_num}{Num}}(2))), new \mbox{\hyperlink{class_add}{Add}}(new \mbox{\hyperlink{class_var}{Var}}(\char`\"{}x\char`\"{}), new \mbox{\hyperlink{class_num}{Num}}(1)))) -\/$>$ pretty\+\_\+print(out)
+\item 
+\mbox{\Hypertarget{tests_8cpp_a57f88fded4b251d993ca246105262d00}\label{tests_8cpp_a57f88fded4b251d993ca246105262d00}} 
+{\bfseries TEST\+\_\+\+CASE} (\char`\"{}pretty\+\_\+print\+\_\+let\+\_\+mine\+\_\+some\+\_\+reuse\+\_\+of\+\_\+kevin\+\_\+triple\+\_\+nested\+\_\+let\char`\"{})
+\item 
+\mbox{\Hypertarget{tests_8cpp_a7028f7dd8a15d0531a23e2570006fdc3}\label{tests_8cpp_a7028f7dd8a15d0531a23e2570006fdc3}} 
+{\bfseries TEST\+\_\+\+CASE} (\char`\"{}Let\+\_\+equals\+\_\+mine\char`\"{})
+\item 
+\mbox{\Hypertarget{tests_8cpp_ad72b9804f9076945c7e6990d4e35cb2d}\label{tests_8cpp_ad72b9804f9076945c7e6990d4e35cb2d}} 
+{\bfseries TEST\+\_\+\+CASE} (\char`\"{}Let\+\_\+has\+\_\+variable\+\_\+mine\char`\"{})
+\item 
+\mbox{\Hypertarget{tests_8cpp_a64da70545fc80bba49e3287dd6771ccc}\label{tests_8cpp_a64da70545fc80bba49e3287dd6771ccc}} 
+{\bfseries TEST\+\_\+\+CASE} (\char`\"{}Let\+\_\+print\+\_\+mine\char`\"{})
+\item 
+\mbox{\Hypertarget{tests_8cpp_ab786e90d643f917482c49114d96ce862}\label{tests_8cpp_ab786e90d643f917482c49114d96ce862}} 
+{\bfseries TEST\+\_\+\+CASE} (\char`\"{}Let\+\_\+interp\+\_\+mine\char`\"{})
 \end{DoxyCompactItemize}
 
 

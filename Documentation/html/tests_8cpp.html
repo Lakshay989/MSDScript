@@ -105,9 +105,48 @@ Functions</h2></td></tr>
 <tr class="memitem:a4391df22e5499fbe49747eccb464228c"><td class="memItemLeft" align="right" valign="top"><a id="a4391df22e5499fbe49747eccb464228c" name="a4391df22e5499fbe49747eccb464228c"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>TEST_CASE</b> (&quot;to_pretty_string&quot;)</td></tr>
 <tr class="separator:a4391df22e5499fbe49747eccb464228c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94b3566245a61a73849c929a480ad843"><td class="memItemLeft" align="right" valign="top"><a id="a94b3566245a61a73849c929a480ad843" name="a94b3566245a61a73849c929a480ad843"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_CASE</b> (&quot; let &quot;)</td></tr>
-<tr class="separator:a94b3566245a61a73849c929a480ad843"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93b68d571f8f6b6b435efaec1b507410"><td class="memItemLeft" align="right" valign="top"><a id="a93b68d571f8f6b6b435efaec1b507410" name="a93b68d571f8f6b6b435efaec1b507410"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_CASE</b> (&quot; Tests for <a class="el" href="class_let.html">Let</a> class written by me&quot;)</td></tr>
+<tr class="separator:a93b68d571f8f6b6b435efaec1b507410"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a68aaa4019ddab6159d5dad16f71fff"><td class="memItemLeft" align="right" valign="top"><a id="a9a68aaa4019ddab6159d5dad16f71fff" name="a9a68aaa4019ddab6159d5dad16f71fff"></a>
+new&#160;</td><td class="memItemRight" valign="bottom"><b>Let</b> (&quot;x&quot;, new <a class="el" href="class_num.html">Num</a>(5), new <a class="el" href="class_add.html">Add</a>(new <a class="el" href="class_var.html">Var</a>(&quot;x&quot;), new <a class="el" href="class_num.html">Num</a>(1)))) -&gt; pretty_print(out)</td></tr>
+<tr class="separator:a9a68aaa4019ddab6159d5dad16f71fff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7751e0eb46a1b2a1bae8ccbdd6bab33"><td class="memItemLeft" align="right" valign="top"><a id="ac7751e0eb46a1b2a1bae8ccbdd6bab33" name="ac7751e0eb46a1b2a1bae8ccbdd6bab33"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CHECK</b> (out.str()==&quot;_let x = 5\n&quot; &quot;_in  x + 1&quot;)</td></tr>
+<tr class="separator:ac7751e0eb46a1b2a1bae8ccbdd6bab33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab83cb628c93f39be111bc8da74969635"><td class="memItemLeft" align="right" valign="top"><a id="ab83cb628c93f39be111bc8da74969635" name="ab83cb628c93f39be111bc8da74969635"></a>
+out&#160;</td><td class="memItemRight" valign="bottom"><b>str</b> (std::string())</td></tr>
+<tr class="separator:ab83cb628c93f39be111bc8da74969635"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35f6ff1f71a036fbbaaa0d6696c07d91"><td class="memItemLeft" align="right" valign="top"><a id="a35f6ff1f71a036fbbaaa0d6696c07d91" name="a35f6ff1f71a036fbbaaa0d6696c07d91"></a>
+new&#160;</td><td class="memItemRight" valign="bottom"><b>Add</b> (new <a class="el" href="class_let.html">Let</a>(&quot;x&quot;, new <a class="el" href="class_num.html">Num</a>(5), new <a class="el" href="class_var.html">Var</a>(&quot;x&quot;)), new <a class="el" href="class_num.html">Num</a>(1))) -&gt; pretty_print(out)</td></tr>
+<tr class="separator:a35f6ff1f71a036fbbaaa0d6696c07d91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01ab3625c4472a03cd87e575f5dd2d12"><td class="memItemLeft" align="right" valign="top"><a id="a01ab3625c4472a03cd87e575f5dd2d12" name="a01ab3625c4472a03cd87e575f5dd2d12"></a>
+new&#160;</td><td class="memItemRight" valign="bottom"><b>Mult</b> (new <a class="el" href="class_num.html">Num</a>(5), new <a class="el" href="class_let.html">Let</a>(&quot;x&quot;, new <a class="el" href="class_num.html">Num</a>(5), new <a class="el" href="class_add.html">Add</a>(new <a class="el" href="class_var.html">Var</a>(&quot;x&quot;), new <a class="el" href="class_num.html">Num</a>(1))))) -&gt; pretty_print(out)</td></tr>
+<tr class="separator:a01ab3625c4472a03cd87e575f5dd2d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a68256c1da9cc17673181f476b99bc2"><td class="memItemLeft" align="right" valign="top"><a id="a7a68256c1da9cc17673181f476b99bc2" name="a7a68256c1da9cc17673181f476b99bc2"></a>
+new&#160;</td><td class="memItemRight" valign="bottom"><b>Add</b> (new <a class="el" href="class_mult.html">Mult</a>(new <a class="el" href="class_num.html">Num</a>(5), new <a class="el" href="class_let.html">Let</a>(&quot;x&quot;, new <a class="el" href="class_num.html">Num</a>(5), new <a class="el" href="class_var.html">Var</a>(&quot;x&quot;))), new <a class="el" href="class_num.html">Num</a>(1))) -&gt; pretty_print(out)</td></tr>
+<tr class="separator:a7a68256c1da9cc17673181f476b99bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac33866b23bff1dc9e2df0d20bd74f9bc"><td class="memItemLeft" align="right" valign="top"><a id="ac33866b23bff1dc9e2df0d20bd74f9bc" name="ac33866b23bff1dc9e2df0d20bd74f9bc"></a>
+new&#160;</td><td class="memItemRight" valign="bottom"><b>Let</b> (&quot;x&quot;, new <a class="el" href="class_num.html">Num</a>(5), new <a class="el" href="class_add.html">Add</a>(new <a class="el" href="class_let.html">Let</a>(&quot;y&quot;, new <a class="el" href="class_num.html">Num</a>(3), new <a class="el" href="class_add.html">Add</a>(new <a class="el" href="class_var.html">Var</a>(&quot;y&quot;), new <a class="el" href="class_num.html">Num</a>(2))), new <a class="el" href="class_var.html">Var</a>(&quot;x&quot;)))) -&gt; pretty_print(out)</td></tr>
+<tr class="separator:ac33866b23bff1dc9e2df0d20bd74f9bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a6562b5a8ed272a1bf5a5abc8fafd01"><td class="memItemLeft" align="right" valign="top"><a id="a9a6562b5a8ed272a1bf5a5abc8fafd01" name="a9a6562b5a8ed272a1bf5a5abc8fafd01"></a>
+new&#160;</td><td class="memItemRight" valign="bottom"><b>Let</b> (&quot;x&quot;, new <a class="el" href="class_let.html">Let</a>(&quot;y&quot;, new <a class="el" href="class_num.html">Num</a>(6), new <a class="el" href="class_mult.html">Mult</a>(new <a class="el" href="class_var.html">Var</a>(&quot;y&quot;), new <a class="el" href="class_num.html">Num</a>(2))), new <a class="el" href="class_add.html">Add</a>(new <a class="el" href="class_var.html">Var</a>(&quot;x&quot;), new <a class="el" href="class_num.html">Num</a>(1)))) -&gt; pretty_print(out)</td></tr>
+<tr class="separator:a9a6562b5a8ed272a1bf5a5abc8fafd01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57f88fded4b251d993ca246105262d00"><td class="memItemLeft" align="right" valign="top"><a id="a57f88fded4b251d993ca246105262d00" name="a57f88fded4b251d993ca246105262d00"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_CASE</b> (&quot;pretty_print_let_mine_some_reuse_of_kevin_triple_nested_let&quot;)</td></tr>
+<tr class="separator:a57f88fded4b251d993ca246105262d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7028f7dd8a15d0531a23e2570006fdc3"><td class="memItemLeft" align="right" valign="top"><a id="a7028f7dd8a15d0531a23e2570006fdc3" name="a7028f7dd8a15d0531a23e2570006fdc3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_CASE</b> (&quot;Let_equals_mine&quot;)</td></tr>
+<tr class="separator:a7028f7dd8a15d0531a23e2570006fdc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad72b9804f9076945c7e6990d4e35cb2d"><td class="memItemLeft" align="right" valign="top"><a id="ad72b9804f9076945c7e6990d4e35cb2d" name="ad72b9804f9076945c7e6990d4e35cb2d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_CASE</b> (&quot;Let_has_variable_mine&quot;)</td></tr>
+<tr class="separator:ad72b9804f9076945c7e6990d4e35cb2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64da70545fc80bba49e3287dd6771ccc"><td class="memItemLeft" align="right" valign="top"><a id="a64da70545fc80bba49e3287dd6771ccc" name="a64da70545fc80bba49e3287dd6771ccc"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_CASE</b> (&quot;Let_print_mine&quot;)</td></tr>
+<tr class="separator:a64da70545fc80bba49e3287dd6771ccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab786e90d643f917482c49114d96ce862"><td class="memItemLeft" align="right" valign="top"><a id="ab786e90d643f917482c49114d96ce862" name="ab786e90d643f917482c49114d96ce862"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_CASE</b> (&quot;Let_interp_mine&quot;)</td></tr>
+<tr class="separator:ab786e90d643f917482c49114d96ce862"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>contains all the tests forl the methods present in this project </p>

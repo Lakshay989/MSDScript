@@ -42,8 +42,8 @@ public:
     virtual bool has_variable() = 0 ; // This function determines if the the expression consists of a variable or not.
     virtual Expr* subst(std::string s, Expr* e) = 0; // This function substitutes the expression with the combination of sub-expressions if possible.
     virtual void print(std::ostream &out) = 0; // This function prints the expression.
-    virtual void pretty_print(std::ostream &out, int position = 0) = 0;
-    virtual void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0) = 0; // This is an extenstion of the print function with minor changes.
+    virtual void pretty_print(std::ostream &out, int position = 0) = 0; // This is an extenstion of the print function with minor changes.
+    virtual void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0) = 0; // Helper for pretty_print()
     
     std::string to_string() {
         std::stringstream st("");
@@ -143,7 +143,7 @@ class Let : public Expr
 {
 public:
     
-    std::string lhs ; //!< Variable on the lhs of the expression
+    std::string lhs ; //!< string on the lhs of the expression
     Expr *rhs ; //!< Expression on the rhs of the variable
     Expr *body ; //!< body of the rhs
     

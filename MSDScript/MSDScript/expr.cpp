@@ -180,11 +180,13 @@ void Add::pretty_print_at(std::ostream &out, precedence_t precedence, bool paran
     if (precedence >= precedence_add) {
         out << "(";
     }
-    out << this->lhs->to_pretty_string(position) << " + " << this->rhs->to_pretty_string(position);
-    if (precedence >= precedence_add) {
-        out << ")";
+    this->lhs->pretty_print_at(out, precedence_add, true, position);
+        out << " + ";
+        this->rhs->pretty_print_at(out, precedence_none, false, position);
+        if (precedence >= precedence_add) {
+            out << ")";
+        }
     }
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -273,7 +275,10 @@ void Mult::pretty_print_at(std::ostream &out, precedence_t precedence, bool para
     if (precedence >= precedence_mult) {
         out << "(";
     }
-    out << this->lhs->to_pretty_string(position) << " * " << this->rhs->to_pretty_string(position);
+    //out <<
+    this->lhs->pretty_print_at(out, precedence_mult, true, position);
+    out << " * " ;
+    this->rhs->pretty_print_at(out, precedence_add, !(precedence >= precedence_mult) && paranthesis, position);
     if (precedence >= precedence_mult) {
         out << ")";
     }
@@ -373,7 +378,7 @@ void Var::pretty_print_at(std::ostream &out, precedence_t precedence, bool paran
 /**
 * \brief Constructor
 */
-Let::Let(Var *lhs, Expr *rhs, Expr *body)
+Let::Let(std::string lhs, Expr *rhs, Expr *body)
 {
     this->lhs = lhs ;
     this->rhs = rhs ;
@@ -407,7 +412,7 @@ bool Let::equals( Expr *e)
 */
 int Let::interp() // More Testing rhs->interp()
 {
-    return this->body->subst(this->lhs->to_string(), this->rhs)->interp();
+    return this->body->subst(this->lhs, this->rhs)->interp();
 }
 
 
@@ -429,7 +434,7 @@ bool Let::has_variable()
 */
 Expr* Let::subst(std::string subt, Expr* exp)
 {
-    if( this->lhs->name == subt )
+    if( this->lhs == subt )
     {
         return new Let(this->lhs, this->rhs->subst(subt, exp), this->body);
     }
@@ -446,7 +451,7 @@ Expr* Let::subst(std::string subt, Expr* exp)
 */
 void Let::print(std::ostream &out)
 {
-    out<< "(_let " << this->lhs->to_string() << "=" << this->rhs->to_string() << " _in " << this->body->to_string() << ")" ;
+    out<< "(_let " << this->lhs << "=" << this->rhs->to_string() << " _in " << this->body->to_string() << ")" ;
 }
 
 
@@ -457,27 +462,26 @@ void Let::print(std::ostream &out)
 */
 void Let::pretty_print(std::ostream &out, int position)
 {
-    this->pretty_print_at(out, precedence_none, false, position);
+    this->pretty_print_at(out, precedence_none, false, out.tellp());
 }
 
 void Let::pretty_print_at(std::ostream &out, precedence_t precedence, bool parentheses, int position)
 {
     if (parentheses) {
             out << "(";
-            position += 1;
+            //position += 1;
         }
-        out << "_let " << this->lhs->to_pretty_string() << " = " << this->rhs->to_pretty_string() << "\n";
-        int letLine_position = out.tellp();
-
-        for (int i = 0; i < position; i++) {
-            out << " ";
-        }
-        out << "_in  ";
-        int inLine_position = out.tellp();
-        out << this->body->to_pretty_string(inLine_position - letLine_position);
-        if (parentheses) {
-            out << ")";
-        }
+    int spaces = (int) out.tellp() - position ;
+    out << "_let " << this->lhs << " = " ;
+    this->rhs->pretty_print_at(out, precedence, false, position) ;
+    out << "\n" ;
+    position = out.tellp() ;
+    out << std::string(spaces, ' ') << "_in  " ;
+    this->body->pretty_print_at(out, precedence_none, false, position);
+    if (parentheses)
+    {
+        out << ")";
+    }
 }
 
 

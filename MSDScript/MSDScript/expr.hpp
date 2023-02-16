@@ -52,9 +52,9 @@ public:
     }
     
     
-    std::string to_pretty_string(int position = 0) {
+    std::string to_pretty_string() {
         std::stringstream st("");
-        this->pretty_print(st, position);
+        this->pretty_print(st);
         return st.str();
     }
     
@@ -143,11 +143,11 @@ class Let : public Expr
 {
 public:
     
-    Var *lhs ; //!< Variable on the lhs of the expression
+    std::string lhs ; //!< Variable on the lhs of the expression
     Expr *rhs ; //!< Expression on the rhs of the variable
     Expr *body ; //!< body of the rhs
     
-    Let(Var *lhs, Expr *rhs, Expr *body) ;
+    Let(std::string lhs, Expr *rhs, Expr *body) ;
     
     bool equals(Expr *e);
     int interp();

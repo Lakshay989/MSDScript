@@ -159,6 +159,9 @@ TEST_CASE("to_string") {
         
     }
 }
+
+// ------------------------------------------------------------------------------------------------------------
+
     
 TEST_CASE("to_pretty_string") {
     SECTION("Test Num to_pretty_string") {
@@ -336,36 +339,70 @@ TEST_CASE("to_pretty_string") {
     
 }
 
-TEST_CASE(" let ")
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+TEST_CASE(" Tests for Let class written by me")
 {
     SECTION("General Examples for Let to_pretty_string")
     {
         
-        CHECK((new Let(new Var("x"), new Num(5), new Add(new Let(new Var("y"), new Num(3), new Add(new Var("y"), new Num(2))), new Var("x"))))
-              ->to_pretty_string() == "_let x = 5\n_in  (_let y = 3\n      _in  y + 2) + x") ;
-        
-        
-        CHECK((new Mult(new Mult(new Num (2), new Let(new Var("x"), new Num(5), new Add(new Var("x") , new Num(1)))), new Num(3)))
-              ->to_pretty_string() == "(2 * _let x = 5\n_in  x + 1) * 3") ;
-        
-        
-        Let *expression1 = new Let(new Var("x"), new Num(5), new Add(new Let(new Var("y"), new Num(3), new Add(new Var("y"), new Num(2))), new Var("x"))) ;
-        
-        Let *expression2 = new Let(new Var("z"), new Num(9), new Add(expression1, new Var("z"))) ;
-        
-        CHECK(expression2->to_pretty_string() == "_let z = 9\n_in  (_let x = 5\n      _in  (_let y = 3\n            _in  y + 2) + x) + z") ;
-    }
+        CHECK((new Let("x", new Num(5), new Add(new Let("y", new Num(3), new Add(new Var("y"), new Num(2))), new Var("x"))))
+              ->to_pretty_string() == "_let x = 5\n"
+                                      "_in  (_let y = 3\n"
+                                      "      _in  y + 2) + x") ;
+
+
+        CHECK((new Mult(new Mult(new Num (2), new Let("x", new Num(5), new Add(new Var("x") , new Num(1)))), new Num(3)))
+              ->to_pretty_string() == "(2 * _let x = 5\n"
+                                      "     _in  x + 1) * 3") ;
+
+
+        Let *expression1 = new Let("x", new Num(5), new Add(new Let("y", new Num(3), new Add(new Var("y"), new Num(2))), new Var("x"))) ;
+
+        Let *expression2 = new Let("z", new Num(9), new Add(expression1, new Var("z"))) ;
+
+        CHECK(expression2->to_pretty_string() == "_let z = 9\n"
+                                                 "_in  (_let x = 5\n"
+                                                 "      _in  (_let y = 3\n"
+                                                 "            _in  y + 2) + x) + z") ;
+
+
+        Add *expression3 = new Add(new Let("x", new Num(5), new Var("x")), new Num(1));
+        REQUIRE(expression3->to_pretty_string() == "(_let x = 5\n"
+                                                      " _in  x) + 1");
+
+        Let *expression4 = new Let("x", new Num(5), new Add(new Var("x"), new Num(1)));
+        Mult *expression5 = new Mult(new Num(5), expression4);
+        REQUIRE(expression5->to_pretty_string() == "5 * _let x = 5\n"
+                                                   "    _in  x + 1");
+
+        Add *expression6 = new Add(new Num(5), expression4);
+        REQUIRE(expression6->to_pretty_string() == "5 + _let x = 5\n"
+                                                   "    _in  x + 1");
+
+        Add *expression7 = new Add(expression5, new Num(1));
+        REQUIRE(expression7->to_pretty_string() == "5 * (_let x = 5\n"
+                                                   "     _in  x + 1) + 1");
+
+
+        Let *expression8 = new Let("x", new Let("y", new Num(6), new Mult(new Var("y"), new Num(2))), new Add(new Var("x"), new Num(1)));
+        REQUIRE(expression8->to_pretty_string() == "_let x = _let y = 6\n"
+                                                   "         _in  y * 2\n"
+                                                   "_in  x + 1");
+        }
     
     
     SECTION("Test LetBinding equals")
     {
-        Let *expression1 = new Let(new Var("x"), new Num(2), new Add(new Var("x"), new Num(1)));
+        Let *expression1 = new Let("x", new Num(2), new Add(new Var("x"), new Num(1)));
 
         REQUIRE(expression1->equals(new Num(2)) == false);
         REQUIRE(expression1->equals(new Mult(new Var("x"), new Num(1))) == false);
 
         Add *expression2 = new Add(new Var("x"), new Num(3));
-        Let *expression3 = new Let(new Var("x"), new Num(2), expression2) ;
+        Let *expression3 = new Let("x", new Num(2), expression2) ;
         
         REQUIRE(expression2->equals(new Add(new Var("x"), new Num(3))) == true);
         REQUIRE(expression3->equals(new Mult(new Var("x"), new Num(1))) == false);
@@ -377,7 +414,7 @@ TEST_CASE(" let ")
              * 5 * (_let x = 5
                 _in  x) + 1
              */
-            Let *expression1 = new Let(new Var("x"), new Num(5), new Var("x"));
+            Let *expression1 = new Let("x", new Num(5), new Var("x"));
         
             Add *expression2 = new Add(new Mult(new Num(5), expression1), new Num(1));
 
@@ -390,20 +427,20 @@ TEST_CASE(" let ")
             _in  x + 1
              */
 
-            Let *expression3 = new Let(new Var("x"), new Add(new Num(5), new Num(2)), new Add(new Var("x"), new Num(1)));
+            Let *expression3 = new Let("x", new Add(new Num(5), new Num(2)), new Add(new Var("x"), new Num(1)));
             Mult *expression4 = new Mult(new Num(5), expression3);
             REQUIRE(expression4->interp() == 40);
 
 
             // subst interp
             Add *add = new Add(new Var("x"), new Var("y"));
-            Let *expression5 = new Let(new Var("x"), new Num(3), add);
+            Let *expression5 = new Let("x", new Num(3), add);
             REQUIRE(expression5->subst("y", new Num(4))->interp() == 7);
 
         }
 
     SECTION("Test LetBinding has_variable") {
-        Var *lhs = new Var("x");
+        std::string lhs = "x";
 
         Num *num = new Num(2);
         Add *exp = new Add(new Num(1), new Var("y"));
@@ -436,10 +473,10 @@ TEST_CASE(" let ")
          _in x + y
          */
         
-        Let *expression1 = new Let(new Var("x"), new Num(3), new Add(new Var("x"), new Var("y")));
-        Let *expression2 = new Let(new Var("x"), new Num(3), new Add(new Var("x"), new Num(4)));
+        Let *expression1 = new Let("x", new Num(3), new Add(new Var("x"), new Var("y")));
+        Let *expression2 = new Let("x", new Num(3), new Add(new Var("x"), new Num(4)));
 
-        //CHECK(expression1->subst("y", new Num(4))->equals(expression2) == true);
+        CHECK(expression1->subst("y", new Num(4))->equals(expression2) == true);
         
         CHECK(expression1->subst("y", new Num(4))->to_pretty_string() == expression2->to_pretty_string()) ;
 
@@ -447,8 +484,7 @@ TEST_CASE(" let ")
          _let x = 6
         _in x + 1)
         */
-        Let *expression3 = new Let(new Var("x"), new Num(6),
-                                                    new Add(new Var("x"), new Num(1)));
+        Let *expression3 = new Let("x", new Num(6),new Add(new Var("x"), new Num(1)));
         
         REQUIRE(expression3->subst("x", new Num(5))->equals(expression3));
     }
@@ -456,9 +492,9 @@ TEST_CASE(" let ")
     SECTION("Test LetBinding to_string")
     {
         
-        Let *expression1 = new Let(new Var("y"), new Num(3), new Add(new Var("y"), new Num(2)));
+        Let *expression1 = new Let("y", new Num(3), new Add(new Var("y"), new Num(2)));
         
-        Let *expression2 = new Let(new Var("x"), new Num(5),new Add(expression1, new Var("x")));
+        Let *expression2 = new Let("x", new Num(5),new Add(expression1, new Var("x")));
         
         
         REQUIRE(expression1->to_string() == "(_let y=3 _in (y+2))");
@@ -466,4 +502,185 @@ TEST_CASE(" let ")
     }
 
 }
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+TEST_CASE("Pretty Print examples_Kevin") //Created from assignment examples
+
+{
+    std::stringstream out("");
+    (new Let("x", new Num(5), new Add(new Var("x"), new Num(1))))->pretty_print(out);
+    CHECK(out.str() == "_let x = 5\n"
+                       "_in  x + 1");
+    out.str(std::string());
+    (new Add(new Let("x", new Num(5), new Var("x")), new Num(1)))->pretty_print(out);
+    CHECK(out.str() == "(_let x = 5\n"
+                       " _in  x) + 1");
+    out.str(std::string());
+    (new Mult(new Num(5), new Let("x", new Num(5), new Add(new Var("x"), new Num(1)))))->pretty_print(out);
+    CHECK(out.str() == "5 * _let x = 5\n"
+                       "    _in  x + 1");
+    out.str(std::string());
+    (new Add(new Mult(new Num(5), new Let("x", new Num(5), new Var("x"))), new Num(1)))->pretty_print(out);
+    CHECK(out.str() == "5 * (_let x = 5\n"
+                       "     _in  x) + 1");
+    out.str(std::string());
+    (new Let("x", new Num(5), new Add(new Let("y", new Num(3), new Add(new Var("y"), new Num(2))), new Var("x"))))
+            ->pretty_print(out);
+
+    CHECK(out.str() == "_let x = 5\n"
+                       "_in  (_let y = 3\n"
+                       "      _in  y + 2) + x");
+    out.str(std::string());
+    (new Let("x", new Let("y", new Num(6), new Mult(new Var("y"), new Num(2))), new Add(new Var("x"), new Num(1))))->pretty_print(out);
+    CHECK(out.str() == "_let x = _let y = 6\n"
+                       "         _in  y * 2\n"
+                       "_in  x + 1");
+
+}
+
+TEST_CASE("pretty_print_let_mine_some_reuse_of_kevin_triple_nested_let") {
+    Let* tripleNestedLet = new Let("x", new Num(1),
+                                   new Let("y", new Num(1),
+                                           new Mult(new Add(new Var("x"), new Var("y")), new Var("z"))));
+    Let* tripleNestedLet2 = new Let("x", new Num(1),
+                                    new Let("y", new Num(1),
+                                            new Let("z", new Add(new Var("x"), new Num(1)),
+                                                    new Add(new Add(new Var("x"), new Var("y")), new Var("z")))));
+    Let* tripleNestedLet3 = new Let("x", new Num(1),
+                                    new Let("y", new Num(1),
+                                            new Let("z", new Add(new Var("x"), new Num(1)),
+                                                    new Mult(new Add(new Var("x"), new Var("y")), new Var("z")))));
+
+
+    CHECK(tripleNestedLet -> to_pretty_string() ==
+          "_let x = 1\n"
+          "_in  _let y = 1\n"
+          "     _in  (x + y) * z"
+    );
+    CHECK(tripleNestedLet2 -> to_pretty_string() ==
+          "_let x = 1\n"
+          "_in  _let y = 1\n"
+          "     _in  _let z = x + 1\n"
+          "          _in  (x + y) + z"
+    );
+    CHECK(tripleNestedLet3 -> to_pretty_string() ==
+                            "_let x = 1\n"
+                            "_in  _let y = 1\n"
+                            "     _in  _let z = x + 1\n"
+                            "          _in  (x + y) * z"
+    );
+    Let* tripleNestedLet4 =new Let("x", new Num(5),
+                                   new Let("y", new Num(3),
+                                           new Add(new Var("y"), new Num(2))));
+    Let* tripleNestedLet5 =new Let("x", new Num(5),
+                                   new Add(new Let("y", new Num(3),
+                                                   new Add(new Var("y"), new Num(2))), new Var("x")));
+    std::stringstream out("");
+    out.str("");
+    tripleNestedLet4->pretty_print(out);
+    CHECK(out.str() ==
+                  "_let x = 5\n"
+                  "_in  _let y = 3\n"
+                  "     _in  y + 2"
+    );
+
+    CHECK(tripleNestedLet5 -> to_pretty_string() == "_let x = 5\n"
+                                                          "_in  (_let y = 3\n"
+                                                          "      _in  y + 2) + x");
+    SECTION("assignment_examples") {
+        CHECK( (new Add(new Mult(new Num(5), new Let("x", new Num(5), new Var("x"))), new Num(1)))-> to_pretty_string()
+               == "5 * (_let x = 5\n"
+                  "     _in  x) + 1");
+        CHECK( (new Mult(new Mult(new Num (2), new Let("x", new Num(5), new Add(new Var("x") ,new  Num(1)) )), new Num(3) )) -> to_pretty_string()
+               == "(2 * _let x = 5\n"
+                  "     _in  x + 1) * 3");
+    }
+    // A _let needs parentheses when it is nested immediately as the right argument of an unparenthesized *
+    // where _let would have needed parentheses in the surrounding context
+    // (that is, if the _let used in place of the whole * would need parentheses,
+    // then it still needs parentheses within the right-hand size of *).
+    SECTION("new_edge") {
+        CHECK( (new Mult(new Num (2), new Let("x", new Num(5), new Add(new Var("x") ,new  Num(1)) ) )) -> to_pretty_string()
+               == "2 * _let x = 5\n"
+                  "    _in  x + 1");
+        CHECK( (new Add(new Mult(new Num(5), new Let("x", new Num(5), new Mult(new Var("x"), new Num(2)))), new Num(1)))-> to_pretty_string()
+               == "5 * (_let x = 5\n"
+                  "     _in  x * 2) + 1");
+        CHECK( (new Mult((new Add(new Mult(new Num(5), new Let("x", new Num(5), new Mult(new Var("x"), new Num(2)))), new Num(1))), new Num(7)))-> to_pretty_string()
+               == "(5 * (_let x = 5\n"
+                  "      _in  x * 2) + 1) * 7");
+        CHECK( (new Let("x", new Num(10), new Mult( new Mult(new Var("x"), new Mult(new Mult(new Num(10), new Num(10)), new Num(10))), new Mult(new Num(10), new Num(10)))))
+                       ->to_pretty_string()  == "_let x = 10\n"
+                                                      "_in  (x * (10 * 10) * 10) * 10 * 10");
+        CHECK( (new Let("x", new Num(1), new Mult( new Mult(new Var("x"), new Mult(new Mult(new Num(10), new Num(10)), new Var("x"))), new Mult(new Num(10), new Num(10)))))
+                        -> to_pretty_string() == "_let x = 1\n"
+                                                       "_in  (x * (10 * 10) * x) * 10 * 10" );
+        CHECK( (new Let("x", new Num(1), new Mult( new Mult(new Var("x"), new Mult(new Mult(new Num(10), new Num(10)), new Var("x"))), new Mult(new Var("y"), new Num(10)))))
+                       -> to_pretty_string() == "_let x = 1\n"
+                                                      "_in  (x * (10 * 10) * x) * y * 10" );
+    }
+}
+
+TEST_CASE("Let_equals_mine") {
+        SECTION("Values_same") {
+            REQUIRE( (new Let("x", new Num(4), new Add(new Num(2), new Var("x")) ))->equals(new Let("x", new Num(4), new Add(new Num(2), new Var("x")) )));
+        }
+        SECTION("Values_same_different_rhs") {
+            REQUIRE( !(new Let("x", new Num(4), new Add(new Num(2), new Var("x")) ))->equals(new Let("x", new Num(5), new Add(new Num(2), new Var("x")) )));
+        }
+        SECTION("Values_same_different_lhs") {
+            REQUIRE( !(new Let("x", new Num(4), new Add(new Num(2), new Var("x")) ))->equals(new Let("y", new Num(4), new Add(new Num(2), new Var("x")) )));
+        }
+        SECTION("Values_same_different_body") {
+            REQUIRE( !(new Let("x", new Num(4), new Add(new Num(2), new Var("x")) ))->equals(new Let("x", new Num(4), new Mult(new Num(3), new Var("y")) )));
+        }
+        SECTION("different_types") {
+            REQUIRE( !(new Let("x", new Num(4), new Add(new Num(2), new Var("x")) ))->equals( new Mult(new Num(3), new Var("y")) ));
+        }
+}
+TEST_CASE("Let_has_variable_mine") {
+    SECTION("has") {
+        REQUIRE( (new Let("x", new Num(4), new Add(new Num(2), new Var("x")) ))->has_variable());
+    }
+    SECTION("does_not_has") {
+        REQUIRE( !(new Let("x", new Num(4), new Add(new Num(2), new Num(4)) ))->has_variable());
+    }
+}
+TEST_CASE("Let_print_mine") {
+    CHECK( (new Let("x", new Num(5), new Add(new Let("y", new Num(3), new Add(new Var("y"), new Num(2))), new Var("x")))) -> to_string()
+                                                                                                        == "(_let x=5 _in ((_let y=3 _in (y+2))+x))");
+    CHECK( (new Let("x", new Num(1),
+                   new Let("y", new Num(1),
+                           new Let("z", new Add(new Var("x"), new Num(1)),
+                                   new Mult(new Add(new Var("x"), new Var("y")), new Var("z")))))) -> to_string()
+                                                                                                        == "(_let x=1 _in (_let y=1 _in (_let z=(x+1) _in ((x+y)*z))))");
+}
+TEST_CASE ("Let_interp_mine") {
+    SECTION("hw_examples") {
+        CHECK((new Add(new Mult(new Num(5), new Let("x", new Num(5), new Var("x"))), new Num(1))) -> interp() == 26);
+        CHECK((new Mult(new Num(5), new Let("x", new Num(5), new Add(new Var("x"), new Num(1))))) -> interp() == 30);
+    }
+    SECTION("from_pretty_print_edge") {
+        CHECK( (new Let("x", new Num(1),
+                       new Let("y", new Num(1),
+                               new Let("z", new Add(new Var("x"), new Num(1)),
+                                       new Mult(new Add(new Var("x"), new Var("y")), new Var("z")))))) -> interp() == 4);
+        CHECK( (new Mult((new Add(new Mult(new Num(5), new Let("x", new Num(5), new Mult(new Var("x"), new Num(2)))), new Num(1))), new Num(7))) -> interp() == 357); // 51 * 7
+        CHECK( (new Let("x", new Num(10), new Mult( new Mult(new Var("x"), new Mult(new Mult(new Num(10), new Num(10)), new Num(10))), new Mult(new Num(10), new Num(10)))))
+                      ->interp()  == 1000000);
+        CHECK( (new Let("x", new Num(1), new Mult( new Mult(new Var("x"), new Mult(new Mult(new Num(10), new Num(10)), new Var("x"))), new Mult(new Num(10), new Num(10)))))
+                       ->interp()  == 10000);
+        CHECK_THROWS_WITH( ((new Let("x", new Num(1), new Mult( new Mult(new Var("x"), new Mult(new Mult(new Num(10), new Num(10)), new Var("x"))), new Mult(new Var("y"), new Num(10)))))
+                       -> interp() == 10000), "interp does not work with variable expressions !!");
+    }
+    SECTION("bypass_middle_let") {
+        CHECK ((new Let("x", new Num(2), new Let("z", new Num(4), new Add(new Var("x"), new Num(10)))))
+                -> interp() == 12);
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 

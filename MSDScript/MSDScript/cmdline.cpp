@@ -17,54 +17,134 @@
 
 #include "cmdline.hpp"
 
-using namespace std ;
+
+void if_interp()
+{
+    cout << " Handling interp" << endl ;
+    Expr* expr = parse_input();
+    cout << "Expression entered: " << expr->to_pretty_string() << endl ;
+    cout << "interp value: " << expr->interp();
+}
+
+void if_print()
+{
+    cout << "Handling print" << endl ;
+    Expr* expr = parse_input();
+    cout << "Printed expression" << expr->to_string() << endl ;
+}
+
+void if_pretty_print()
+{
+    cout << "Handling pretty print" << endl ;
+    Expr* expr = parse_input();
+    cout << "Printed expression" << expr->to_pretty_string() << endl ;
+}
+
+void if_test(char* argv[])
+{
+    if(Catch::Session().run(1, argv) != 0)
+        exit(1);
+    cout<<"Tests passed \n";
+}
+
+void if_throw_error(char* argv[])
+{
+    cerr<<"No such argument exists. Kindly use --help for a list of accepted arguments \n";
+    exit(1) ;
+}
+
+void if_help()
+{
+    cout<<"The command line arguments allowed are : \n --help \n --test \n --interp \n --print \n --pretty-print \n ";
+    exit(1);
+}
+
+Expr* parse_input()
+{
+    std::string input ;
+    std::getline(std::cin, input);
+    std::stringstream ss(input);
+    return parse_expression(ss);
+}
 
 
-/* use_arguments( int argc , char* argv[]) identifies the argument given ahead of running the executable
-    on the command line is valid and if it is valid executes the command.
-*/
 
 /**
 * \brief Identifies the argument given ahead of running the executable
 * \param argc first parameter, stores the number of command line arguments passed by the user
 * \param argv second parameter, is array of character pointers listing all the arguments.
 */
-void use_arguments(int argc , char* argv[])
+run_mode_t use_arguments(int argc , char* argv[])
 {
-    
     if(argc == 1)
     {
-        return;
+        return do_nothing;
     }
     
-    bool test_occured = false ;
-    
-    
-    for(int i = 1 ; i< argc ; i++)
+    std::string argument = argv[1] ;
+    //bool test_occured = false ;
+
+    if(argument == "--help")
     {
-        if(strcmp(argv[i], "--help") == 0)
-        {
-            cout<<"The command line arguments allowed are : \n --help \n --test \n";
-            exit(0);
-        }
-        
-        else if(test_occured == true)
-        {
-            cerr<<"Tests already performed \n";
-            exit(1) ;
-        }
-        else if(strcmp(argv[i],"--test") == 0)
-        {
-            if(Catch::Session().run(1, argv) != 0)
-                exit(1);
-            cout<<"Tests passed \n";
-            test_occured = true;
-        }
-        else
-        {
-            cerr<<"No such argument exists. Kindly use --help for a list of accepted arguments \n";
-            exit(1) ;
-        }
+        return do_help;
+    }
+    else if(argument == "--test")
+    {
+        return do_test;
+    }
+    else if(argument == "--interp")
+    {
+        return do_interp;
+    }
+    else if(argument == "--print")
+    {
+        return do_print;
+    }
+    else if(argument == "--pretty-print")
+    {
+        return do_pretty_print;
+    }
+    else
+    {
+        return do_error_handling;
     }
 }
+
+//void use_arguments(int argc , char* argv[])
+//{
+//
+//    if(argc == 1)
+//    {
+//        return;
+//    }
+//
+//    bool test_occured = false ;
+//
+//
+//    for(int i = 1 ; i< argc ; i++)
+//    {
+//        if(strcmp(argv[i], "--help") == 0)
+//        {
+//            cout<<"The command line arguments allowed are : \n --help \n --test \n";
+//            exit(0);
+//        }
+//
+//        else if(test_occured == true)
+//        {
+//            cerr<<"Tests already performed \n";
+//            exit(1) ;
+//        }
+//        else if(strcmp(argv[i],"--test") == 0)
+//        {
+//            if(Catch::Session().run(1, argv) != 0)
+//                exit(1);
+//            cout<<"Tests passed \n";
+//            test_occured = true;
+//        }
+//        else
+//        {
+//            cerr<<"No such argument exists. Kindly use --help for a list of accepted arguments \n";
+//            exit(1) ;
+//        }
+//    }
 

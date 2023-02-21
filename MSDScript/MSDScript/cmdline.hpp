@@ -16,10 +16,38 @@
 #define cmdline_hpp
 //
 #include "catch.h"
+#include "expr.hpp"
+#include "parse.hpp"
+#include "cmdline.hpp"
+
 #include <stdio.h>
 #include <iostream>
 #include <string>
 
-void use_arguments(int argc, char* argv[]) ;
+using namespace std ;
+
+
+typedef enum {
+
+    do_nothing,
+    do_interp,
+    do_print,
+    do_pretty_print,
+    do_test,
+    do_error_handling,
+    do_help,
+
+} run_mode_t;
+
+void if_interp();
+void if_print();
+void if_pretty_print();
+void if_test(char* argv[]);
+void if_throw_error(char* argv[]);
+void if_help();
+
+Expr* parse_input();
+
+run_mode_t use_arguments(int argc, char* argv[]) ;
 
 #endif /* cmdline_hpp */

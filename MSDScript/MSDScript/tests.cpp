@@ -737,4 +737,67 @@ CHECK(parse_expression_str("Hello")->equals(new Var("Hello")));
 CHECK(parse_expression_str("3*(2+width)")->equals(new Mult(new Num(3),new Add(new Num(2), new Var("width")))));
 }
 
+TEST_CASE("Test cases for parse") {
+    REQUIRE_THROWS_WITH(parse_expression_str("()"), "invalid input");
 
+    REQUIRE(parse_expression_str("    1     ")->equals(new Num(1)));
+    REQUIRE(parse_expression_str("(   1   )")->equals(new Num(1)));
+    REQUIRE(parse_expression_str("(1)")->equals(new Num(1)));
+    REQUIRE(parse_expression_str("(((1)))")->equals(new Num(1)));
+
+
+    REQUIRE_THROWS_WITH(parse_expression_str("(1"), "missing close parenthesis");
+    REQUIRE_THROWS_WITH(parse_expression_str("( 1    "), "missing close parenthesis");
+
+    REQUIRE(parse_expression_str("1")->equals(new Num(1)));
+    REQUIRE(parse_expression_str("10")->equals(new Num(10)));
+    REQUIRE(parse_expression_str("-3")->equals(new Num(-3)));
+
+    REQUIRE(parse_expression_str("  \n 5  ")->equals(new Num(5)));
+
+    REQUIRE_THROWS_WITH(parse_expression_str("-"), "number should come right after -");
+    REQUIRE_THROWS_WITH(parse_expression_str(" -   5  "), "number should come right after -");
+
+    REQUIRE(parse_expression_str(" ( 2 + 3) * 5 + 1 ")->interp() == 26);
+    REQUIRE(parse_expression_str(" 2 + 3  * 5 + 1 ")->interp() == 18);
+    REQUIRE(parse_expression_str(" 2 + 3  * (5 + 1 )")->interp() == 20);
+
+    REQUIRE_THROWS_WITH(parse_expression_str(" 1 - 3")->interp(), "invalid input");
+    REQUIRE_THROWS_WITH(parse_expression_str(" 1 - ")->interp(), "invalid input");
+
+    SECTION("variable") {
+
+        REQUIRE(parse_expression_str("x")->equals(new Var("x")));
+        REQUIRE(parse_expression_str("xyz")->equals(new Var("xyz")));
+        REQUIRE(parse_expression_str("xYz")->equals(new Var("xYz")));
+
+        REQUIRE_THROWS_WITH(parse_expression_str("x_z"), "unexpected character in variable");
+
+        REQUIRE(parse_expression_str("x + y")->equals(new Add(new Var("x"), new Var("y"))));
+
+        REQUIRE(parse_expression_str("x * y")->equals(new Mult(new Var("x"), new Var("y"))));
+
+        REQUIRE(parse_expression_str("z * x + y")
+                        ->equals(new Add(new Mult(new Var("z"), new Var("x")),
+                                         new Var("y"))));
+
+        REQUIRE(parse_expression_str("z * (x + y)")
+                        ->equals(new Mult(new Var("z"),
+                                          new Add(new Var("x"), new Var("y")))));
+    }
+
+    SECTION("let binding") {
+        Add *expression1 = new Add(new Var("x"), new Num(1));
+        Let *expression2 = new Let("x", new Num(5), expression1);
+        REQUIRE(parse_expression_str("_let x = 5 _in x + 1")->equals(expression2));
+
+        Let *expression3 = new Let("x", new Add(new Var("x"), new Num(1)), new Add(new Var("x"), new Num(7)));
+        Let *expression4 = new Let("x", new Num(5), expression3);
+        REQUIRE(parse_expression_str("_let x = 5 _in _let x = x +1    _in  x + 7")->equals(expression4));
+
+        REQUIRE_THROWS_WITH(parse_expression_str("_lt x = 5 _in x + 1"), "invalid input");
+        REQUIRE_THROWS_WITH(parse_expression_str("_let x  5 _in x + 1"), "invalid input");
+        REQUIRE_THROWS_WITH(parse_expression_str("_let x = 5 _i x + 1"), "invalid input");
+        REQUIRE_THROWS_WITH(parse_expression_str("_let x = 5 x + 1"), "invalid input");
+    }
+}

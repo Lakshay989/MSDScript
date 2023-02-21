@@ -1,15 +1,15 @@
 CXX=c++
 CFLAGS= -std=c++17
 
-CXXSOURCE= cmdline.cpp  main.cpp expr.cpp tests.cpp
-OBJS = main.o cmdline.o expr.o tests.o
-HEADERS= cmdline.hpp expr.hpp
+CXXSOURCE= cmdline.cpp  main.cpp expr.cpp parse.cpp tests.cpp 
+OBJS = main.o cmdline.o expr.o parse.o tests.o
+HEADERS= cmdline.hpp expr.hpp parse.hpp
 
 CCOMPILE = -c
 CLINK = -o
 
 msdscript: $(OBJS)
-	$(CXX) $(CFLAGS) main.o cmdline.o expr.o tests.o -o msdscript
+	$(CXX) $(CFLAGS) main.o cmdline.o expr.o tests.o parse.o -o msdscript
 
 main.o: main.cpp
 	c++ -std=c++17 -c main.cpp
@@ -23,12 +23,32 @@ expr.o: expr.cpp expr.hpp catch.h
 tests.o: tests.cpp catch.h
 	c++ -std=c++17 -c tests.cpp
 
+parse.o: parse.cpp parse.hpp expr.hpp
+	c++ -std=c++17 -c parse.cpp
+
+.PHONY: clean 
 clean:
 	rm -f *.o *.out
 
 .PHONY: test
 test: msdscript
 	./msdscript --test
+
+
+.PHONY: interp
+interp: msdscript
+	./msdscript --interp
+
+
+.PHONY: print
+print: msdscript
+	./msdscript --print
+
+
+.PHONY: prettyprint
+prettyprint: msdscript
+	./msdscript --pretty-print
+
 
 .PHONY: doc
 doc: 

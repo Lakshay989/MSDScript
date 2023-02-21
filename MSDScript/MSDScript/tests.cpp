@@ -684,9 +684,8 @@ TEST_CASE ("Let_interp_mine") {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-/* Some ideas for parse tests, probably not enough. Also, you may need
-   to adjust these tests, and there may even be mistakes here. */
-TEST_CASE("parse") {
+
+TEST_CASE("Provided tests for parse ") {
   CHECK_THROWS_WITH( parse_expression_str("()"), "invalid input" );
   
   CHECK( parse_expression_str("(1)")->equals(new Num(1)) );
@@ -721,82 +720,21 @@ TEST_CASE("parse") {
                           new Add(new Var("x"), new Var("y"))) ));
 }
 
-//TEST_CASE( "parse" ) {
-//CHECK((NEW(NumExpr)(1))->equals(NEW(NumExpr)(1)));
-//CHECK(!(NEW(NumExpr)(1))->equals(NEW(NumExpr)(2)));
-//CHECK(!(NEW(NumExpr)(1))->equals(NEW(MultExpr)(NEW(NumExpr)(2), NEW(NumExpr)(4))));
-//CHECK((NEW(VarExpr)("hello"))->equals(NEW(VarExpr)("hello")));
-//CHECK(!(NEW(VarExpr)("hello"))->equals(NEW(VarExpr)("ello")));
-//CHECK(peek_next(*(NEW(std::istringstream)("hello"))) == 'h');
-//CHECK(peek_next(*(NEW(std::istringstream)("   hello"))) == 'h');
-//CHECK(get_next(*(NEW(std::istringstream)("   hello"))) == 'h');
-//CHECK(parse_str("1")->equals(NEW(NumExpr)(1)));
-//CHECK(parse_str("  1")->equals(NEW(NumExpr)(1)));
-//CHECK(parse_str("4+2")->equals(NEW(AddExpr)(NEW(NumExpr)(4), NEW(NumExpr)(2))));
-//CHECK(parse_str("   45 +    23")->equals(NEW(AddExpr)(NEW(NumExpr)(45), NEW(NumExpr)(23))));
-//CHECK(parse_str("   45   *  23   ")->equals(NEW(MultExpr)(NEW(NumExpr)(45), NEW(NumExpr)(23))));
-//CHECK(parse_str("(90)")->equals(NEW(NumExpr)(90)));
-//CHECK(parse_str("3*(2+43)")->equals(NEW(MultExpr)(NEW(NumExpr)(3),NEW(AddExpr)(NEW(NumExpr)(2), NEW(NumExpr)(43)))));
-//CHECK(parse_str("Hello")->equals(NEW(VarExpr)("Hello")));
-//CHECK(parse_str("3*(2+width)")->equals(NEW(MultExpr)(NEW(NumExpr)(3),NEW(AddExpr)(NEW(NumExpr)(2), NEW(VarExpr)("width")))));
-//}
-//
-//
-//TEST_CASE("interpreter"){
-//CHECK(parse_str("_let x = (_let y = 7 _in y) _in x")->interp(Env::emptyenv)->equals(NEW(NumVal)(7)));
-//CHECK(parse_str("_let x = 5 _in _let y = x _in y + y")->interp(Env::emptyenv)->equals(NEW(NumVal)(10)));
-//CHECK(parse_str("_let x = 6 _in _let x = 19 _in x")->interp(Env::emptyenv)->equals(NEW(NumVal)(19)));
-//CHECK(parse_str("_if 5 == 3 _then 2 _else 89")->interp(Env::emptyenv)->equals(NEW(NumVal)(89)));
-//CHECK(parse_str("-8 + 3")->interp(Env::emptyenv)->equals(NEW(NumVal)(-5)));
-//}
-//
-//TEST_CASE("function"){
-//CHECK(parse_str("_fun (x) x + 1")->equals(NEW(FuncExpr)("x", NEW(AddExpr)( NEW(VarExpr)("x"), NEW(NumExpr)(1)))));
-//CHECK(parse_str("_let f = _fun (x) x + 1 _in f(10)")->interp(Env::emptyenv)->equals(NEW(NumVal)(11)));
-//CHECK(parse_str("_let y = 8 _in _let f = _fun (x) x * y _in f(2)")->interp(Env::emptyenv)->equals(NEW(NumVal)(16)));
-//CHECK(parse_str("(_fun (x) x + 2)(1)")->interp(Env::emptyenv)->equals(NEW(NumVal)(3)));
-//CHECK(parse_str("_let f = _fun (x) _fun (y) x*x + y*y _in (f(2))(3)")->interp(Env::emptyenv)->equals(NEW(NumVal)(13)));
-//CHECK(parse_str("_let f = _fun (x) _fun (y) x*x + y*y _in f(2)(3)")->interp(Env::emptyenv)->equals(NEW(NumVal)(13)));
-//CHECK(parse_str("_let add = _fun (x) _fun (y) x + y _in _let addFive = add(5) _in addFive(10)")->interp(Env::emptyenv)->equals(NEW(NumVal)(15)));
-//}
-//
-//TEST_CASE("recursive functions"){
-//CHECK( parse_str("_let factrl = _fun(factrl)"
-//                 "                _fun(x)"
-//                 "                  _if x == 1"
-//                 "                  _then 1"
-//                 "                  _else x * factrl(factrl)(x + -1)"
-//                 "_in factrl(factrl)(5)")
-//      ->interp(Env::emptyenv)->to_string() == "120" );
-//CHECK( parse_str("_let fib = _fun (fib)"
-//                 "              _fun (x)"
-//                 "                 _if x == 0"
-//                 "                 _then 1"
-//                 "                 _else _if x == 2 + -1"
-//                 "                 _then 1"
-//                 "                 _else fib(fib)(x + -1)"
-//                 "                       + fib(fib)(x + -2)"
-//                 "_in fib(fib)(10)")->interp(Env::emptyenv)->to_string() == "89");
-//}
-//
-//TEST_CASE("continuation"){
-//CHECK( Step::interp_by_steps(parse_str("_let factrl = _fun(factrl)"
-//                                       "                _fun(x)"
-//                                       "                  _if x == 1"
-//                                       "                  _then 1"
-//                                       "                  _else x * factrl(factrl)(x + -1)"
-//                                       "_in factrl(factrl)(5)"))
-//      ->to_string() == "120" );
-//CHECK( (Step::interp_by_steps)(parse_str("_let fib = _fun (fib)"
-//                                       "              _fun (x)"
-//                                       "                 _if x == 0"
-//                                       "                 _then 1"
-//                                       "                 _else _if x == 2 + -1"
-//                                       "                 _then 1"
-//                                       "                 _else fib(fib)(x + -1)"
-//                                       "                       + fib(fib)(x + -2)"
-//                                       "_in fib(fib)(10)"))->to_string() == "89");
-//
-//CHECK( Step::interp_by_steps(parse_str("_let countdown = _fun(countdown) _fun(n) _if n == 0 _then 0 _else countdown(countdown)(n + -1) _in countdown(countdown)(1000000)")));
-//}
-//
+TEST_CASE( "parse" ) {
+CHECK((new Num(1))->equals(new Num(1)));
+CHECK(!(new Num(1))->equals(new Num(2)));
+CHECK(!(new Num(1))->equals(new Mult (new Num(2), new Num(4))));
+CHECK((new Var("hello"))->equals(new Var("hello")));
+CHECK(!(new Var("hello"))->equals(new Var("ello")));
+CHECK(parse_expression_str("1")->equals(new Num(1)));
+CHECK(parse_expression_str("  1")->equals(new Num(1)));
+CHECK(parse_expression_str("4+2")->equals(new Add(new Num(4), new Num(2))));
+CHECK(parse_expression_str("   45 +    23")->equals(new Add(new Num(45), new Num(23))));
+CHECK(parse_expression_str("   45   *  23   ")->equals(new Mult(new Num(45), new Num(23))));
+CHECK(parse_expression_str("(90)")->equals(new Num(90)));
+CHECK(parse_expression_str("3*(2+43)")->equals(new Mult(new Num(3),new Add(new Num(2), new Num(43)))));
+CHECK(parse_expression_str("Hello")->equals(new Var("Hello")));
+CHECK(parse_expression_str("3*(2+width)")->equals(new Mult(new Num(3),new Add(new Num(2), new Var("width")))));
+}
+
+

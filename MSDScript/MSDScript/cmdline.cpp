@@ -20,24 +20,27 @@
 
 void if_interp()
 {
-    cout << " Handling interp" << endl ;
+    //cout << " Handling interp" << endl ;
     Expr* expr = parse_input();
-    cout << "Expression entered: " << expr->to_pretty_string() << endl ;
-    cout << "interp value: " << expr->interp();
+    //cout << "Expression entered: " << expr->to_pretty_string() << endl ;
+    //cout << "interp value: "
+    cout << expr->interp() << endl;
 }
 
 void if_print()
 {
-    cout << "Handling print" << endl ;
+    //cout << "Handling print" << endl ;
     Expr* expr = parse_input();
-    cout << "Printed expression: " << expr->to_string() << endl ;
+    //cout << "Printed expression: ";
+    cout<< expr->to_string() << endl ;
 }
 
 void if_pretty_print()
 {
-    cout << "Handling pretty print" << endl ;
+    //cout << "Handling pretty print" << endl ;
     Expr* expr = parse_input();
-    cout << "Printed expression: " << expr->to_pretty_string() << endl ;
+    //cout << "Printed expression: " ;
+    cout<< expr->to_pretty_string() << endl ;
 }
 
 void if_test(char* argv[])
@@ -50,7 +53,7 @@ void if_test(char* argv[])
 void if_throw_error(char* argv[])
 {
     cerr<<"No such argument exists. Kindly use --help for a list of accepted arguments \n";
-    exit(1) ;
+    exit(0) ;
 }
 
 void if_help()
@@ -61,10 +64,18 @@ void if_help()
 
 Expr* parse_input()
 {
-    std::string input ;
-    std::getline(std::cin, input);
-    std::stringstream ss(input);
-    return parse_expression(ss);
+//    std::string input ;
+//    std::getline(std::cin, input);
+//    std::stringstream ss(input);
+//    return parse_expression(ss);
+    Expr *expr;
+        try {
+            expr = parse_expression(std::cin);
+        } catch (std::runtime_error &err) {
+            std::cerr << "Runtime error: " << err.what();
+            std::exit(EXIT_FAILURE);
+        }
+        return expr;
 }
 
 

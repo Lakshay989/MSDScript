@@ -3,6 +3,7 @@ CFLAGS= -std=c++17
 
 CXXSOURCE= cmdline.cpp  main.cpp expr.cpp parse.cpp tests.cpp 
 OBJS = main.o cmdline.o expr.o parse.o tests.o
+TESTOBJS = exec.o test_msdscript.o
 HEADERS= cmdline.hpp expr.hpp parse.hpp
 
 CCOMPILE = -c
@@ -26,6 +27,14 @@ tests.o: tests.cpp catch.h
 parse.o: parse.cpp parse.hpp expr.hpp
 	c++ -std=c++17 -c parse.cpp
 
+test_msdscript: $(TESTOBJS)
+	c++ -std=c++17 $(TESTOBJS) -o test_msdscript
+
+test_msdscript.o: test_msdscript.cpp expr.hpp exec.cpp
+	c++ -std=c++17 -c test_msdscript.cpp
+
+
+
 .PHONY: clean 
 clean:
 	rm -f *.o *.out
@@ -48,6 +57,10 @@ print: msdscript
 .PHONY: prettyprint
 prettyprint: msdscript
 	./msdscript --pretty-print
+
+.PHONY: testmsdscript
+testmsdscript: test_msdscript
+	./test_msdscript msdscript msdscript0 --pretty-print
 
 
 .PHONY: doc

@@ -73,7 +73,7 @@ Expr* parse_input()
             expr = parse_expression(std::cin);
         } catch (std::runtime_error &err) {
             std::cerr << "Runtime error: " << err.what();
-            std::exit(EXIT_FAILURE);
+            std::exit(1);
         }
         return expr;
 }

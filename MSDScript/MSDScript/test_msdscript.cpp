@@ -6,12 +6,10 @@
 
 using SINGLE_TEST_ARGVS = const char *const;
 
-int generate_random_int(int min = 0, int max = 9) {
-    // If no explicit seed, C++ takes the current CPU time as the default seed
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::uniform_int_distribution<> dis(min, max);
-    return dis(gen);
+int generate_random_int()
+{
+    //int randNum = rand() % 10;
+    return rand() % 10;
 }
 
 std::string random_valid_let_binding() {
@@ -28,17 +26,17 @@ std::string random_valid_let_binding() {
 }
 
 std::string random_expr_string(bool var = false) {
-    int randNum = rand() % 10;
-    if (randNum < 6) {
+    //int randNum = rand() % 10;
+    if (generate_random_int() < 6) {
         return std::to_string(rand());
     }
-    else if (randNum < 7) {
+    else if (generate_random_int() < 7) {
         return random_expr_string() + "+" + random_expr_string();
     }
-    else if (randNum < 8) {
+    else if (generate_random_int() < 8) {
         return random_expr_string() + "*" + random_expr_string();
     }
-    else if (randNum < 9 && var) {
+    else if (generate_random_int() < 9 && var) {
         return "x";
     }
     else {

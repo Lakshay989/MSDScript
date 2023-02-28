@@ -60,7 +60,7 @@ prettyprint: msdscript
 
 .PHONY: testmsdscript
 testmsdscript: test_msdscript
-	./test_msdscript msdscript msdscript0 --interp
+	./test_msdscript msdscript
 
 
 .PHONY: doc

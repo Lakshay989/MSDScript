@@ -110,7 +110,7 @@ std::string random_expr_string(bool var = false) {
 
 int main(int argc, char** argv) {
     srand(time(NULL));
-    if (argc == 2) {
+    if (argc == 2 && std::strcmp(argv[0], "./test_msdscript") != 0) {
         char* scriptName = argv[1];
         const char* const interp_argv[] = { scriptName, "--interp" };
         const char* const print_argv[] = { scriptName, "--print" };
@@ -139,21 +139,24 @@ int main(int argc, char** argv) {
     if (argc > 2) {
         char* scriptName1 = argv[1];
         char* scriptName2 = argv[2];
+        char* mode = argv[3] ;
         
+//        const char* const interp_argv1[] = { scriptName1, "--interp" };
+//        const char* const interp_argv2[] = { scriptName2, "--interp" };
         
+        const char* const solution_argv1[] = { scriptName1, mode };
+        const char* const solution_argv2[] = { scriptName2, mode };
         
-        const char* const interp_argv1[] = { scriptName1, "--interp" };
-        const char* const interp_argv2[] = { scriptName2, "--interp" };
-        
+
         for (int i = 0; i < 100; i++) {
             std::string in = random_expr_string();
             
-            ExecResult interp_result1 = exec_program(2, interp_argv1, in);
-            ExecResult interp_result2 = exec_program(2, interp_argv2, in);
+            ExecResult result1 = exec_program(2, solution_argv1, in);
+            ExecResult result2 = exec_program(2, solution_argv2, in);
 
             std::cout << "Testing: " << in<< std::endl ;
-            std::cout << "Interp1: " << interp_result1.out;
-            std::cout << "Interp2: " << interp_result2.out<< std::endl << std::endl ;
+            std::cout << mode << "1 :" << result1.out;
+            std::cout << mode << "2 :" << result2.out<< std::endl << std::endl ;
         }
     }
     return 0;

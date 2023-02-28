@@ -44,42 +44,6 @@ std::string random_expr_string(bool var = false) {
     }
 }
 
-std::string random_invalid_expression() {
-    int possibility = generate_random_int();
-    if (possibility < 2) {
-        // missing opening parenthesis
-        return random_expr_string() + " )";
-    } else if (possibility < 4) {
-        // missing closing parenthesis
-        return "( " + random_expr_string();
-    } else if (possibility < 6) {
-        // missing operator between two expressions
-        return random_expr_string() + " " + random_expr_string();
-    } else if (possibility < 8) {
-        // single minus operator
-        return "-";
-    } else {
-        // single minus operator should only be the prefix of a number
-        return "- " + random_expr_string();
-    }
-}
-
-std::string random_expression_string() {
-    int possibility = generate_random_int();
-    if (possibility < 5) {
-        // valid expression
-        return random_expr_string();
-    } else {
-        // invalid expression
-        return random_invalid_expression();
-    }
-}
-
-bool are_both_test_failed(ExecResult r1, ExecResult r2) {
-    return r1.exit_code != 0 && r2.exit_code;
-}
-
-
 int main(int argc, char** argv) {
     srand(time(NULL));
     if (argc == 2 && std::strcmp(argv[0], "./test_msdscript") != 0) {

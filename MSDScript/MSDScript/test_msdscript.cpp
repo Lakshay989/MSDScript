@@ -140,6 +140,8 @@ int main(int argc, char** argv) {
         char* scriptName1 = argv[1];
         char* scriptName2 = argv[2];
         
+        
+        
         const char* const interp_argv1[] = { scriptName1, "--interp" };
         const char* const interp_argv2[] = { scriptName2, "--interp" };
         
@@ -151,7 +153,7 @@ int main(int argc, char** argv) {
 
             std::cout << "Testing: " << in<< std::endl ;
             std::cout << "Interp1: " << interp_result1.out;
-            std::cout << "Interp2: " << interp_result2.out<< std::endl << std::endl ;  //<< std::endl
+            std::cout << "Interp2: " << interp_result2.out<< std::endl << std::endl ;
         }
     }
     return 0;

@@ -44,67 +44,41 @@ std::string random_expr_string(bool var = false) {
     }
 }
 
-//std::string random_invalid_expression() {
-//    int possibility = generate_random_int();
-//    if (possibility < 2) {
-//        // missing opening parenthesis
-//        return random_valid_expr_string() + " )";
-//    } else if (possibility < 4) {
-//        // missing closing parenthesis
-//        return "( " + random_valid_expr_string();
-//    } else if (possibility < 6) {
-//        // missing operator between two expressions
-//        return random_valid_expr_string() + " " + random_valid_expr_string();
-//    } else if (possibility < 8) {
-//        // single minus operator
-//        return "-";
-//    } else {
-//        // single minus operator should only be the prefix of a number
-//        return "- " + random_valid_expr_string();
-//    }
-//}
+std::string random_invalid_expression() {
+    int possibility = generate_random_int();
+    if (possibility < 2) {
+        // missing opening parenthesis
+        return random_expr_string() + " )";
+    } else if (possibility < 4) {
+        // missing closing parenthesis
+        return "( " + random_expr_string();
+    } else if (possibility < 6) {
+        // missing operator between two expressions
+        return random_expr_string() + " " + random_expr_string();
+    } else if (possibility < 8) {
+        // single minus operator
+        return "-";
+    } else {
+        // single minus operator should only be the prefix of a number
+        return "- " + random_expr_string();
+    }
+}
 
-//std::string random_expression_string() {
-//    int possibility = generate_random_int();
-//    if (possibility < 5) {
-//        // valid expression
-//        return random_valid_expr_string();
-//    } else {
-//        // invalid expression
-//        return random_invalid_expression();
-//    }
-//}
+std::string random_expression_string() {
+    int possibility = generate_random_int();
+    if (possibility < 5) {
+        // valid expression
+        return random_expr_string();
+    } else {
+        // invalid expression
+        return random_invalid_expression();
+    }
+}
 
-//bool are_both_test_failed(ExecResult r1, ExecResult r2) {
-//    return r1.exit_code != 0 && r2.exit_code;
-//}
-//
-//void run_single_test(SINGLE_TEST_ARGVS argv_1[], SINGLE_TEST_ARGVS argv_2[], std::string argv_1_name,
-//                     std::string argv_2_name) {
-//    for (int i = 0; i < SINGLE_TEST_COUNT; i++) {
-//        std::string in = random_expr_string();
-//
-//        ExecResult result_1 = exec_program(2, argv_1, in);
-//        ExecResult result_2 = exec_program(2, argv_2, in);
-//
-//        bool both_test_failed = are_both_test_failed(result_1, result_2);
-//
-//        if (!both_test_failed && (result_1.out != result_2.out)) {
-//            std::cerr << "\n\nTrying " << in << "\n";
-//            std::cerr << argv_1_name << ".exit_code: " << result_1.exit_code << '\n';
-//            std::cerr << argv_1_name << ".out: \n" << result_1.out << '\n';
-//            if (result_1.exit_code != 0) {
-//                std::cerr << argv_1_name << ".error: " << result_1.err << "\n";
-//            }
-//            std::cerr << argv_2_name << ".exit_code: " << result_2.exit_code << '\n';
-//            std::cerr << argv_2_name << ".out: \n" << result_2.out << '\n';
-//            if (result_2.exit_code != 0) {
-//                std::cerr << argv_2_name << ".error: " << result_2.err << "\n";
-//            }
-//            std::cerr << "different results \n\n";
-//        }
-//    }
-//}
+bool are_both_test_failed(ExecResult r1, ExecResult r2) {
+    return r1.exit_code != 0 && r2.exit_code;
+}
+
 
 int main(int argc, char** argv) {
     srand(time(NULL));

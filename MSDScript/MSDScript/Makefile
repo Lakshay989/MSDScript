@@ -30,7 +30,7 @@ parse.o: parse.cpp parse.hpp expr.hpp
 test_msdscript: $(TESTOBJS)
 	c++ -std=c++17 $(TESTOBJS) -o test_msdscript
 
-test_msdscript.o: test_msdscript.cpp expr.hpp exec.cpp
+test_msdscript.o: test_msdscript.cpp expr.hpp exec.h exec.cpp
 	c++ -std=c++17 -c test_msdscript.cpp
 
 
@@ -60,7 +60,7 @@ prettyprint: msdscript
 
 .PHONY: testmsdscript
 testmsdscript: test_msdscript
-	./test_msdscript msdscript msdscript7 --interp
+	./test_msdscript msdscript msdscript0 --interp
 
 
 .PHONY: doc

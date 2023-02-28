@@ -1,6 +1,6 @@
 #include <iostream>
 #include <random>
-#include "exec.hpp"
+#include "exec.h"
 
 #define SINGLE_TEST_COUNT 200
 

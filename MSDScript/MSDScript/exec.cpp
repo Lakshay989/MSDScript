@@ -7,7 +7,7 @@
 #include <poll.h>
 #include <errno.h>
 
-#include "exec.hpp"
+#include "exec.h"
 
 static const int READ_END  = 0;
 static const int WRITE_END = 1;

@@ -15,6 +15,8 @@
 #ifndef expr_hpp
 #define expr_hpp
 
+class Val;
+
 #include <stdio.h>
 #include <string>
 #include <iostream>
@@ -38,7 +40,7 @@ class Expr  // Base class
 {
 public:
     virtual bool equals(Expr *e) = 0 ;  // This function checks for the equality for the LHS and the RHS.
-    virtual int interp() = 0 ; // This function interprets the value of the expression/variable.
+    virtual Val* interp() = 0 ; // This function interprets the value of the expression/variable.
     virtual bool has_variable() = 0 ; // This function determines if the the expression consists of a variable or not.
     virtual Expr* subst(std::string s, Expr* e) = 0; // This function substitutes the expression with the combination of sub-expressions if possible.
     virtual void print(std::ostream &out) = 0; // This function prints the expression.
@@ -63,14 +65,14 @@ public:
 
 /*! \brief Derived Class from Expr for representing a number
 */
-class Num : public Expr
+class NumExpr : public Expr
 {
 public:
     int val; //!< Value of the number
     
-    Num(int val);
+    NumExpr(int val);
     bool equals(Expr *e) ;
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
@@ -89,7 +91,7 @@ public:
     
     Add(Expr *lhs, Expr *rhs);
     bool equals(Expr *e) ;
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
@@ -109,7 +111,7 @@ public:
     
     Mult(Expr *lhs, Expr *rhs);
     bool equals(Expr *e) ;
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
@@ -128,7 +130,7 @@ public:
     Var(std::string name);
     
     bool equals(Expr *e);
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
@@ -150,7 +152,7 @@ public:
     Let(std::string lhs, Expr *rhs, Expr *body) ;
     
     bool equals(Expr *e);
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);

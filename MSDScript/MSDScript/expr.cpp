@@ -12,12 +12,13 @@
 * \author Lakshay Santosh Kucheriya
 */
 
+#include "val.hpp"
 #include "expr.hpp"
 
 /**
 * \brief Constructor
 */
-Num::Num(int val)
+NumExpr::NumExpr(int val)
 {
     this->val = val;
 }
@@ -28,9 +29,9 @@ Num::Num(int val)
 * \param e Expression
 * \return boolean value of LHS = RHS
 */
-bool Num::equals(Expr *e)
+bool NumExpr::equals(Expr *e)
 {
-    Num *n = dynamic_cast<Num*>(e);
+    NumExpr *n = dynamic_cast<NumExpr*>(e);
     if (n == NULL)
         return false;
     else
@@ -42,9 +43,9 @@ bool Num::equals(Expr *e)
 * \brief This function interprets the value of the integer
 * \return integer value of the number
 */
-int Num::interp()
+Val* NumExpr::interp()
 {
-    return int(val);
+    return new NumVal(this -> val);
 }
 
 
@@ -52,7 +53,7 @@ int Num::interp()
 * \brief This function determines if the the expression consists of a variable or not.
 * \return boolean value for the number has a variable or not
 */
-bool Num::has_variable()
+bool NumExpr::has_variable()
 {
     return false;
 }
@@ -64,7 +65,7 @@ bool Num::has_variable()
 * \param e second argument, Expression
 * \return Expression which is modified if combination of sub expressions was possible
 */
-Expr* Num::subst(std::string s, Expr* e)
+Expr* NumExpr::subst(std::string s, Expr* e)
 {
     return this ;
 }
@@ -73,7 +74,7 @@ Expr* Num::subst(std::string s, Expr* e)
 * \brief Prints the expression
 * \param [out] out output stream
 */
-void Num::print(std::ostream &out) {
+void NumExpr::print(std::ostream &out) {
     out << std::to_string(val);
 }
 
@@ -82,11 +83,11 @@ void Num::print(std::ostream &out) {
 * \param [out] out output stream
 * \param position second argument, position to track the alignment
 */
-void Num::pretty_print(std::ostream &out, int position) {
+void NumExpr::pretty_print(std::ostream &out, int position) {
     this->pretty_print_at(out, precedence_none, false);
 }
 
-void Num::pretty_print_at(std::ostream &out, precedence_t precedence, bool paranthesis, int position) {
+void NumExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool paranthesis, int position) {
     out << std::to_string(val);
 }
 
@@ -124,9 +125,9 @@ bool Add::equals(Expr *e) // Add Equals
 * \brief This function interprets the value of the expression
 * \return integer value of the computed expression
 */
-int Add::interp()
+Val* Add::interp()
 {
-    return (int)lhs->interp() + (int)rhs->interp() ;
+    return lhs->interp()->add_to(rhs->interp()) ;
 }
 
 
@@ -219,9 +220,9 @@ bool Mult::equals(Expr* e) { // Mult equals
 * \brief This function interprets the value of the expression
 * \return integer value of the computed expression
 */
-int Mult::interp()
+Val* Mult::interp()
 {
-    return (int)lhs->interp() * (int)rhs->interp();
+    return lhs->interp()->mult_with( rhs->interp() );
 }
 
 
@@ -315,7 +316,7 @@ bool Var::equals(Expr *e)  // Var equals
 * \brief This function interprets the value of the Variable
 * \return error message as value of the variable cannot be iterpreted
 */
-int Var::interp()
+Val* Var::interp()
 {
     throw std::runtime_error("interp does not work with variable expressions !!");
 }
@@ -410,7 +411,7 @@ bool Let::equals( Expr *e)
 * \brief This function interprets the value of the Variable
 * \return value of the variable assigned using Let
 */
-int Let::interp() // More Testing rhs->interp()
+Val* Let::interp() // More Testing rhs->interp()
 {
     return this->body->subst(this->lhs, this->rhs)->interp();
 }

@@ -67,7 +67,7 @@ Expr *parse_num(std::istream &in)
     {
         num *= -1;
     }
-    return new Num(num);
+    return new NumExpr(num);
 }
 
 

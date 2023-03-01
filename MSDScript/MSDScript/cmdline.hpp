@@ -18,7 +18,8 @@
 #include "catch.h"
 #include "expr.hpp"
 #include "parse.hpp"
-#include "cmdline.hpp"
+//#include "cmdline.hpp"
+#include "val.hpp"
 
 #include <stdio.h>
 #include <iostream>

@@ -24,7 +24,7 @@ void if_interp()
     Expr* expr = parse_input();
     //cout << "Expression entered: " << expr->to_pretty_string() << endl ;
     //cout << "interp value: "
-    cout << expr->interp() << endl;
+    cout << expr->interp()->to_string() << endl;
 }
 
 void if_print()

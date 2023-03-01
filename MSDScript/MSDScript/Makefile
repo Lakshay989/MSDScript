@@ -1,10 +1,10 @@
 CXX=c++
 CFLAGS= -std=c++17
 
-CXXSOURCE= cmdline.cpp  main.cpp expr.cpp parse.cpp tests.cpp 
-OBJS = main.o cmdline.o expr.o parse.o tests.o
+CXXSOURCE= cmdline.cpp  main.cpp expr.cpp parse.cpp tests.cpp val.cpp 
+OBJS = main.o cmdline.o expr.o parse.o tests.o val.o
 TESTOBJS = exec.o test_msdscript.o
-HEADERS= cmdline.hpp expr.hpp parse.hpp
+HEADERS= cmdline.hpp expr.hpp parse.hpp val.hpp
 
 CCOMPILE = -c
 CLINK = -o
@@ -26,6 +26,9 @@ tests.o: tests.cpp catch.h
 
 parse.o: parse.cpp parse.hpp expr.hpp
 	c++ -std=c++17 -c parse.cpp
+
+val.o: val.hpp val.cpp expr.h
+	c++ -std=c++17 -c val.cpp
 
 test_msdscript: $(TESTOBJS)
 	c++ -std=c++17 $(TESTOBJS) -o test_msdscript

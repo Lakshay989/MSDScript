@@ -26,17 +26,17 @@ std::string random_valid_let_binding() {
 }
 
 std::string random_expr_string(bool var = false) {
-    //int randNum = rand() % 10;
-    if (generate_random_int() < 6) {
+    int randNum = generate_random_int();
+    if (randNum < 6) {
         return std::to_string(rand());
     }
-    else if (generate_random_int() < 7) {
+    else if (randNum < 7) {
         return random_expr_string() + "+" + random_expr_string();
     }
-    else if (generate_random_int() < 8) {
+    else if (randNum < 8) {
         return random_expr_string() + "*" + random_expr_string();
     }
-    else if (generate_random_int() < 9 && var) {
+    else if (randNum < 9 && var) {
         return "x";
     }
     else {
@@ -46,7 +46,7 @@ std::string random_expr_string(bool var = false) {
 
 int main(int argc, char** argv) {
     srand(time(NULL));
-    if (argc == 2 && std::strcmp(argv[0], "./test_msdscript") != 0) {
+    if (argc == 2) {
         char* scriptName = argv[1];
         const char* const interp_argv[] = { scriptName, "--interp" };
         const char* const print_argv[] = { scriptName, "--print" };
@@ -54,15 +54,15 @@ int main(int argc, char** argv) {
         
         for (int i = 0; i < 100; i++) {
             std::string in = random_expr_string();
-            std::cout << "Testing: " << in << "\n";
+            std::cout << "Testing: " << in << std::endl;
             
             ExecResult interp_result = exec_program(2, interp_argv, in);
             ExecResult print_result = exec_program(2, print_argv, in);
             ExecResult prettyPrint_result = exec_program(2, prettyPrint_argv, in);
             
-            std::cout << "Interp: " << interp_result.out << "\n";
-            std::cout << "Print: " << print_result.out << "\n";
-            std::cout << "Pretty Print: " << prettyPrint_result.out << "\n";
+            std::cout << "Interp: " << interp_result.out;
+            std::cout << "Print: " << print_result.out ;
+            std::cout << "Pretty Print: " << prettyPrint_result.out << std::endl << std::endl;
             
             ExecResult interp_result_verify = exec_program(2, interp_argv, print_result.out);
             
@@ -70,7 +70,8 @@ int main(int argc, char** argv) {
                 throw std::runtime_error("results does not match!");
             }
         }
-        std::cout << "Result: Test successful!" << std::endl;
+        std::cout << "Result: Tests passed ! Verified interp() == print()->interp()" << std::endl;
+
     }
     if (argc > 2) {
         char* scriptName1 = argv[1];

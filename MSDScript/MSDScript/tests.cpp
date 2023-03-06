@@ -15,6 +15,7 @@
 #include "catch.h"
 #include "expr.hpp"
 #include "parse.hpp"
+#include "val.hpp"
 
 
 #include <stdio.h>
@@ -67,20 +68,20 @@ TEST_CASE("Tests for checking interp")
     CHECK_THROWS_WITH( (new Var("x+y"))->interp(), "interp does not work with variable expressions !!" );
     CHECK_THROWS_WITH( (new Var("1"))->interp(), "interp does not work with variable expressions !!" );
 
-    CHECK( (new Add(new Add(new NumExpr(10), new NumExpr(15)),new Add(new NumExpr(20),new NumExpr(20))))->interp()==65);
-    CHECK( (new Add(new Add(new NumExpr(5), new NumExpr(5)),new Add(new NumExpr(20),new NumExpr(20))))->interp()!=49);
-    CHECK( (new Add(new Add(new NumExpr(-50), new NumExpr(15)),new Add(new NumExpr(-15),new NumExpr(50))))->interp()==0);
-    CHECK( (new Add(new Add(new NumExpr(1000), new NumExpr(500)),new Add(new NumExpr(500),new NumExpr(-1000))))->interp()==1000);
-    CHECK( (new Add(new Mult(new NumExpr(5), new NumExpr(10)),new Mult(new NumExpr(-5),new NumExpr(-10))))->interp()==100);
-    CHECK( (new Add(new Mult(new NumExpr(50), new NumExpr(1)),new Add(new NumExpr(30),new NumExpr(20))))->interp()==100);
+    CHECK( (new Add(new Add(new NumExpr(10), new NumExpr(15)),new Add(new NumExpr(20),new NumExpr(20))))->interp()->equals(new NumVal(65))) ;
+    CHECK( (new Add(new Add(new NumExpr(5), new NumExpr(5)),new Add(new NumExpr(20),new NumExpr(20))))->interp()->equals(new NumVal(50)));
+    CHECK( (new Add(new Add(new NumExpr(-50), new NumExpr(15)),new Add(new NumExpr(-15),new NumExpr(50))))->interp()->equals(new NumVal(0)));
+    CHECK( (new Add(new Add(new NumExpr(1000), new NumExpr(500)),new Add(new NumExpr(500),new NumExpr(-1000))))->interp()->equals(new NumVal(1000)));
+    CHECK( (new Add(new Mult(new NumExpr(5), new NumExpr(10)),new Mult(new NumExpr(-5),new NumExpr(-10))))->interp()->equals(new NumVal(100)));
+    CHECK( (new Add(new Mult(new NumExpr(50), new NumExpr(1)),new Add(new NumExpr(30),new NumExpr(20))))->interp()->equals(new NumVal(100)));
 
-    CHECK( (new Mult(new NumExpr(3), new NumExpr(2)))->interp()==6 );
-    CHECK( (new Mult(new NumExpr(3), new NumExpr(0)))->interp()==0 );
-    CHECK( (new Mult(new NumExpr(6), new NumExpr(9)))->interp()==54 );
-    CHECK( (new Mult(new NumExpr(3), new NumExpr(-30)))->interp()==-90 );
-    CHECK( (new Mult(new Add(new NumExpr(5), new NumExpr(5)),new Add(new NumExpr(27),new NumExpr(23))))->interp()==500);
-    CHECK( (new Mult(new Add(new NumExpr(-50), new NumExpr(-50)),new Mult(new NumExpr(0),new NumExpr(50))))->interp()==0);
-    CHECK( (new Mult(new Mult(new NumExpr(5), new NumExpr(5)),new Mult(new NumExpr(-5),new NumExpr(-5))))->interp()==625);
+    CHECK( (new Mult(new NumExpr(3), new NumExpr(2)))->interp()->equals(new NumVal(6)));
+    CHECK( (new Mult(new NumExpr(3), new NumExpr(0)))->interp()->equals(new NumVal(0)));
+    CHECK( (new Mult(new NumExpr(6), new NumExpr(9)))->interp()->equals(new NumVal(54)));
+    CHECK( (new Mult(new NumExpr(3), new NumExpr(-30)))->interp()->equals(new NumVal(-90)));
+    CHECK( (new Mult(new Add(new NumExpr(5), new NumExpr(5)),new Add(new NumExpr(27),new NumExpr(23))))->interp()->equals(new NumVal(500)));
+    CHECK( (new Mult(new Add(new NumExpr(-50), new NumExpr(-50)),new Mult(new NumExpr(0),new NumExpr(50))))->interp()->equals(new NumVal(0)));
+    CHECK( (new Mult(new Mult(new NumExpr(5), new NumExpr(5)),new Mult(new NumExpr(-5),new NumExpr(-5))))->interp()->equals(new NumVal(625)));
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -419,8 +420,8 @@ TEST_CASE(" Tests for Let class written by me")
         
             Add *expression2 = new Add(new Mult(new NumExpr(5), expression1), new NumExpr(1));
 
-            REQUIRE(expression1->interp() == 5);
-            REQUIRE(expression2->interp() == 26);
+            REQUIRE(expression1->interp() ->equals(new NumVal(5)));
+            REQUIRE(expression2->interp() ->equals(new NumVal(26)));
 
         
             /*
@@ -430,13 +431,13 @@ TEST_CASE(" Tests for Let class written by me")
 
             Let *expression3 = new Let("x", new Add(new NumExpr(5), new NumExpr(2)), new Add(new Var("x"), new NumExpr(1)));
             Mult *expression4 = new Mult(new NumExpr(5), expression3);
-            REQUIRE(expression4->interp() == 40);
+            REQUIRE(expression4->interp()->equals(new NumVal(40)));
 
 
             // subst interp
             Add *add = new Add(new Var("x"), new Var("y"));
             Let *expression5 = new Let("x", new NumExpr(3), add);
-            REQUIRE(expression5->subst("y", new NumExpr(4))->interp() == 7);
+            REQUIRE(expression5->subst("y", new NumExpr(4))->interp()->equals(new NumVal(7)));
 
         }
 
@@ -660,25 +661,25 @@ TEST_CASE("Let_print_mine") {
 }
 TEST_CASE ("Let_interp_mine") {
     SECTION("hw_examples") {
-        CHECK((new Add(new Mult(new NumExpr(5), new Let("x", new NumExpr(5), new Var("x"))), new NumExpr(1))) -> interp() == 26);
-        CHECK((new Mult(new NumExpr(5), new Let("x", new NumExpr(5), new Add(new Var("x"), new NumExpr(1))))) -> interp() == 30);
+        CHECK((new Add(new Mult(new NumExpr(5), new Let("x", new NumExpr(5), new Var("x"))), new NumExpr(1))) -> interp()->equals(new NumVal(26)));
+        CHECK((new Mult(new NumExpr(5), new Let("x", new NumExpr(5), new Add(new Var("x"), new NumExpr(1))))) -> interp()->equals(new NumVal(30)));
     }
     SECTION("from_pretty_print_edge") {
         CHECK( (new Let("x", new NumExpr(1),
                        new Let("y", new NumExpr(1),
                                new Let("z", new Add(new Var("x"), new NumExpr(1)),
-                                       new Mult(new Add(new Var("x"), new Var("y")), new Var("z")))))) -> interp() == 4);
-        CHECK( (new Mult((new Add(new Mult(new NumExpr(5), new Let("x", new NumExpr(5), new Mult(new Var("x"), new NumExpr(2)))), new NumExpr(1))), new NumExpr(7))) -> interp() == 357); // 51 * 7
+                                       new Mult(new Add(new Var("x"), new Var("y")), new Var("z")))))) -> interp()->equals(new NumVal(4)));
+        CHECK( (new Mult((new Add(new Mult(new NumExpr(5), new Let("x", new NumExpr(5), new Mult(new Var("x"), new NumExpr(2)))), new NumExpr(1))), new NumExpr(7))) -> interp() ->equals(new NumVal(357))); // 51 * 7
         CHECK( (new Let("x", new NumExpr(10), new Mult( new Mult(new Var("x"), new Mult(new Mult(new NumExpr(10), new NumExpr(10)), new NumExpr(10))), new Mult(new NumExpr(10), new NumExpr(10)))))
-                      ->interp()  == 1000000);
+                      ->interp()->equals(new NumVal(1000000)));
         CHECK( (new Let("x", new NumExpr(1), new Mult( new Mult(new Var("x"), new Mult(new Mult(new NumExpr(10), new NumExpr(10)), new Var("x"))), new Mult(new NumExpr(10), new NumExpr(10)))))
-                       ->interp()  == 10000);
+                       ->interp()->equals(new NumVal(10000)));
         CHECK_THROWS_WITH( ((new Let("x", new NumExpr(1), new Mult( new Mult(new Var("x"), new Mult(new Mult(new NumExpr(10), new NumExpr(10)), new Var("x"))), new Mult(new Var("y"), new NumExpr(10)))))
-                       -> interp() == 10000), "interp does not work with variable expressions !!");
+                       -> interp()->equals(new NumVal(10000))), "interp does not work with variable expressions !!");
     }
     SECTION("bypass_middle_let") {
         CHECK ((new Let("x", new NumExpr(2), new Let("z", new NumExpr(4), new Add(new Var("x"), new NumExpr(10)))))
-                -> interp() == 12);
+                -> interp()->equals(new NumVal(12)));
     }
 }
 
@@ -758,9 +759,9 @@ TEST_CASE("Test cases for parse") {
     REQUIRE_THROWS_WITH(parse_expression_str("-"), "number should come right after -");
     REQUIRE_THROWS_WITH(parse_expression_str(" -   5  "), "number should come right after -");
 
-    REQUIRE(parse_expression_str(" ( 2 + 3) * 5 + 1 ")->interp() == 26);
-    REQUIRE(parse_expression_str(" 2 + 3  * 5 + 1 ")->interp() == 18);
-    REQUIRE(parse_expression_str(" 2 + 3  * (5 + 1 )")->interp() == 20);
+    REQUIRE(parse_expression_str(" ( 2 + 3) * 5 + 1 ")->interp()->equals(new NumVal(26)));
+    REQUIRE(parse_expression_str(" 2 + 3  * 5 + 1 ")->interp()->equals(new NumVal(18)));
+    REQUIRE(parse_expression_str(" 2 + 3  * (5 + 1 )")->interp()->equals(new NumVal(20)));
 
     REQUIRE_THROWS_WITH(parse_expression_str(" 1 - 3")->interp(), "invalid input");
     REQUIRE_THROWS_WITH(parse_expression_str(" 1 - ")->interp(), "invalid input");

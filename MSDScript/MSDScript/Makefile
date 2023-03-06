@@ -10,7 +10,7 @@ CCOMPILE = -c
 CLINK = -o
 
 msdscript: $(OBJS)
-	$(CXX) $(CFLAGS) main.o cmdline.o expr.o tests.o parse.o -o msdscript
+	$(CXX) $(CFLAGS) main.o cmdline.o expr.o tests.o parse.o val.o -o msdscript
 
 main.o: main.cpp
 	c++ -std=c++17 -c main.cpp
@@ -27,7 +27,7 @@ tests.o: tests.cpp catch.h
 parse.o: parse.cpp parse.hpp expr.hpp
 	c++ -std=c++17 -c parse.cpp
 
-val.o: val.hpp val.cpp expr.h
+val.o: val.hpp val.cpp expr.hpp
 	c++ -std=c++17 -c val.cpp
 
 test_msdscript: $(TESTOBJS)

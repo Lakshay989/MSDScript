@@ -23,8 +23,8 @@ void if_interp()
     //cout << " Handling interp" << endl ;
     Expr* expr = parse_input();
     //cout << "Expression entered: " << expr->to_pretty_string() << endl ;
-    //cout << "interp value: "
-    cout << expr->interp()->to_string() << endl;
+    //cout << "interp value: " ;
+    cout << expr->interp()->to_string() << endl; // ->to_string()
 }
 
 void if_print()
@@ -64,19 +64,20 @@ void if_help()
 
 Expr* parse_input()
 {
-//    std::string input ;
-//    std::getline(std::cin, input);
-//    std::stringstream ss(input);
-//    return parse_expression(ss);
-    Expr *expr;
-        try {
-            expr = parse_expression(std::cin);
-        } catch (std::runtime_error &err) {
-            std::cerr << "Runtime error: " << err.what();
-            std::exit(1);
-        }
-        return expr;
+    std::string input ;
+    std::getline(std::cin, input);
+    std::stringstream ss(input);
+    return parse_expression(ss);
 }
+//    Expr *expr;
+//        try {
+//            expr = parse_expression(std::cin);
+//        } catch (std::runtime_error &err) {
+//            std::cerr << "Runtime error: " << err.what();
+//            std::exit(1);
+//        }
+//        return expr;
+
 
 
 /**

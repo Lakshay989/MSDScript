@@ -21,7 +21,7 @@ cmdline.o: cmdline.cpp cmdline.hpp catch.h
 expr.o: expr.cpp expr.hpp catch.h
 	c++ -std=c++17 -c expr.cpp
 
-tests.o: tests.cpp catch.h
+tests.o: tests.cpp catch.h 
 	c++ -std=c++17 -c tests.cpp
 
 parse.o: parse.cpp parse.hpp expr.hpp

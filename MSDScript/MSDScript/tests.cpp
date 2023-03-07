@@ -802,3 +802,67 @@ TEST_CASE("Test cases for parse") {
         REQUIRE_THROWS_WITH(parse_expression_str("_let x = 5 x + 1"), "invalid input");
     }
 }
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TEST_CASE("NumVal") {
+    SECTION("add_to") {
+        auto *num1 = new NumVal(23);
+        auto *num2 = new NumVal(27);
+        auto *num3 = new NumVal(50);
+        
+        auto add1 = num1->add_to(num2);
+        auto add2 = num2->add_to(num1);
+
+        REQUIRE(add1->equals(num3));
+        REQUIRE(add2->equals(num3));
+
+        REQUIRE_THROWS_WITH(num3->add_to(nullptr), "add of non-number");
+    }
+
+    SECTION("mult_with") {
+        auto *num1 = new NumVal(20);
+        auto *num2 = new NumVal(5);
+        auto *num3 = new NumVal(100);
+        
+        auto mult1 = num1->mult_with(num2);
+        auto mult2 = num2->mult_with(num1);
+
+        REQUIRE(mult1->equals(num3));
+        REQUIRE(mult2->equals(num3));
+
+        REQUIRE_THROWS_WITH(num3->mult_with(nullptr), "mult with non-number");
+    }
+
+    SECTION("equals") {
+        auto *num1 = new NumVal(2);
+        auto *num2 = new NumVal(3);
+        auto *num3 = new NumVal(2);
+
+        REQUIRE(num1->equals(num2) == false);
+        REQUIRE(num1->equals(num3));
+        REQUIRE(num1->equals(num1));
+        REQUIRE(num1->equals(nullptr) == false);
+    }
+
+    SECTION("to_string") {
+        auto *num1 = new NumVal(2);
+        auto *num2 = new NumVal(-2);
+
+        REQUIRE(num1->to_string() == std::to_string(2));
+        REQUIRE(num2->to_string() == std::to_string(-2));
+    }
+
+    SECTION("to_expr") {
+        auto *num1 = new NumVal(2);
+        auto *num2 = new NumVal(-2);
+
+        auto *num_expr1 = new NumExpr(2);
+        auto *num_expr2 = new NumExpr(-2);
+
+        REQUIRE(num1->to_expr()->equals(num_expr1));
+        REQUIRE(num2->to_expr()->equals(num_expr2));
+        REQUIRE(num1->to_expr()->equals(num_expr2) == false);
+        REQUIRE(num2->to_expr()->equals(num_expr1) == false);
+    }
+}

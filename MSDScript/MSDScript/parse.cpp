@@ -211,7 +211,7 @@ Expr *parse_let(std::istream &in)
     return new Let(lhs->to_string(), rhs, body) ;
 }
 
-Expr *parse_if_expr(std::istream &in, int &open_parenthesis_to_match)
+Expr *parse_if_expr(std::istream &in)
 {
     skip_whitespace(in);
     Expr *condition = parse_multicand(in);

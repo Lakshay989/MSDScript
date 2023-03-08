@@ -796,7 +796,7 @@ TEST_CASE("Test cases for parse") {
         Let *expression4 = new Let("x", new NumExpr(5), expression3);
         REQUIRE(parse_expression_str("_let x = 5 _in _let x = x +1    _in  x + 7")->equals(expression4));
 
-        REQUIRE_THROWS_WITH(parse_expression_str("_lt x = 5 _in x + 1"), "invalid input");
+        REQUIRE_THROWS_WITH(parse_expression_str("_lt x = 5 _in x + 1"), "consume mismatch");
         REQUIRE_THROWS_WITH(parse_expression_str("_let x  5 _in x + 1"), "invalid input");
         REQUIRE_THROWS_WITH(parse_expression_str("_let x = 5 _i x + 1"), "invalid input");
         REQUIRE_THROWS_WITH(parse_expression_str("_let x = 5 x + 1"), "invalid input");

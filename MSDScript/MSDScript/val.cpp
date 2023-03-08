@@ -56,6 +56,13 @@ Expr *NumVal::to_expr() {
     return new NumExpr(this->rep);
 }
 
+bool NumVal::is_true()
+{
+    throw std::runtime_error("A num val can not be a bool val");
+    
+}
+
+
 //--------------------------------------------------------------------------------------------------------------
 
 BoolVal::BoolVal(bool rep)

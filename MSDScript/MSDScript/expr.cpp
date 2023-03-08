@@ -517,6 +517,7 @@ Expr *BoolExpr::subst(std::string s, Expr *e)
 {
     return new BoolExpr(this->rep) ;
 }
+
 void BoolExpr::print(std::ostream &out)
 {
     if(this->rep)
@@ -528,6 +529,11 @@ void BoolExpr::print(std::ostream &out)
         out << "_false" ;
     }
 }
+
+void BoolExpr::pretty_print(std::ostream &out, int position) {
+    this->pretty_print_at(out, precedence_none, false, position);
+}
+
 void BoolExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position)
 {
     if(this->rep)
@@ -610,6 +616,10 @@ void IfExpr::print(std::ostream &out)
     out << ")";
 }
 
+void IfExpr::pretty_print(std::ostream &out, int position) {
+    this->pretty_print_at(out, precedence_none, false, position);
+}
+
 void IfExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position)
 {
     if (parenthesis) {
@@ -674,6 +684,10 @@ void EqExpr::print(std::ostream &out)
     out << "==";
     this->rhs->print(out);
     out << ")";
+}
+
+void EqExpr::pretty_print(std::ostream &out, int position) {
+    this->pretty_print_at(out, precedence_none, false, position);
 }
 
 void EqExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position)

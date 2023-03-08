@@ -178,7 +178,7 @@ public:
     bool has_variable();
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0); // This is an extenstion of the print function with minor changes.
+    void pretty_print(std::ostream &out, int position = 0);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position);
 };
 
@@ -198,7 +198,7 @@ public:
     bool has_variable();
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0); // This is an extenstion of the print function with minor changes.
+    void pretty_print(std::ostream &out, int position = 0);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position);
 };
 
@@ -215,7 +215,7 @@ public:
     bool has_variable();
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0); // This is an extenstion of the print function with minor changes.
+    void pretty_print(std::ostream &out, int position = 0);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position);
 };
 

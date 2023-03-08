@@ -485,6 +485,216 @@ void Let::pretty_print_at(std::ostream &out, precedence_t precedence, bool paren
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+BoolExpr::BoolExpr(bool rep)
+{
+    this->rep = rep ;
+}
+    
+bool BoolExpr::equals(Expr *e)
+{
+    auto *other = dynamic_cast<BoolExpr *>(e) ;
+    if(other == nullptr)
+    {
+        return false;
+    }
+    return  this->rep == other->rep;
+}
+
+Val *BoolExpr::interp()
+{
+    return new BoolVal(this->rep);
+}
+
+bool BoolExpr::has_variable()
+{
+    return false;
+}
+
+Expr *BoolExpr::subst(std::string s, Expr *e)
+{
+    return new BoolExpr(this->rep) ;
+}
+void BoolExpr::print(std::ostream &out)
+{
+    if(this->rep)
+    {
+        out << "_true" ;
+    }
+    else
+    {
+        out << "_false" ;
+    }
+}
+void BoolExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position)
+{
+    if(this->rep)
+    {
+        out << "_true" ;
+    }
+    else
+    {
+        out << "_false" ;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//class IfExpr : public Expr {
+//public:
+//    bool condition;
+//    Expr *then_expr;
+//    Expr *else_expr;
+
+IfExpr::IfExpr(bool condition, Expr *then_expr, Expr *else_expr)
+{
+    this->condition = condition ;
+    this->then_expr = then_expr ;
+    this->else_expr = else_expr ;
+}
+IfExpr::IfExpr(Expr *condition, Expr *then_expr, Expr *else_expr)
+{
+    auto *condition_expr = dynamic_cast<BoolExpr *>(condition);
+    if (condition_expr == nullptr)
+    {
+        throw std::runtime_error("The condition of if exprression should be a boolean expression");
+    }
+    
+    this->condition = condition_expr->interp()->is_true();
+    this->then_expr = then_expr;
+    this->else_expr = else_expr;
+    }
+    
+bool IfExpr::equals(Expr *e)
+{
+    auto *other = dynamic_cast<IfExpr *>(e);
+    if (other == nullptr) {
+        return false;
+    }
+    return this->condition == other->condition && this->then_expr->equals(other->then_expr) &&
+           this->else_expr->equals(other->else_expr);
+}
+
+Val *IfExpr::interp()
+{
+    if (this->condition) {
+        return this->then_expr->interp();
+    } else {
+        return this->else_expr->interp();
+    }
+}
+
+bool IfExpr::has_variable()
+{
+    return this->then_expr->has_variable() || this->else_expr->has_variable();
+}
+
+Expr *IfExpr::subst(std::string s, Expr *e)
+{
+    Expr *subst_then_expr = this->then_expr->subst(s, e);
+    Expr *subst_else_expr = this->else_expr->subst(s, e);
+    return new IfExpr(this->condition, subst_then_expr, subst_else_expr);
+}
+
+void IfExpr::print(std::ostream &out)
+{
+    out << "(_if ";
+    auto *condition = new BoolVal(this->condition);
+    out << condition->to_string();
+    out << " _then ";
+    this->then_expr->print(out);
+    out << " _else ";
+    this->else_expr->print(out);
+    out << ")";
+}
+
+void IfExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position)
+{
+    if (parenthesis) {
+        out << "(";
+    }
+    int blank_spaces_backoff = (int) out.tellp() - position;
+    std::cout << "\nprev stop at: " << position << "\n";
+    BoolVal *condition = new BoolVal(this->condition);
+    out << "_if " << condition->to_string() << "\n";
+    out << std::string(blank_spaces_backoff, ' ') << "_then ";
+    std::cout << "after then: " << out.tellp() << "\n";
+    this->then_expr->pretty_print_at(out, precedence_none, false, position);
+    out << "\n";
+    out << std::string(blank_spaces_backoff, ' ') << "_else ";
+    std::cout << "after else: " << out.tellp() << "\n";
+    this->else_expr->pretty_print_at(out, precedence_none, false, position);
+    if (parenthesis)
+    {
+        out << ")";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+EqExpr::EqExpr(Expr *lhs, Expr *rhs)
+{
+    this->lhs = lhs ;
+    this->rhs = rhs ;
+}
+
+bool EqExpr::equals(Expr *e)
+{
+    auto *other = dynamic_cast<EqExpr *>(e);
+        if (other == nullptr) {
+            return false;
+        }
+        return this->lhs->equals(other->lhs) && this->rhs->equals(other->rhs);
+}
+
+Val *EqExpr::interp()
+{
+    bool result = this->lhs->equals(this->rhs);
+    return new BoolVal(result);
+}
+
+bool EqExpr::has_variable()
+{
+    return this->lhs->has_variable() || this->rhs->has_variable();
+}
+
+Expr *EqExpr::subst(std::string s, Expr *e)
+{
+    Expr *subst_lhs = this->lhs->subst(s, e);
+    Expr *subst_rhs = this->rhs->subst(s, e);
+    return new EqExpr(subst_lhs, subst_rhs);
+}
+
+void EqExpr::print(std::ostream &out)
+{
+    out << "(";
+    this->lhs->print(out);
+    out << "==";
+    this->rhs->print(out);
+    out << ")";
+}
+
+void EqExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position)
+{
+    if (parenthesis) {
+        out << "(";
+    }
+    this->lhs->pretty_print_at(out, precedence_none, false, position);
+    out << " == ";
+    this->rhs->pretty_print_at(out, precedence_none, false, position);
+    if (parenthesis)
+    {
+        out << ")";
+    }
+    
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 

@@ -20,7 +20,7 @@ Expr *parse_expression(std::istream &in)
         if (ch == '=') {
             parse_keyword(in, "==");
             Expr *second_expr = parse_expression(in);
-            comprag = second_expr;
+            comprag = new EqExpr(comprag, second_expr);
             skip_whitespace(in);
             ch = in.peek();
         }
@@ -121,7 +121,7 @@ Expr *parse_multicand(std::istream &in)
     }
     if (ch == '(') {
         consume(in, '(');
-        Expr *sub_expression = parse_comprag(in);
+        Expr *sub_expression = parse_expression(in);
         skip_whitespace(in);
         
         if (in.peek() != ')')
@@ -144,7 +144,7 @@ Expr *parse_multicand(std::istream &in)
 
     if (ch == '_')
     {
-        std::string next_keyword = consume_and_find_next_keyword(in);
+        std::string next_keyword = parse_and_locate_next_keyword(in);
                 if (next_keyword == "_let")
                 {
                     return parse_let(in);
@@ -181,7 +181,7 @@ Expr *parse_variable(std::istream &in)
     }
     ch = in.peek() ;
     
-    if (ch != ' ' && !(ch == '+' || ch == '*' || ch == ')' || in.eof())) // eof returns -1 in C++
+    if (ch != ' ' && !(ch == '+' || ch == '*' || ch == ')' || ch =='(' || ch == '=' || in.eof())) // eof returns -1 in C++
     {
         throw std::runtime_error("unexpected character in variable");
     }
@@ -194,29 +194,33 @@ Expr *parse_let(std::istream &in)
     
     skip_whitespace(in) ;
     Expr *lhs = parse_variable(in) ;
-    
     skip_whitespace(in) ;
     parse_keyword(in, "=") ;
     
     skip_whitespace(in);
     Expr *rhs = parse_comprag(in) ;
-    
     skip_whitespace(in) ;
     parse_keyword(in, "_in");
     
     skip_whitespace(in) ;
     Expr *body = parse_comprag(in) ;
-    
     skip_whitespace(in) ;
+    
     return new Let(lhs->to_string(), rhs, body) ;
 }
 
 Expr *parse_if_expr(std::istream &in)
 {
     skip_whitespace(in);
-    Expr *condition = parse_multicand(in);
+    Expr *condition = parse_expression(in);
+    skip_whitespace(in);
+    parse_keyword(in, "_then");
+    
     skip_whitespace(in);
     Expr *then_expr = parse_expression(in);
+    skip_whitespace(in);
+    parse_keyword(in, "_else");
+    
     skip_whitespace(in);
     Expr *else_expr = parse_expression(in);
     skip_whitespace(in);
@@ -253,8 +257,8 @@ void skip_whitespace(std::istream &in)
     }
 }
 
-std::string consume_and_find_next_keyword(std::istream &in) {
-    if (in.eof() || in.peek() != '_') {
+std::string parse_and_locate_next_keyword(std::istream &in) {
+    if (in.peek() != '_' || in.eof()) {
         throw std::runtime_error("not a keyword");
     }
     consume(in, '_');

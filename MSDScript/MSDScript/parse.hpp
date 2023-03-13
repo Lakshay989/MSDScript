@@ -37,6 +37,6 @@ void consume(std::istream &in, int expectation);
 
 void skip_whitespace(std::istream &in);
 
-std::string consume_and_find_next_keyword(std::istream &in);
+std::string parse_and_locate_next_keyword(std::istream &in);
 
 #endif /* parse_hpp */

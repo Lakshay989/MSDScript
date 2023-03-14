@@ -1073,6 +1073,11 @@ TEST_CASE("Eq Expr")
             REQUIRE(eq_num_1_add_2_3->interp()->is_true() == false);
             REQUIRE(eq_add_1_add_2->interp()->is_true());
             REQUIRE(eq_add_1_add_2->interp()->to_string() == "_true");
+            
+            REQUIRE_THROWS_WITH(parse_expression_str("_let x = _true + 1\n"
+                                       "_in  _if _true\n"
+                                       "     _then 5\n"
+                                       "     _else x")->interp(), "Addition to a boolean is not possible");
         }
 
         auto *eq_var_x_num_2 = new EqExpr(new Var("x"), num2);

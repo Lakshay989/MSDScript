@@ -381,7 +381,8 @@ bool Let::equals( Expr *e)
 */
 Val* Let::interp() // More Testing rhs->interp()
 {
-    return this->body->subst(this->lhs, this->rhs)->interp();
+    Expr *rhs_after_interp = rhs->interp()->to_expr();
+    return this->body->subst(this->lhs, rhs_after_interp)->interp();
 }
 
 

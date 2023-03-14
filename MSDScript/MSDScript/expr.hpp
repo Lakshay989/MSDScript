@@ -49,9 +49,9 @@ public:
     
     virtual void print(std::ostream &out) = 0; // This function prints the expression.
     
-    virtual void pretty_print(std::ostream &out, int position = 0) = 0; // This is an extenstion of the print function with minor changes.
+   // virtual void pretty_print(std::ostream &out) = 0; // This is an extenstion of the print function with minor changes.
     
-    virtual void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0) = 0; // Helper for pretty_print()
+    virtual void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position = 0) = 0; // Helper for pretty_print()
     
     std::string to_string() {
         std::stringstream st("");
@@ -65,6 +65,10 @@ public:
         this->pretty_print(st);
         return st.str();
     }
+    
+    void pretty_print(std::ostream &out) {
+        this->pretty_print_at(out, precedence_none, false, false, out.tellp());
+    };
     
 };
 
@@ -82,8 +86,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0);
+    //void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
 };
 
 
@@ -101,8 +105,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0 );
+   // void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
     
 };
 
@@ -121,8 +125,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0);
+    //void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
 };
 
 
@@ -140,8 +144,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position = 0);
+    //void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
 };
 
 
@@ -162,8 +166,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position);
+    //void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
     
 };
 
@@ -178,18 +182,18 @@ public:
     bool has_variable();
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position);
+    //void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
 };
 
 
 class IfExpr : public Expr {
 public:
-    bool condition;
+    Expr *condition; //bool ?
     Expr *then_expr;
     Expr *else_expr;
 
-    IfExpr(bool condition, Expr *then_expr, Expr *else_expr);
+    //IfExpr(bool condition, Expr *then_expr, Expr *else_expr);
     IfExpr(Expr *condition, Expr *then_expr, Expr *else_expr);
     
     bool equals(Expr *e);
@@ -198,8 +202,8 @@ public:
     bool has_variable();
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position);
+    //void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
 };
 
 
@@ -215,10 +219,8 @@ public:
     bool has_variable();
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
-    void pretty_print(std::ostream &out, int position = 0);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis, int position);
+    //void pretty_print(std::ostream &out);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
 };
-
-
 
 #endif /* expr_hpp */

@@ -165,17 +165,6 @@ void Add::print(std::ostream &out) {
 }
 
 
-/**
-* \brief Prints the expression with more clarity
-* \param [out] out output stream
-* \param position second argument, position to track the alignment
-*/
-//void Add::pretty_print(std::ostream &out) {
-//    this->lhs->pretty_print_at(out, precedence_add, true, position);
-//    out << " + ";
-//    this->rhs->pretty_print_at(out, precedence_none, false, position);
-//}
-
 void Add::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position) {
     if (precedence >= precedence_add) {
         out << "(";
@@ -259,17 +248,6 @@ void Mult::print(std::ostream &out) {
     out << ")";
 }
 
-
-/**
-* \brief Prints the expression with more clarity
-* \param [out] out output stream
-* \param position second argument, position to track the alignment
-*/
-//void Mult::pretty_print(std::ostream &out, int position) {
-//    this->lhs->pretty_print_at(out, precedence_mult, true, position);
-//    out << " * ";
-//    this->rhs->pretty_print_at(out, precedence_add, false, position);
-//}
 
 void Mult::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq,  int position) {
     if (precedence >= precedence_mult) {
@@ -359,15 +337,6 @@ void Var::print(std::ostream &out) {
 }
 
 
-/**
-* \brief Prints the expression with more clarity
-* \param [out] out output stream
-* \param position second argument, position to track the alignment
-*/
-//void Var::pretty_print(std::ostream &out, int position) {
-//    this->pretty_print_at(out, precedence_none, false);
-//}
-
 void Var::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position) {
     out << this->name;
 }
@@ -455,16 +424,6 @@ void Let::print(std::ostream &out)
 }
 
 
-/**
-* \brief Prints the expression with more clarity
-* \param [out] out first argument, output stream
-* \param position second argument, position to track the alignment
-*/
-//void Let::pretty_print(std::ostream &out, int position)
-//{
-//    this->pretty_print_at(out, precedence_none, false, out.tellp());
-//}
-
 void Let::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
 {
     if (parenthesis_let) {
@@ -529,10 +488,6 @@ void BoolExpr::print(std::ostream &out)
     }
 }
 
-//void BoolExpr::pretty_print(std::ostream &out, int position) {
-//    this->pretty_print_at(out, precedence_none, false, position);
-//}
-
 void BoolExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
 {
     if(this->rep)
@@ -547,26 +502,9 @@ void BoolExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//class IfExpr : public Expr {
-//public:
-//    bool condition;
-//    Expr *then_expr;
-//    Expr *else_expr;
 
-//IfExpr::IfExpr(bool condition, Expr *then_expr, Expr *else_expr)
-//{
-//    this->condition = condition ;
-//    this->then_expr = then_expr ;
-//    this->else_expr = else_expr ;
-//}
 IfExpr::IfExpr(Expr *condition, Expr *then_expr, Expr *else_expr)
 {
-//    auto *condition_expr = dynamic_cast<BoolExpr *>(condition);
-//    if (condition_expr == nullptr)
-//    {
-//        throw std::runtime_error("The condition of if exprression should be a boolean expression");
-//    }
-    
     this->condition = condition;
     this->then_expr = then_expr;
     this->else_expr = else_expr;
@@ -616,30 +554,10 @@ void IfExpr::print(std::ostream &out)
     out << ")";
 }
 
-//void IfExpr::pretty_print(std::ostream &out, int position) {
-//    this->pretty_print_at(out, precedence_none, false, position);
-//}
 
 void IfExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
 {
-////    if (parenthesis) {
-////        out << "(";
-////    }
-//    int blank_spaces_backoff = (int) out.tellp() - position;
-//    std::cout << "\nprev stop at: " << position << "\n";
-//    BoolVal *condition = new BoolVal(this->condition);
-//    out << "_if " << condition->to_string() << "\n";
-//    out << std::string(blank_spaces_backoff, ' ') << "_then ";
-//    std::cout << "after then: " << out.tellp() << "\n";
-//    this->then_expr->pretty_print_at(out, precedence_none, false, position);
-//    out << "\n";
-//    out << std::string(blank_spaces_backoff, ' ') << "_else ";
-//    std::cout << "after else: " << out.tellp() << "\n";
-//    this->else_expr->pretty_print_at(out, precedence_none, false, position);
-//    if (parenthesis)
-//    {
-//        out << ")";
-//    }
+
     int blank_spaces_backoff = (int) out.tellp() - position;
         out << "_if ";
         this->condition->pretty_print_at(out, precedence_none, false, false, position);
@@ -698,10 +616,6 @@ void EqExpr::print(std::ostream &out)
     this->rhs->print(out);
     out << ")";
 }
-
-//void EqExpr::pretty_print(std::ostream &out, int position) {
-//    this->pretty_print_at(out, precedence_none, false, position);
-//}
 
 void EqExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
 {

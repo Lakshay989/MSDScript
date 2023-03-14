@@ -14,25 +14,22 @@
  */
 Expr *parse_expression(std::istream &in)
 {
-    Expr *addend = parse_addend(in) ;
-    skip_whitespace(in) ;
-    int ch = in.peek();
-    
-    if (ch == '+')   // test
-    {
-        consume(in, '+');
-        Expr *second_expr = parse_expression(in);
-        addend = new Add(addend, second_expr);
-        skip_whitespace(in);
-        ch = in.peek();
-    }
-    
+    Expr *comprag = parse_comprag(in) ;
+    skip_whitespace(in);
+        int ch = in.peek();
+        if (ch == '=') {
+            parse_keyword(in, "==");
+            Expr *second_expr = parse_expression(in);
+            comprag = new EqExpr(comprag, second_expr);
+            skip_whitespace(in);
+            ch = in.peek();
+        }
     if (ch != EOF && ch != ')' && ch != '_' && ch != '\n')
     {
         throw std::runtime_error("invalid input");
     }
     
-    return addend;
+    return comprag;
 }
 
 
@@ -41,6 +38,21 @@ Expr *parse_expression_str(std::string str)
     std::stringstream ss(str);
     return parse_expression(ss);
 }
+
+Expr *parse_comprag(std::istream &in)
+{
+    Expr *addend = parse_addend(in);
+    skip_whitespace(in) ;
+    char ch = in.peek();
+    if(ch == '+'){
+        consume(in, '+');
+        Expr *second_expr = parse_comprag(in);
+        addend = new Add(addend, second_expr);
+        skip_whitespace(in);
+    }
+    return addend;
+}
+
 
 Expr *parse_num(std::istream &in)
 {
@@ -132,7 +144,24 @@ Expr *parse_multicand(std::istream &in)
 
     if (ch == '_')
     {
-        return parse_let(in);
+        std::string next_keyword = parse_and_locate_next_keyword(in);
+                if (next_keyword == "_let")
+                {
+                    return parse_let(in);
+                }
+                else if (next_keyword == "_false")
+                {
+                    return new BoolExpr(false);
+                }
+                else if (next_keyword == "_true")
+                {
+                    return new BoolExpr(true);
+                }
+                else if (next_keyword == "_if")
+                {
+                    return parse_if_expr(in);
+                }
+        
     }
     
     consume(in, ch);
@@ -152,7 +181,7 @@ Expr *parse_variable(std::istream &in)
     }
     ch = in.peek() ;
     
-    if (ch != ' ' && !(ch == '+' || ch == '*' || ch == ')' || in.eof())) // eof returns -1 in C++
+    if (ch != ' ' && !(ch == '+' || ch == '*' || ch == ')' || ch =='(' || ch == '=' || in.eof())) // eof returns -1 in C++
     {
         throw std::runtime_error("unexpected character in variable");
     }
@@ -161,22 +190,42 @@ Expr *parse_variable(std::istream &in)
 
 Expr *parse_let(std::istream &in)
 {
-    parse_keyword(in, "_let");
-    skip_whitespace(in) ;
+    //parse_keyword(in, "_let");
     
+    skip_whitespace(in) ;
     Expr *lhs = parse_variable(in) ;
     skip_whitespace(in) ;
     parse_keyword(in, "=") ;
-    skip_whitespace(in);
     
-    Expr *rhs = parse_expression(in) ;
+    skip_whitespace(in);
+    Expr *rhs = parse_comprag(in) ;
     skip_whitespace(in) ;
     parse_keyword(in, "_in");
+    
+    skip_whitespace(in) ;
+    Expr *body = parse_comprag(in) ;
     skip_whitespace(in) ;
     
-    Expr *body = parse_expression(in) ;
-    skip_whitespace(in) ;
     return new Let(lhs->to_string(), rhs, body) ;
+}
+
+Expr *parse_if_expr(std::istream &in)
+{
+    skip_whitespace(in);
+    Expr *condition = parse_expression(in);
+    skip_whitespace(in);
+    parse_keyword(in, "_then");
+    
+    skip_whitespace(in);
+    Expr *then_expr = parse_expression(in);
+    skip_whitespace(in);
+    parse_keyword(in, "_else");
+    
+    skip_whitespace(in);
+    Expr *else_expr = parse_expression(in);
+    skip_whitespace(in);
+    
+    return new IfExpr(condition, then_expr, else_expr);
 }
 
 void parse_keyword(std::istream &in, std::string expectation)
@@ -207,3 +256,18 @@ void skip_whitespace(std::istream &in)
         consume(in, ch);
     }
 }
+
+std::string parse_and_locate_next_keyword(std::istream &in) {
+    if (in.peek() != '_' || in.eof()) {
+        throw std::runtime_error("not a keyword");
+    }
+    consume(in, '_');
+    std::string keyword = "_";
+    while (isalpha(in.peek()))
+    {
+        keyword += (char) in.peek();
+        consume(in, in.peek());
+    }
+    return keyword;
+}
+

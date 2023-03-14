@@ -21,6 +21,7 @@ public:
     virtual bool equals(Val *other_val) = 0 ;
     virtual std::string to_string() = 0;
     virtual Expr *to_expr() = 0 ;
+    virtual bool is_true() = 0;
 
 } ;
 
@@ -37,9 +38,26 @@ public:
     Val *mult_with(Val *other_val) ;
     bool equals(Val *other_val) ;
     std::string to_string() ;
-    Expr *to_expr()  ;
-    
+    Expr *to_expr() ;
+    bool is_true() ;
 } ;
+
+class BoolVal : public Val
+{
+private:
+    bool rep ;
+    
+public:
+    
+    BoolVal(bool rep) ;
+
+    Val *add_to(Val *other_val) ;
+    Val *mult_with(Val *other_val) ;
+    bool equals(Val *other_val) ;
+    std::string to_string() ;
+    Expr *to_expr() ;
+    bool is_true() ;
+};
 
 #endif /* val_hpp */
 

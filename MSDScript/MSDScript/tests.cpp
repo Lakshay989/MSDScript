@@ -796,7 +796,7 @@ TEST_CASE("Test cases for parse") {
         Let *expression4 = new Let("x", new NumExpr(5), expression3);
         REQUIRE(parse_expression_str("_let x = 5 _in _let x = x +1    _in  x + 7")->equals(expression4));
 
-        REQUIRE_THROWS_WITH(parse_expression_str("_lt x = 5 _in x + 1"), "invalid input");
+        REQUIRE_THROWS_WITH(parse_expression_str("_lt x = 5 _in x + 1"), "consume mismatch");
         REQUIRE_THROWS_WITH(parse_expression_str("_let x  5 _in x + 1"), "invalid input");
         REQUIRE_THROWS_WITH(parse_expression_str("_let x = 5 _i x + 1"), "invalid input");
         REQUIRE_THROWS_WITH(parse_expression_str("_let x = 5 x + 1"), "invalid input");
@@ -866,3 +866,275 @@ TEST_CASE("NumVal") {
         REQUIRE(num2->to_expr()->equals(num_expr1) == false);
     }
 }
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+TEST_CASE("Bool Val") {
+
+    auto *bool_false = new BoolVal(false);
+    auto *bool_true = new BoolVal(true);
+    auto *bool_true_1 = new BoolVal(true);
+    auto *num = new NumVal(1);
+
+    SECTION("add to") {
+        REQUIRE_THROWS_WITH(bool_true->add_to(bool_true), "Addition to a boolean is not possible");
+        REQUIRE_THROWS_WITH(bool_true->add_to(num), "Addition to a boolean is not possible");
+    }
+
+    SECTION("mult with") {
+        REQUIRE_THROWS_WITH(bool_true->mult_with(bool_true), "Multiplication with a boolean is not possible");
+        REQUIRE_THROWS_WITH(bool_true->mult_with(num), "Multiplication with a boolean is not possible");
+    }
+
+    SECTION("equals") {
+        REQUIRE(bool_true->equals(nullptr) == false);
+        REQUIRE(bool_true->equals(bool_false) == false);
+        REQUIRE(bool_true->equals(num) == false);
+        REQUIRE(bool_true->equals(bool_true_1));
+    }
+
+    SECTION("is_true") {
+        REQUIRE(bool_true->is_true());
+        REQUIRE(bool_false->is_true() == false);
+    }
+}
+
+TEST_CASE("Bool Expr") {
+
+    auto *bool_true = new BoolExpr(true);
+    auto *bool_true_1 = new BoolExpr(true);
+    auto *bool_false = new BoolExpr(false);
+
+
+    SECTION("equals") {
+        REQUIRE(bool_true->equals(bool_true_1));
+        REQUIRE(bool_false->equals(bool_true) == false);
+
+        auto *num_2 = new NumExpr(2);
+        REQUIRE(bool_true->equals(num_2) == false);
+
+        auto *add_2_3 = new Add(new NumExpr(2), new NumExpr(3));
+        REQUIRE(bool_true->equals(add_2_3) == false);
+
+        auto *mult_2_3 = new Mult(new NumExpr(2), new NumExpr(3));
+        REQUIRE(bool_true->equals(mult_2_3) == false);
+
+        auto *var_x = new Var("x");
+        REQUIRE(bool_true->equals(var_x) == false);
+
+        auto *lb_x_5_x = new Let("x", new NumExpr(2), new Var("x"));
+        REQUIRE(bool_true->equals(lb_x_5_x) == false);
+    }
+
+    SECTION("interp") {
+        REQUIRE(bool_true->interp()->equals(new BoolVal(true)));
+        REQUIRE(bool_false->interp()->equals(new BoolVal(false)));
+    }
+
+    SECTION("has_variable") {
+        REQUIRE(bool_true->has_variable() == false);
+        REQUIRE(bool_false->has_variable() == false);
+    }
+
+    SECTION("subst") {
+        REQUIRE(bool_true->subst("x", new BoolExpr(true))->equals(bool_true_1));
+    }
+
+    SECTION("print") {
+        REQUIRE(bool_true->to_string() == "_true");
+        REQUIRE(bool_false->to_string() == "_false");
+    }
+
+    SECTION("pretty_print") {
+        REQUIRE(bool_true->to_pretty_string() == "_true");
+        REQUIRE(bool_false->to_pretty_string() == "_false");
+    }
+}
+
+TEST_CASE("If Expr") {
+
+    auto *add_expr = new Add(new NumExpr(3), new NumExpr(4));
+    auto *mult_expr = new Mult(new NumExpr(1), new NumExpr(2));
+    // x = 2, 1 + x => 3
+    auto *let_add_expr = new Let("x", new NumExpr(2), new Add(new NumExpr(1), new Var("x")));
+    // (_if _true _then 2 _else (3 + 4))
+    auto *if_true_then_num_else_add_expr = new IfExpr(new BoolExpr(true), new NumExpr(2), add_expr);
+    auto *if_true_then_num_else_add_expr1 = new IfExpr(new BoolExpr(true), new NumExpr(2), add_expr);
+    auto *if_false_then_num_else_add_expr = new IfExpr(new BoolExpr(false), new NumExpr(2), add_expr);
+    auto *if_true_then_mult_else_add_expr = new IfExpr(new BoolExpr(true), mult_expr, add_expr);
+    auto *if_true_then_num_else_let_expr = new IfExpr(new BoolExpr(true), new NumExpr(2), let_add_expr);
+
+
+    SECTION("equals") {
+        REQUIRE(if_true_then_num_else_add_expr->equals(if_true_then_num_else_add_expr1));
+        REQUIRE(if_true_then_num_else_add_expr->equals(if_false_then_num_else_add_expr) == false);
+        REQUIRE(if_true_then_num_else_add_expr->equals(if_true_then_mult_else_add_expr) == false);
+        REQUIRE(if_true_then_num_else_add_expr->equals(if_true_then_num_else_let_expr) == false);
+    }
+
+    auto *if_false_then_2_else_lb = new IfExpr(new BoolExpr(false), new NumExpr(2), let_add_expr);
+
+
+    SECTION("interp") {
+        REQUIRE(if_true_then_num_else_add_expr->interp()->equals(new NumVal(2)));
+        REQUIRE(if_false_then_num_else_add_expr->interp()->equals(add_expr->interp()));
+        REQUIRE(if_true_then_mult_else_add_expr->interp()->equals(mult_expr->interp()));
+        REQUIRE(if_false_then_2_else_lb->interp()->equals(let_add_expr->interp()));
+    }
+
+    SECTION("has_variable") {
+        REQUIRE(if_true_then_num_else_add_expr->has_variable() == false);
+        REQUIRE(if_false_then_num_else_add_expr->has_variable() == false);
+        REQUIRE(if_true_then_mult_else_add_expr->has_variable() == false);
+        REQUIRE(if_true_then_num_else_let_expr->has_variable());
+    }
+
+    auto *add_x_1 = new Add(new Var("x"), new NumExpr(1));
+    // x + 1
+    auto *if_true_then_add_x_1_else_3 = new IfExpr(new BoolExpr(true), add_x_1, new NumExpr(3));
+    auto *add_3_1 = new Add(new NumExpr(3), new NumExpr(1));
+    auto *if_true_then_add_3_1_else_3 = new IfExpr(new BoolExpr(true), add_3_1, new NumExpr(3));
+
+    SECTION("subst") {
+        REQUIRE(if_true_then_num_else_add_expr->subst("x", new NumExpr(3))->equals(if_true_then_num_else_add_expr));
+        REQUIRE(if_false_then_2_else_lb->subst("x", new NumExpr(3))->equals(if_false_then_2_else_lb));
+        REQUIRE(if_true_then_add_x_1_else_3->subst("x", new NumExpr(3))->equals(if_true_then_add_3_1_else_3));
+        REQUIRE(if_true_then_add_x_1_else_3->subst("y", new NumExpr(2))->equals(if_true_then_add_x_1_else_3));
+    }
+
+    auto *if_bool_expr_true_then_2_else_3 = new IfExpr(new BoolExpr(true), new NumExpr(2), new NumExpr(3));
+
+
+    SECTION("print") {
+        REQUIRE(if_true_then_num_else_add_expr->to_string() == "(_if _true _then 2 _else (3+4))");
+        REQUIRE(if_false_then_2_else_lb->to_string() == "(_if _false _then 2 _else (_let x=2 _in (1+x)))");
+        REQUIRE(if_true_then_add_x_1_else_3->to_string() == "(_if _true _then (x+1) _else 3)");
+
+        REQUIRE(if_bool_expr_true_then_2_else_3->to_string() == "(_if _true _then 2 _else 3)");
+    }
+    
+}
+
+
+TEST_CASE("Eq Expr")
+{
+    auto *num2 = new NumExpr(2);
+    auto *num3 = new NumExpr(3);
+    auto *add_expr = new Add(num2, num3);
+    auto *eq_expr = new EqExpr(num2, num3);
+    // 2 == 2 + 3
+    auto *eq_num_add = new EqExpr(num2, add_expr);
+    auto *eq_num_num = new EqExpr(num2, new NumExpr(4));
+    
+    SECTION("equals") {
+            REQUIRE(eq_expr->equals(eq_num_add) == false);
+            REQUIRE(eq_expr->equals(eq_num_num) == false);
+            REQUIRE(eq_expr->equals(eq_expr));
+            REQUIRE(eq_expr->equals(num2) == false);
+        }
+
+        auto *eq_num_2_num_2 = new EqExpr(num2, num2);
+        auto *eq_num_1_bool_false = new EqExpr(new NumExpr(1), new BoolExpr(false));
+
+    /*    _let same = 1 == 2
+        _in  _if 1 == 2
+        _then _false + 5
+        _else 88*/
+        auto *eq_num_1_num_2 = new EqExpr(new NumExpr(1), num2);
+        auto *add_bool_false_num_5 = new Add(new BoolExpr(false), new NumExpr(5));
+        auto *if_eq_then_add_else_88 = new IfExpr(eq_num_1_num_2, add_bool_false_num_5, new NumExpr(88));
+        auto *let_same_eq_in_if = new Let("same", eq_num_1_num_2, if_eq_then_add_else_88);
+
+        /* _if 4 + 1
+         _then 2
+         _else 3*/
+        auto *add_num_4_num_1 = new Add(new NumExpr(4), new NumExpr(1));
+        auto *if_add_then_2_else_3 = new IfExpr(add_num_4_num_1, new NumExpr(2), new NumExpr(3));
+
+        // (1 == 2) + 3
+        auto *add_eq_1_2_num_3 = new Add(eq_num_1_num_2, new NumExpr(3));
+
+        auto *eq_num_1_add_2_3 = new EqExpr(new NumExpr(1), new Add(new NumExpr(2), new NumExpr(3)));
+
+        // 1+1 == 2+0
+        auto *add_num_1_num_1 = new Add(new NumExpr(1), new NumExpr(1));
+        auto *add_num_2_num_0 = new Add(new NumExpr(2), new NumExpr(0));
+        auto *eq_add_1_add_2 = new EqExpr(add_num_1_num_1, add_num_2_num_0);
+
+        SECTION("interp") {
+            REQUIRE(eq_expr->interp()->is_true() == false);
+            REQUIRE(eq_num_2_num_2->interp()->is_true());
+            REQUIRE(eq_num_add->interp()->is_true() == false);
+            REQUIRE(eq_num_1_bool_false->interp()->is_true() == false);
+            REQUIRE(let_same_eq_in_if->interp()->equals(new NumVal(88)));
+            REQUIRE_THROWS_WITH(if_add_then_2_else_3->interp(), "A num val can not be a bool val");
+            REQUIRE_THROWS_WITH(add_eq_1_2_num_3->interp(), "Addition to a boolean is not possible");
+            REQUIRE(eq_num_1_add_2_3->interp()->is_true() == false);
+            REQUIRE(eq_add_1_add_2->interp()->is_true());
+            REQUIRE(eq_add_1_add_2->interp()->to_string() == "_true");
+            
+            REQUIRE_THROWS_WITH(parse_expression_str("_let x = _true + 1\n"
+                                       "_in  _if _true\n"
+                                       "     _then 5\n"
+                                       "     _else x")->interp(), "Addition to a boolean is not possible");
+        }
+
+        auto *eq_var_x_num_2 = new EqExpr(new Var("x"), num2);
+        auto *eq_add_x_2_num_2 = new EqExpr(new Add(new Var("x"), num2), num2);
+        // _let x=2 _in x+1
+        auto *lb_x_2_add_x_1 = new Let("x", new NumExpr(2), new Add(new Var("x"), new NumExpr(1)));
+        // _let x=2 _in x+1 == 2
+        auto *eq_lb_num = new EqExpr(lb_x_2_add_x_1, num2);
+
+        SECTION("has_variable") {
+            REQUIRE(eq_expr->has_variable() == false);
+            REQUIRE(eq_var_x_num_2->has_variable());
+            REQUIRE(eq_add_x_2_num_2->has_variable());
+            REQUIRE(eq_lb_num->has_variable());
+        }
+
+        auto *eq_add_1_2_num_2 = new EqExpr(new Add(new NumExpr(1), new NumExpr(2)), new NumExpr(2));
+
+        SECTION("subst") {
+            REQUIRE(eq_expr->subst("x", new NumExpr(1))->equals(eq_expr));
+            REQUIRE(eq_var_x_num_2->subst("x", new NumExpr(1))->equals(eq_num_1_num_2));
+            REQUIRE(eq_add_x_2_num_2->subst("x", new NumExpr(1))->equals(eq_add_1_2_num_2));
+            REQUIRE(eq_lb_num->subst("x", new NumExpr(1))->equals(eq_lb_num));
+        }
+
+        SECTION("print") {
+            REQUIRE(eq_num_1_num_2->to_string() == "(1==2)");
+            REQUIRE(eq_num_add->to_string() == "(2==(2+3))");
+            REQUIRE(eq_lb_num->to_string() == "((_let x=2 _in (x+1))==2)");
+        }
+
+        SECTION("pretty_print") {
+            // left: num / var / bool
+            REQUIRE(eq_num_1_num_2->to_pretty_string() == "1 == 2");
+            REQUIRE(eq_num_add->to_pretty_string() == "2 == 2 + 3");
+            REQUIRE(eq_lb_num->to_pretty_string() == "(_let x = 2\n"
+                                                     " _in  x + 1) == 2");
+            REQUIRE(if_add_then_2_else_3->to_pretty_string() == "_if 4 + 1\n"
+                                                                "_then 2\n"
+                                                                "_else 3");
+        }
+
+        SECTION("to_string") {
+            REQUIRE(parse_expression_str("1==2+3")->to_string() == "(1==(2+3))");
+            REQUIRE(parse_expression_str("(1==2)+3")->to_string() == "((1==2)+3)");
+            REQUIRE(parse_expression_str("1+1 == 2+0")->to_string() == "((1+1)==(2+0))");
+        }
+
+        SECTION("to_pretty_string")
+        {
+            REQUIRE(parse_expression_str("1==2+3")->to_pretty_string() == "1 == 2 + 3");
+            REQUIRE(parse_expression_str("(1==2)+3")->to_pretty_string() == "(1 == 2) + 3");
+            REQUIRE(parse_expression_str("1+1 == 2+0")->to_pretty_string() == "1 + 1 == 2 + 0");
+            REQUIRE(let_same_eq_in_if->to_pretty_string() == "_let same = 1 == 2\n"
+                                                             "_in  _if 1 == 2\n"
+                                                             "     _then _false + 5\n"
+                                                             "     _else 88");
+        }
+}
+

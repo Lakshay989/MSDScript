@@ -27,10 +27,16 @@ Expr *parse_variable(std::istream &in);
 
 Expr *parse_let(std::istream &in);
 
+Expr *parse_comprag(std::istream &in);
+
+Expr *parse_if_expr(std::istream &in);
+
 void parse_keyword(std::istream &in, std::string expectation);
 
 void consume(std::istream &in, int expectation);
 
 void skip_whitespace(std::istream &in);
+
+std::string parse_and_locate_next_keyword(std::istream &in);
 
 #endif /* parse_hpp */

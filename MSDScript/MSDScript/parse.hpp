@@ -31,6 +31,10 @@ Expr *parse_comprag(std::istream &in);
 
 Expr *parse_if_expr(std::istream &in);
 
+Expr *parse_inner_expression(std::istream &in);
+
+Expr *parse_fun_expr(std::istream &in);
+
 void parse_keyword(std::istream &in, std::string expectation);
 
 void consume(std::istream &in, int expectation);

@@ -114,58 +114,23 @@ Expr *parse_addend(std::istream &in)
 Expr *parse_multicand(std::istream &in)
 {
     skip_whitespace(in);
-    int ch = in.peek();
-    if ((ch == '-') || isdigit(ch))
-    {
-        return parse_num(in);
-    }
-    if (ch == '(') {
-        consume(in, '(');
-        Expr *sub_expression = parse_expression(in);
-        skip_whitespace(in);
-        
-        if (in.peek() != ')')
-        {
-            throw std::runtime_error("missing close parenthesis");
-        }
-        else
-        {
-            consume(in, ')') ;
-        }
-        return sub_expression;
-    }
-    
-    if (isalpha(ch))
-    {
-        Expr *variable = parse_variable(in);
-        skip_whitespace(in);
-        return variable;
-    }
 
-    if (ch == '_')
-    {
-        std::string next_keyword = parse_and_locate_next_keyword(in);
-                if (next_keyword == "_let")
-                {
-                    return parse_let(in);
-                }
-                else if (next_keyword == "_false")
-                {
-                    return new BoolExpr(false);
-                }
-                else if (next_keyword == "_true")
-                {
-                    return new BoolExpr(true);
-                }
-                else if (next_keyword == "_if")
-                {
-                    return parse_if_expr(in);
-                }
-        
-    }
+    Expr *expr = parse_inner_expression(in);
     
-    consume(in, ch);
-    throw std::runtime_error("invalid input");
+    //std::cout << "inner: " << expr->to_string() << "\n";
+    skip_whitespace(in);
+    while (!in.eof() && in.peek() == '(')
+    {
+        consume(in, '(');
+        skip_whitespace(in);
+        Expr *actual_arg = parse_expression(in);
+        
+        skip_whitespace(in);
+        consume(in, ')');
+        expr = new CallExpr(expr, actual_arg);
+    }
+        return expr;
+
 }
     
 
@@ -226,6 +191,80 @@ Expr *parse_if_expr(std::istream &in)
     skip_whitespace(in);
     
     return new IfExpr(condition, then_expr, else_expr);
+}
+
+Expr *parse_inner_expression(std::istream &in)
+{
+    skip_whitespace(in) ;
+    int ch = in.peek();
+    if ((ch == '-') || isdigit(ch))
+    {
+        return parse_num(in);
+    }
+    if (ch == '(')
+    {
+        consume(in, '(');
+        Expr *sub_expression = parse_expression(in);
+        skip_whitespace(in);
+        
+        if (in.peek() != ')')
+        {
+            throw std::runtime_error("missing close parenthesis");
+        }
+        else
+        {
+            consume(in, ')') ;
+        }
+        return sub_expression;
+    }
+    
+    if (isalpha(ch))
+    {
+        Expr *variable = parse_variable(in);
+        skip_whitespace(in);
+        return variable;
+    }
+    
+    if (ch == '_')
+    {
+        std::string next_keyword = parse_and_locate_next_keyword(in);
+        if (next_keyword == "_let")
+        {
+            return parse_let(in);
+        }
+        
+        else if (next_keyword == "_false")
+        {
+            return new BoolExpr(false);
+        }
+        
+        else if (next_keyword == "_true")
+        {
+            return new BoolExpr(true);
+        }
+        
+        else if (next_keyword == "_if")
+        {
+            return parse_if_expr(in);
+        }
+    }
+    
+    consume(in, ch);
+    throw std::runtime_error("invalid input");
+}
+
+Expr *parse_fun_expr(std::istream &in)
+{
+    skip_whitespace(in);
+    consume(in, '(');
+    skip_whitespace(in);
+    Expr *variable = parse_variable(in);
+    
+    skip_whitespace(in);
+    consume(in, ')');
+    Expr *body = parse_expression(in);
+    
+    return new FunExpr(variable->to_string(), body);
 }
 
 void parse_keyword(std::istream &in, std::string expectation)

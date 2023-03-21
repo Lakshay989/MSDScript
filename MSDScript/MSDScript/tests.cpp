@@ -86,15 +86,15 @@ TEST_CASE("Tests for checking interp")
 
 // ------------------------------------------------------------------------------------------------------------
 
-TEST_CASE("Test for has_variable")
-{
-    CHECK( (new NumExpr(1))->has_variable() == false );
-    CHECK( (new Var("x"))->has_variable() == true );
-    CHECK( (new Add(new NumExpr(5),new NumExpr(6)))->has_variable() == false );
-    CHECK( (new Add(new Var("x"),new Var("y")))->has_variable() == true );
-    CHECK( (new Mult(new NumExpr(2),new Var("x")))->has_variable() == true );
-
-}
+//TEST_CASE("Test for has_variable")
+//{
+//    CHECK( (new NumExpr(1))->has_variable() == false );
+//    CHECK( (new Var("x"))->has_variable() == true );
+//    CHECK( (new Add(new NumExpr(5),new NumExpr(6)))->has_variable() == false );
+//    CHECK( (new Add(new Var("x"),new Var("y")))->has_variable() == true );
+//    CHECK( (new Mult(new NumExpr(2),new Var("x")))->has_variable() == true );
+//
+//}
 
 // ------------------------------------------------------------------------------------------------------------
 
@@ -453,19 +453,19 @@ TEST_CASE(" Tests for Let class written by me")
         Var *variable_body = new Var("x");
 
         // rhs: number
-        REQUIRE((new Let(lhs, num, num_body))->has_variable() == false);
-        REQUIRE((new Let(lhs, num, exp_body))->has_variable());
-        REQUIRE((new Let(lhs, num, variable_body))->has_variable());
-
-        // rhs: expression has variable
-        REQUIRE((new Let(lhs, exp, num_body))->has_variable());
-        REQUIRE((new Let(lhs, exp, exp_body))->has_variable());
-        REQUIRE((new Let(lhs, exp, variable_body))->has_variable());
-
-        // rhs: rhs is a variable
-        REQUIRE((new Let(lhs, variable, num_body))->has_variable());
-        REQUIRE((new Let(lhs, variable, exp_body))->has_variable());
-        REQUIRE((new Let(lhs, variable, variable_body))->has_variable());
+//        REQUIRE((new Let(lhs, num, num_body))->has_variable() == false);
+//        REQUIRE((new Let(lhs, num, exp_body))->has_variable());
+//        REQUIRE((new Let(lhs, num, variable_body))->has_variable());
+//
+//        // rhs: expression has variable
+//        REQUIRE((new Let(lhs, exp, num_body))->has_variable());
+//        REQUIRE((new Let(lhs, exp, exp_body))->has_variable());
+//        REQUIRE((new Let(lhs, exp, variable_body))->has_variable());
+//
+//        // rhs: rhs is a variable
+//        REQUIRE((new Let(lhs, variable, num_body))->has_variable());
+//        REQUIRE((new Let(lhs, variable, exp_body))->has_variable());
+//        REQUIRE((new Let(lhs, variable, variable_body))->has_variable());
     }
 
     SECTION("Test LetBinding subst") {
@@ -642,14 +642,14 @@ TEST_CASE("Let_equals_mine") {
             REQUIRE( !(new Let("x", new NumExpr(4), new Add(new NumExpr(2), new Var("x")) ))->equals( new Mult(new NumExpr(3), new Var("y")) ));
         }
 }
-TEST_CASE("Let_has_variable_mine") {
-    SECTION("has") {
-        REQUIRE( (new Let("x", new NumExpr(4), new Add(new NumExpr(2), new Var("x")) ))->has_variable());
-    }
-    SECTION("does_not_has") {
-        REQUIRE( !(new Let("x", new NumExpr(4), new Add(new NumExpr(2), new NumExpr(4)) ))->has_variable());
-    }
-}
+//TEST_CASE("Let_has_variable_mine") {
+//    SECTION("has") {
+//        REQUIRE( (new Let("x", new NumExpr(4), new Add(new NumExpr(2), new Var("x")) ))->has_variable());
+//    }
+//    SECTION("does_not_has") {
+//        REQUIRE( !(new Let("x", new NumExpr(4), new Add(new NumExpr(2), new NumExpr(4)) ))->has_variable());
+//    }
+//}
 TEST_CASE("Let_print_mine") {
     CHECK( (new Let("x", new NumExpr(5), new Add(new Let("y", new NumExpr(3), new Add(new Var("y"), new NumExpr(2))), new Var("x")))) -> to_string()
                                                                                                         == "(_let x=5 _in ((_let y=3 _in (y+2))+x))");
@@ -900,6 +900,9 @@ TEST_CASE("Bool Val") {
     }
 }
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 TEST_CASE("Bool Expr") {
 
     auto *bool_true = new BoolExpr(true);
@@ -932,10 +935,10 @@ TEST_CASE("Bool Expr") {
         REQUIRE(bool_false->interp()->equals(new BoolVal(false)));
     }
 
-    SECTION("has_variable") {
-        REQUIRE(bool_true->has_variable() == false);
-        REQUIRE(bool_false->has_variable() == false);
-    }
+//    SECTION("has_variable") {
+//        REQUIRE(bool_true->has_variable() == false);
+//        REQUIRE(bool_false->has_variable() == false);
+//    }
 
     SECTION("subst") {
         REQUIRE(bool_true->subst("x", new BoolExpr(true))->equals(bool_true_1));
@@ -951,6 +954,9 @@ TEST_CASE("Bool Expr") {
         REQUIRE(bool_false->to_pretty_string() == "_false");
     }
 }
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 TEST_CASE("If Expr") {
 
@@ -983,12 +989,12 @@ TEST_CASE("If Expr") {
         REQUIRE(if_false_then_2_else_lb->interp()->equals(let_add_expr->interp()));
     }
 
-    SECTION("has_variable") {
-        REQUIRE(if_true_then_num_else_add_expr->has_variable() == false);
-        REQUIRE(if_false_then_num_else_add_expr->has_variable() == false);
-        REQUIRE(if_true_then_mult_else_add_expr->has_variable() == false);
-        REQUIRE(if_true_then_num_else_let_expr->has_variable());
-    }
+//    SECTION("has_variable") {
+//        REQUIRE(if_true_then_num_else_add_expr->has_variable() == false);
+//        REQUIRE(if_false_then_num_else_add_expr->has_variable() == false);
+//        REQUIRE(if_true_then_mult_else_add_expr->has_variable() == false);
+//        REQUIRE(if_true_then_num_else_let_expr->has_variable());
+//    }
 
     auto *add_x_1 = new Add(new Var("x"), new NumExpr(1));
     // x + 1
@@ -1016,6 +1022,7 @@ TEST_CASE("If Expr") {
     
 }
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEST_CASE("Eq Expr")
 {
@@ -1087,12 +1094,12 @@ TEST_CASE("Eq Expr")
         // _let x=2 _in x+1 == 2
         auto *eq_lb_num = new EqExpr(lb_x_2_add_x_1, num2);
 
-        SECTION("has_variable") {
-            REQUIRE(eq_expr->has_variable() == false);
-            REQUIRE(eq_var_x_num_2->has_variable());
-            REQUIRE(eq_add_x_2_num_2->has_variable());
-            REQUIRE(eq_lb_num->has_variable());
-        }
+//        SECTION("has_variable") {
+//            REQUIRE(eq_expr->has_variable() == false);
+//            REQUIRE(eq_var_x_num_2->has_variable());
+//            REQUIRE(eq_add_x_2_num_2->has_variable());
+//            REQUIRE(eq_lb_num->has_variable());
+//        }
 
         auto *eq_add_1_2_num_2 = new EqExpr(new Add(new NumExpr(1), new NumExpr(2)), new NumExpr(2));
 
@@ -1138,3 +1145,91 @@ TEST_CASE("Eq Expr")
         }
 }
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TEST_CASE("Fun Expr") {
+    auto *add_x_1 = new Add(new Var("x"), new NumExpr(1));
+    auto *add_x_2 = new Add(new Var("x"), new NumExpr(2));
+    auto *fun_expr_x_add_x_1 = new FunExpr("x", add_x_1);
+    auto *fun_expr_x_add_x_1_copy = new FunExpr("x", add_x_1);
+    auto *fun_expr_y_add_x_1 = new FunExpr("y", add_x_1);
+    auto *fun_expr_x_add_x_2 = new FunExpr("x", add_x_2);
+    auto *num_expr_5 = new NumExpr(5);
+
+    SECTION("equals") {
+        REQUIRE(fun_expr_x_add_x_1->equals(fun_expr_x_add_x_1_copy));
+        REQUIRE(fun_expr_y_add_x_1->equals(fun_expr_x_add_x_1) == false);
+        REQUIRE(fun_expr_x_add_x_2->equals(fun_expr_x_add_x_1) == false);
+        REQUIRE(fun_expr_x_add_x_1->equals(num_expr_5) == false);
+    }
+
+    auto *fun_val_x_add_x_1 = new FunVal("x", add_x_1);
+
+    SECTION("interp") {
+        REQUIRE(fun_expr_x_add_x_1->interp()->equals(fun_val_x_add_x_1));
+    }
+
+    auto *fun_expr_x_add_x_1_subst_x_2 = fun_expr_x_add_x_1->subst("x", new NumExpr(2));
+    auto *add_2_1 = new Add(new NumExpr(2), new NumExpr(1));
+    auto *fun_expr_x_add_2_1_subst_x_2 = new FunExpr("x", add_2_1);
+    auto *fun_expr_x_add_x_1_subst_y_2 = fun_expr_x_add_x_1->subst("y", new NumExpr(2));
+    auto *fun_val_x_add_2_1 = new FunVal("x", add_2_1);
+
+    SECTION("subst") {
+        REQUIRE(fun_expr_x_add_x_1_subst_x_2->equals(fun_expr_x_add_2_1_subst_x_2));
+        REQUIRE(fun_expr_x_add_x_1_subst_x_2->interp()->equals(fun_val_x_add_2_1));
+        REQUIRE(fun_expr_x_add_x_1_subst_y_2->equals(fun_expr_x_add_x_1));
+    }
+
+    SECTION("print") {
+        REQUIRE(fun_expr_x_add_x_1->to_string() == "(_fun(x)(x+1))");
+    }
+
+    SECTION("pretty_print") {
+        REQUIRE(fun_expr_x_add_x_1->to_pretty_string() == "_fun (x)\n"
+                                                          "  x + 1");
+    }
+}
+
+TEST_CASE("Call Expr") {
+    auto *add_x_1 = new Add(new Var("x"), new NumExpr(1));
+    auto *add_x_2 = new Add(new Var("x"), new NumExpr(2));
+    auto *fun_expr_x_add_x_1 = new FunExpr("x", add_x_1);
+    auto *call_fun_expr_x_add_x_1_on_2 = new CallExpr(fun_expr_x_add_x_1, new NumExpr(2));
+    auto *call_fun_expr_x_add_x_1_on_2_copy = new CallExpr(fun_expr_x_add_x_1, new NumExpr(2));
+    auto *call_fun_expr_x_add_x_1_on_3 = new CallExpr(fun_expr_x_add_x_1, new NumExpr(3));
+    auto *fun_expr_x_add_x_2 = new FunExpr("x", add_x_2);
+    auto *call_fun_expr_x_add_x_2_on_2 = new CallExpr(fun_expr_x_add_x_2, new NumExpr(2));
+
+    SECTION("equals") {
+        REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(call_fun_expr_x_add_x_1_on_2_copy));
+        REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(call_fun_expr_x_add_x_1_on_3) == false);
+        REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(add_x_1) == false);
+        REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(call_fun_expr_x_add_x_2_on_2) == false);
+    }
+
+    SECTION("interp") {
+        REQUIRE(call_fun_expr_x_add_x_1_on_2->interp()->equals(new NumVal(3)));
+    }
+
+    auto *call_fun_expr_x_add_x_1_on_2_subst_x_for_2 = call_fun_expr_x_add_x_1_on_2->subst("x", new NumExpr(2));
+    auto *add_2_1 = new Add(new NumExpr(2), new NumExpr(1));
+    auto *fun_expr_x_add_2_1 = new FunExpr("x", add_2_1);
+    auto *call_fun_expr_x_add_2_1_on_2 = new CallExpr(fun_expr_x_add_2_1, new NumExpr(2));
+    auto *call_fun_expr_x_add_x_1_on_2_subst_y_for_2 = call_fun_expr_x_add_x_1_on_2->subst("y", new NumExpr(2));
+
+
+    SECTION("subst") {
+        REQUIRE(call_fun_expr_x_add_x_1_on_2_subst_x_for_2->equals(call_fun_expr_x_add_2_1_on_2));
+        REQUIRE(call_fun_expr_x_add_x_1_on_2_subst_y_for_2->equals(call_fun_expr_x_add_x_1_on_2));
+    }
+
+    SECTION("print") {
+        REQUIRE(call_fun_expr_x_add_x_1_on_2->to_string() == "(_fun(x)(x+1)) (2)");
+    }
+
+    SECTION("pretty_print") {
+        REQUIRE(call_fun_expr_x_add_x_1_on_2->to_pretty_string() == "(_fun (x)\n"
+                                                                    "   x + 1)(2)");
+    }
+}

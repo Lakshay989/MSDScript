@@ -21,7 +21,7 @@ Val *NumVal::add_to(Val *other_val)
     if (other_num == nullptr) {
         throw std::runtime_error("add of non-number");
     }
-    int new_val = this->rep + other_num->rep;
+    int new_val = (unsigned int) this->rep + other_num->rep;
     return new NumVal(new_val);
 }
 
@@ -31,7 +31,7 @@ Val *NumVal::mult_with(Val *other_val)
     if (other_num == nullptr) {
         throw std::runtime_error("mult with non-number");
     }
-    int new_val = this->rep * other_num->rep;
+    int new_val = (unsigned int) this->rep * other_num->rep;
     return new NumVal(new_val);
 }
 

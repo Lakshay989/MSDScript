@@ -1,5 +1,5 @@
-CXX=c++
-CFLAGS= -std=c++17
+CXX = c++
+CFLAGS = -std=c++17 -fsanitize=undefined -fno-sanitize-recover=undefined
 
 CXXSOURCE= cmdline.cpp  main.cpp expr.cpp parse.cpp tests.cpp val.cpp 
 OBJS = main.o cmdline.o expr.o parse.o tests.o val.o
@@ -13,28 +13,28 @@ msdscript: $(OBJS)
 	$(CXX) $(CFLAGS) main.o cmdline.o expr.o tests.o parse.o val.o -o msdscript
 
 main.o: main.cpp
-	c++ -std=c++17 -c main.cpp
+	$(CXX) $(CFLAGS) -c main.cpp
 
 cmdline.o: cmdline.cpp cmdline.hpp catch.h
-	c++ -std=c++17 -c cmdline.cpp
+	$(CXX) $(CFLAGS) -c cmdline.cpp
 
 expr.o: expr.cpp expr.hpp catch.h
-	c++ -std=c++17 -c expr.cpp
+	$(CXX) $(CFLAGS) -c expr.cpp
 
 tests.o: tests.cpp catch.h 
-	c++ -std=c++17 -c tests.cpp
+	$(CXX) $(CFLAGS) -c tests.cpp
 
 parse.o: parse.cpp parse.hpp expr.hpp
-	c++ -std=c++17 -c parse.cpp
+	$(CXX) $(CFLAGS) -c parse.cpp
 
 val.o: val.hpp val.cpp expr.hpp
-	c++ -std=c++17 -c val.cpp
+	$(CXX) $(CFLAGS) -c val.cpp
 
 test_msdscript: $(TESTOBJS)
-	c++ -std=c++17 $(TESTOBJS) -o test_msdscript
+	$(CXX) $(CFLAGS) $(TESTOBJS) -o test_msdscript
 
 test_msdscript.o: test_msdscript.cpp expr.hpp exec.h exec.cpp
-	c++ -std=c++17 -c test_msdscript.cpp
+	$(CXX) $(CFLAGS) -c test_msdscript.cpp
 
 
 

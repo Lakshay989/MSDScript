@@ -56,7 +56,7 @@ Expr *parse_comprag(std::istream &in)
 
 Expr *parse_num(std::istream &in)
 {
-    int num = 0;
+    unsigned int num = 0;
     bool is_negative = false;
     if (in.peek() == '-')
     {
@@ -79,7 +79,7 @@ Expr *parse_num(std::istream &in)
     {
         num *= -1;
     }
-    return new NumExpr(num);
+    return new NumExpr((int) num);
 }
 
 
@@ -146,7 +146,7 @@ Expr *parse_variable(std::istream &in)
     }
     ch = in.peek() ;
     
-    if (ch != ' ' && !(ch == '+' || ch == '*' || ch == ')' || ch =='(' || ch == '=' || in.eof())) // eof returns -1 in C++
+    if (!isspace(ch) && !(ch == '+' || ch == '*' || ch == ')' || ch =='(' || ch == '=' || in.eof())) // eof returns -1 in C++
     {
         throw std::runtime_error("unexpected character in variable");
     }

@@ -50,16 +50,6 @@ Val* NumExpr::interp()
 
 
 /**
-* \brief This function determines if the the expression consists of a variable or not.
-* \return boolean value for the number has a variable or not
-*/
-bool NumExpr::has_variable()
-{
-    return false;
-}
-
-
-/**
 * \brief This function substitutes the expression with the combination of sub-expressions if possible.
 * \param s first argument, string which can be replaced as a part of the expression
 * \param e second argument, Expression
@@ -128,17 +118,6 @@ Val* Add::interp()
 {
     return lhs->interp()->add_to(rhs->interp()) ;
 }
-
-
-/**
-* \brief This function determines if the the expression consists of a variable or not.
-* \return boolean value for the expression has a variable or not
-*/
-bool Add::has_variable()
-{
-    return (lhs->has_variable() || rhs->has_variable()) ;
-}
-
 
 /**
 * \brief This function substitutes the expression with the combination of sub-expressions if possible.
@@ -215,16 +194,6 @@ Val* Mult::interp()
 
 
 /**
-* \brief This function determines if the the expression consists of a variable or not.
-* \return boolean value for the expression has a variable or not
-*/
-bool Mult::has_variable()
-{
-    return (lhs->has_variable() || rhs->has_variable());
-}
-
-
-/**
 * \brief This function substitutes the expression with the combination of sub-expressions if possible.
 * \param s first argument, string which can be replaced as a part of the expression
 * \param e second argument, Expressiont
@@ -296,16 +265,6 @@ bool Var::equals(Expr *e)  // Var equals
 Val* Var::interp()
 {
     throw std::runtime_error("interp does not work with variable expressions !!");
-}
-
-
-/**
-* \brief This function determines if the the expression consists of a variable or not.
-* \return boolean value for the variable  is a variable or not
-*/
-bool Var::has_variable()
-{
-    return true;
 }
 
 
@@ -387,16 +346,6 @@ Val* Let::interp() // More Testing rhs->interp()
 
 
 /**
-* \brief This function determines if the the expression consists of a variable or not.
-* \return boolean value for the expression has a variable or not
-*/
-bool Let::has_variable()
-{
-    return (this->rhs->has_variable() || this->body->has_variable()) ;
-}
-
-
-/**
 * \brief This function substitutes the expression with the combination of sub-expressions if possible.
 * \param subt first argument, string which can be replaced as a part of the expression
 * \param exp second argument, Expression
@@ -467,10 +416,6 @@ Val *BoolExpr::interp()
     return new BoolVal(this->rep);
 }
 
-bool BoolExpr::has_variable()
-{
-    return false;
-}
 
 Expr *BoolExpr::subst(std::string s, Expr *e)
 {
@@ -530,10 +475,6 @@ Val *IfExpr::interp()
     }
 }
 
-bool IfExpr::has_variable()
-{
-    return this->condition->has_variable() || this->then_expr->has_variable() || this->else_expr->has_variable();
-}
 
 Expr *IfExpr::subst(std::string s, Expr *e)
 {
@@ -595,11 +536,6 @@ Val *EqExpr::interp()
     auto *rhs = this->rhs->interp();
     bool result = lhs->equals(rhs);
     return new BoolVal(result);
-}
-
-bool EqExpr::has_variable()
-{
-    return this->lhs->has_variable() || this->rhs->has_variable();
 }
 
 Expr *EqExpr::subst(std::string s, Expr *e)
@@ -680,7 +616,7 @@ void FunExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool p
         position = out.tellp();
         out << std::string(blank_spaces, ' ');
         this->body->pretty_print_at(out, precedence_none, false, false, position);
-        if (wrap_let) {
+        if (parenthesis_let) {
             out << ")";
         }
 }

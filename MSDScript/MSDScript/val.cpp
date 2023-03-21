@@ -62,6 +62,11 @@ bool NumVal::is_true()
     
 }
 
+Val *NumVal::call(Val *actual_arg)
+{
+    throw std::runtime_error("Cannot call a num val");
+}
+
 
 //--------------------------------------------------------------------------------------------------------------
 
@@ -115,3 +120,56 @@ bool BoolVal::is_true()
     return this->rep;
 }
 
+Val *BoolVal::call(Val *actual_arg)
+{
+    throw std::runtime_error("Cannot call a bool val");
+}
+
+//--------------------------------------------------------------------------------------------------------------
+
+
+FunVal::FunVal(std::string formal_arg, Expr *body)
+{
+    this->formal_arg = formal_arg;
+    this->body = body;
+}
+
+
+Val *FunVal::add_to(Val *other_val)
+{
+    throw std::runtime_error("Addition to a boolean is not possible");
+}
+
+Val *FunVal::mult_with(Val *other_val)
+{
+    throw std::runtime_error("Multiplication with a boolean is not possible");
+}
+
+bool FunVal::equals(Val *other_val)
+{
+    auto *other_fun = dynamic_cast<FunVal *>(other_val);
+        if (other_fun == nullptr) {
+            return false;
+        }
+        return this->formal_arg == other_fun->formal_arg && this->body->equals(other_fun->body);
+    }
+
+std::string FunVal::to_string()
+{
+    return this->to_expr()->to_string();
+}
+
+Expr *FunVal::to_expr()
+{
+    return new FunExpr(this->formal_arg, this->body);
+}
+
+bool FunVal::is_true()
+{
+    throw std::runtime_error("a fun val cannot be interpreted as a bool val");
+}
+
+Val *FunVal::call(Val *actual_arg)
+{
+    return this->body->subst(this->formal_arg, actual_arg->to_expr())->interp();
+}

@@ -22,7 +22,8 @@ public:
     virtual std::string to_string() = 0;
     virtual Expr *to_expr() = 0 ;
     virtual bool is_true() = 0;
-
+    virtual Val *call(Val *actual_arg) = 0 ;
+    
 } ;
 
 class NumVal : public Val
@@ -40,6 +41,7 @@ public:
     std::string to_string() ;
     Expr *to_expr() ;
     bool is_true() ;
+    Val *call(Val *actual_arg);
 } ;
 
 class BoolVal : public Val
@@ -57,7 +59,28 @@ public:
     std::string to_string() ;
     Expr *to_expr() ;
     bool is_true() ;
+    Val *call(Val *actual_arg);
 };
+
+class FunVal : public Val
+{
+private:
+    std::string formal_arg;
+    Expr *body;
+    
+public:
+    
+    FunVal(std::string formal_arg, Expr *body);
+
+    Val *add_to(Val *other_val) ;
+    Val *mult_with(Val *other_val) ;
+    bool equals(Val *other_val) ;
+    std::string to_string() ;
+    Expr *to_expr() ;
+    bool is_true() ;
+    Val *call(Val *actual_arg);
+};
+
 
 #endif /* val_hpp */
 

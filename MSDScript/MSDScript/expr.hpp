@@ -43,7 +43,7 @@ public:
     
     virtual Val* interp() = 0 ; // This function interprets the value of the expression/variable.
     
-    virtual bool has_variable() = 0 ; // This function determines if the the expression consists of a variable or not.
+//    virtual bool has_variable() = 0 ; // This function determines if the the expression consists of a variable or not.
     
     virtual Expr* subst(std::string s, Expr* e) = 0; // This function substitutes the expression with the combination of sub-expressions if possible.
     
@@ -83,7 +83,7 @@ public:
     NumExpr(int val);
     bool equals(Expr *e) ;
     Val* interp();
-    bool has_variable();
+    //bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
@@ -102,7 +102,7 @@ public:
     Add(Expr *lhs, Expr *rhs);
     bool equals(Expr *e) ;
     Val* interp();
-    bool has_variable();
+    //bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
    // void pretty_print(std::ostream &out);
@@ -122,7 +122,7 @@ public:
     Mult(Expr *lhs, Expr *rhs);
     bool equals(Expr *e) ;
     Val* interp();
-    bool has_variable();
+    //bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
@@ -141,7 +141,7 @@ public:
     
     bool equals(Expr *e);
     Val* interp();
-    bool has_variable();
+    //bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
@@ -163,7 +163,7 @@ public:
     
     bool equals(Expr *e);
     Val* interp();
-    bool has_variable();
+    //bool has_variable();
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
@@ -179,7 +179,7 @@ public:
     
     bool equals(Expr *e);
     Val *interp();
-    bool has_variable();
+    //bool has_variable();
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
@@ -187,7 +187,8 @@ public:
 };
 
 
-class IfExpr : public Expr {
+class IfExpr : public Expr
+{
 public:
     Expr *condition; //bool ?
     Expr *then_expr;
@@ -199,7 +200,7 @@ public:
     bool equals(Expr *e);
 
     Val *interp();
-    bool has_variable();
+   // bool has_variable();
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
@@ -207,7 +208,8 @@ public:
 };
 
 
-class EqExpr : public Expr {
+class EqExpr : public Expr
+{
 public:
     Expr *lhs;
     Expr *rhs;
@@ -216,11 +218,53 @@ public:
 
     bool equals(Expr *e);
     Val *interp();
-    bool has_variable();
+    //bool has_variable();
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
 };
 
+//  Function _fun (variable) <expr>
+class FunExpr : public Expr
+{
+public:
+    
+    std::string formal_arg;
+    Expr *body;
+    
+    FunExpr(std::string formal_arg, Expr *body);
+    
+    bool equals(Expr *e);
+    
+    Val *interp();
+    
+    Expr *subst(std::string s, Expr *e);
+    
+    void print(std::ostream &out);
+    
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+};
+
+class CallExpr : public Expr
+{
+    
+public:
+    Expr *to_be_called;
+    Expr *actual_arg;
+    
+    CallExpr(Expr *to_be_called, Expr *actual_arg);
+    
+    bool equals(Expr *e);
+    
+    Val *interp();
+    
+    Expr *subst(std::string s, Expr *e);
+    
+    void print(std::ostream &out);
+    
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    
+};
+    
 #endif /* expr_hpp */

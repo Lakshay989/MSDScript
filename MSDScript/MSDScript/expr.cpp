@@ -633,6 +633,101 @@ void EqExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool pa
     
 }
 
+
+FunExpr::FunExpr(std::string formal_arg, Expr *body)
+{
+    this->formal_arg = formal_arg ;
+    this->body = body ;
+    
+}
+    
+bool FunExpr::equals(Expr *e)
+{
+    auto *other = dynamic_cast<FunExpr *>(e);
+        if (other == nullptr) {
+            return false;
+        }
+        return this->formal_arg == other->formal_arg && this->body->equals(other->body);
+}
+    
+Val *FunExpr::interp()
+{
+    return new FunVal(this->formal_arg, this->body);
+}
+    
+Expr *FunExpr::subst(std::string s, Expr *e)
+{
+    return new FunExpr(this->formal_arg, this->body->subst(s, e));
+}
+    
+void FunExpr::print(std::ostream &out)
+{
+    out << "(_fun(" << this->formal_arg << ")";
+    this->body->print(out);
+    out << ")";
+}
+    
+void FunExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
+{
+    
+    if (parenthesis_let)
+    {
+        out << "(";
+    }
+    int blank_spaces = (int) out.tellp() - position;
+        out << "_fun (" << this->formal_arg << ")\n";
+        out << std::string(2, ' ');
+        position = out.tellp();
+        out << std::string(blank_spaces, ' ');
+        this->body->pretty_print_at(out, precedence_none, false, false, position);
+        if (wrap_let) {
+            out << ")";
+        }
+}
+
+
+CallExpr::CallExpr(Expr *to_be_called, Expr *actual_arg)
+{
+    this->to_be_called = to_be_called ;
+    this->actual_arg = actual_arg ;
+}
+    
+bool CallExpr::equals(Expr *e)
+{
+    auto *other = dynamic_cast<CallExpr *>(e);
+        if (other == nullptr) {
+            return false;
+        }
+        return this->to_be_called->equals(other->to_be_called) && this->actual_arg->equals(other->actual_arg);
+}
+    
+Val *CallExpr::interp()
+{
+    return this->to_be_called->interp()->call(this->actual_arg->interp());
+}
+    
+Expr *CallExpr::subst(std::string s, Expr *e)
+{
+    auto *to_be_called_subst = this->to_be_called->subst(s, e);
+    return new CallExpr(to_be_called_subst, this->actual_arg);
+}
+    
+void CallExpr::print(std::ostream &out)
+{
+    this->to_be_called->print(out);
+    out << " (";
+    this->actual_arg->print(out);
+    out << ")";
+}
+    
+void CallExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
+{
+    this->to_be_called->pretty_print_at(out, precedence_none, true, false, position);
+        out << "(";
+    this->actual_arg->pretty_print_at(out, precedence_none, false, false, position);
+        out << ")";
+}
+    
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

@@ -76,7 +76,7 @@ void NumExpr::print(std::ostream &out) {
 //    this->pretty_print_at(out, precedence_none, false, false, out.tellp());
 //}
 
-void NumExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position) {
+void NumExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position) {
     out << std::to_string(val);
 }
 
@@ -101,7 +101,7 @@ Add::Add(Expr *lhs, Expr *rhs)
 */
 bool Add::equals(Expr *e) // Add Equals
 {
-    Add *a = dynamic_cast<Add*>(e);
+    auto *a = dynamic_cast<Add*>(e);
     if (a == NULL)
         return false;
     else
@@ -144,7 +144,7 @@ void Add::print(std::ostream &out) {
 }
 
 
-void Add::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position) {
+void Add::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position) {
     if (precedence >= precedence_add) {
         out << "(";
     }
@@ -174,7 +174,7 @@ Mult::Mult(Expr *lhs, Expr *rhs)
 * \return boolean value of LHS = RHS
 */
 bool Mult::equals(Expr* e) { // Mult equals
-  Mult* m = dynamic_cast<Mult*>(e);
+  auto *m = dynamic_cast<Mult*>(e);
   if (m == NULL)
     return false;
   else
@@ -218,14 +218,14 @@ void Mult::print(std::ostream &out) {
 }
 
 
-void Mult::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq,  int position) {
+void Mult::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq,  int position) {
     if (precedence >= precedence_mult) {
         out << "(";
     }
     //out <<
     this->lhs->pretty_print_at(out, precedence_mult, true, true, position);
     out << " * " ;
-    this->rhs->pretty_print_at(out, precedence_add, !(precedence >= precedence_mult) && parenthesis_let, true, position);
+    this->rhs->pretty_print_at(out, precedence_add, !(precedence >= precedence_mult) && parenthesis_let_or_fun, true, position);
     if (precedence >= precedence_mult) {
         out << ")";
     }
@@ -296,7 +296,7 @@ void Var::print(std::ostream &out) {
 }
 
 
-void Var::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position) {
+void Var::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position) {
     out << this->name;
 }
 
@@ -374,9 +374,9 @@ void Let::print(std::ostream &out)
 }
 
 
-void Let::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
+void Let::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position)
 {
-    if (parenthesis_let) {
+    if (parenthesis_let_or_fun) {
             out << "(";
             //position += 1;
         }
@@ -387,7 +387,7 @@ void Let::pretty_print_at(std::ostream &out, precedence_t precedence, bool paren
     position = out.tellp() ;
     out << std::string(spaces, ' ') << "_in  " ;
     this->body->pretty_print_at(out, precedence_none, false, false, position);
-    if (parenthesis_let)
+    if (parenthesis_let_or_fun)
     {
         out << ")";
     }
@@ -434,7 +434,7 @@ void BoolExpr::print(std::ostream &out)
     }
 }
 
-void BoolExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
+void BoolExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position)
 {
     if(this->rep)
     {
@@ -497,7 +497,7 @@ void IfExpr::print(std::ostream &out)
 }
 
 
-void IfExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
+void IfExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position)
 {
 
     int blank_spaces_backoff = (int) out.tellp() - position;
@@ -554,9 +554,9 @@ void EqExpr::print(std::ostream &out)
     out << ")";
 }
 
-void EqExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
+void EqExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position)
 {
-    if (parenthesis_let) {
+    if (parenthesis_let_or_fun) {
         out << "(";
     }
     this->lhs->pretty_print_at(out, precedence_none, true, true, position);
@@ -572,7 +572,7 @@ void EqExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool pa
 
 FunExpr::FunExpr(std::string formal_arg, Expr *body)
 {
-    this->formal_arg = formal_arg ;
+    this->formal_arg = formal_arg ; // std::move()
     this->body = body ;
     
 }
@@ -593,6 +593,9 @@ Val *FunExpr::interp()
     
 Expr *FunExpr::subst(std::string s, Expr *e)
 {
+    if(s == this->formal_arg) {
+          return this;
+      }
     return new FunExpr(this->formal_arg, this->body->subst(s, e));
 }
     
@@ -603,20 +606,19 @@ void FunExpr::print(std::ostream &out)
     out << ")";
 }
     
-void FunExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
+void FunExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position)
 {
     
-    if (parenthesis_let)
+    if (parenthesis_let_or_fun)
     {
         out << "(";
     }
-    int blank_spaces = (int) out.tellp() - position;
+    int blank_spaces = (int) out.tellp() - position + 2;
         out << "_fun (" << this->formal_arg << ")\n";
-        out << std::string(2, ' ');
         position = out.tellp();
         out << std::string(blank_spaces, ' ');
         this->body->pretty_print_at(out, precedence_none, false, false, position);
-        if (parenthesis_let) {
+        if (parenthesis_let_or_fun) {
             out << ")";
         }
 }
@@ -645,18 +647,21 @@ Val *CallExpr::interp()
 Expr *CallExpr::subst(std::string s, Expr *e)
 {
     auto *to_be_called_subst = this->to_be_called->subst(s, e);
-    return new CallExpr(to_be_called_subst, this->actual_arg);
+    auto *actual_arg_subst = this->actual_arg->subst(s, e);
+    return new CallExpr(to_be_called_subst, actual_arg_subst);
+    
 }
     
 void CallExpr::print(std::ostream &out)
 {
+    out << "(";
     this->to_be_called->print(out);
-    out << " (";
+    out << ") (";
     this->actual_arg->print(out);
     out << ")";
 }
     
-void CallExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position)
+void CallExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position)
 {
     this->to_be_called->pretty_print_at(out, precedence_none, true, false, position);
         out << "(";

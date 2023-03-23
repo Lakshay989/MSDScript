@@ -209,7 +209,9 @@ Expr *parse_inner_expression(std::istream &in)
         
         if (in.peek() != ')')
         {
-            throw std::runtime_error("missing close parenthesis");
+            if (in.eof()) {
+                throw std::runtime_error("missing close parenthesis");
+            }
         }
         else
         {
@@ -246,6 +248,10 @@ Expr *parse_inner_expression(std::istream &in)
         else if (next_keyword == "_if")
         {
             return parse_if_expr(in);
+        }
+        else if(next_keyword == "_fun")
+        {
+            return parse_fun_expr(in);
         }
     }
     

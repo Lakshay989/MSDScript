@@ -51,7 +51,7 @@ public:
     
    // virtual void pretty_print(std::ostream &out) = 0; // This is an extenstion of the print function with minor changes.
     
-    virtual void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position = 0) = 0; // Helper for pretty_print()
+    virtual void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position = 0) = 0; // Helper for pretty_print()
     
     std::string to_string() {
         std::stringstream st("");
@@ -87,7 +87,7 @@ public:
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
 
@@ -106,7 +106,7 @@ public:
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
    // void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
     
 };
 
@@ -126,7 +126,7 @@ public:
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
 
@@ -145,7 +145,7 @@ public:
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
 
@@ -167,7 +167,7 @@ public:
     Expr* subst(std::string s, Expr* e) ;
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
     
 };
 
@@ -183,7 +183,7 @@ public:
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
 
@@ -204,7 +204,7 @@ public:
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
 
@@ -222,7 +222,7 @@ public:
     Expr *subst(std::string s, Expr *e);
     void print(std::ostream &out);
     //void pretty_print(std::ostream &out);
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
 //  Function _fun (variable) <expr>
@@ -243,7 +243,7 @@ public:
     
     void print(std::ostream &out);
     
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
 class CallExpr : public Expr
@@ -263,7 +263,7 @@ public:
     
     void print(std::ostream &out);
     
-    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let, bool parenthesis_eq, int position);
+    void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
     
 };
     

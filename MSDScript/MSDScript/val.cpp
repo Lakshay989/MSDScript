@@ -137,12 +137,12 @@ FunVal::FunVal(std::string formal_arg, Expr *body)
 
 Val *FunVal::add_to(Val *other_val)
 {
-    throw std::runtime_error("Addition to a boolean is not possible");
+    throw std::runtime_error("Addition to a FunVal is not possible");
 }
 
 Val *FunVal::mult_with(Val *other_val)
 {
-    throw std::runtime_error("Multiplication with a boolean is not possible");
+    throw std::runtime_error("Multiplication with a FunVal is not possible");
 }
 
 bool FunVal::equals(Val *other_val)

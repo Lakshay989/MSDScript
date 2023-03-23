@@ -1156,6 +1156,13 @@ TEST_CASE("Fun Expr") {
     auto *fun_expr_x_add_x_2 = new FunExpr("x", add_x_2);
     auto *num_expr_5 = new NumExpr(5);
 
+    // (_fun (y) (_fun (x) y + x))
+    auto add_y_x = new Add(new Var("y"), new Var("x"));
+    auto *fun_expr_x_add_y_x = new FunExpr("x", add_y_x);
+    auto *fun_expr_y_fun_var_x_add_y_x = new FunExpr("y", fun_expr_x_add_y_x);
+    auto *fun_var_y_fun_var_x_add_y_x = new FunVal("y", fun_expr_x_add_y_x);
+
+
     SECTION("equals") {
         REQUIRE(fun_expr_x_add_x_1->equals(fun_expr_x_add_x_1_copy));
         REQUIRE(fun_expr_y_add_x_1->equals(fun_expr_x_add_x_1) == false);
@@ -1167,6 +1174,7 @@ TEST_CASE("Fun Expr") {
 
     SECTION("interp") {
         REQUIRE(fun_expr_x_add_x_1->interp()->equals(fun_val_x_add_x_1));
+        REQUIRE(fun_expr_y_fun_var_x_add_y_x->interp()->equals(fun_var_y_fun_var_x_add_y_x));
     }
 
     auto *fun_expr_x_add_x_1_subst_x_2 = fun_expr_x_add_x_1->subst("x", new NumExpr(2));
@@ -1176,18 +1184,21 @@ TEST_CASE("Fun Expr") {
     auto *fun_val_x_add_2_1 = new FunVal("x", add_2_1);
 
     SECTION("subst") {
-        REQUIRE(fun_expr_x_add_x_1_subst_x_2->equals(fun_expr_x_add_2_1_subst_x_2));
-        REQUIRE(fun_expr_x_add_x_1_subst_x_2->interp()->equals(fun_val_x_add_2_1));
+        REQUIRE(fun_expr_x_add_x_1_subst_x_2->equals(fun_expr_x_add_x_1));
         REQUIRE(fun_expr_x_add_x_1_subst_y_2->equals(fun_expr_x_add_x_1));
     }
 
     SECTION("print") {
         REQUIRE(fun_expr_x_add_x_1->to_string() == "(_fun(x)(x+1))");
+        REQUIRE(fun_expr_y_fun_var_x_add_y_x->to_string() == "(_fun(y)(_fun(x)(y+x)))");
     }
 
     SECTION("pretty_print") {
         REQUIRE(fun_expr_x_add_x_1->to_pretty_string() == "_fun (x)\n"
                                                           "  x + 1");
+        REQUIRE(fun_expr_y_fun_var_x_add_y_x->to_pretty_string() == "_fun (y)\n"
+                                                                    "  _fun (x)\n"
+                                                                    "    y + x");
     }
 }
 
@@ -1201,15 +1212,19 @@ TEST_CASE("Call Expr") {
     auto *fun_expr_x_add_x_2 = new FunExpr("x", add_x_2);
     auto *call_fun_expr_x_add_x_2_on_2 = new CallExpr(fun_expr_x_add_x_2, new NumExpr(2));
 
+    // (_fun (y) (_fun (x) y + x))
+    auto add_y_x = new Add(new Var("y"), new Var("x"));
+    auto *fun_expr_x_add_y_x = new FunExpr("x", add_y_x);
+    auto *fun_expr_y_fun_var_x_add_y_x = new FunExpr("y", fun_expr_x_add_y_x);
+    auto *fun_var_y_fun_var_x_add_y_x = new FunVal("y", fun_expr_x_add_y_x);
+    auto *call_fun_expr_y_fun_var_x_add_y_x_on_y_2 = new CallExpr(fun_expr_y_fun_var_x_add_y_x, new NumExpr(2));
+    auto *call_call_fun_expr_y_fun_var_x_add_y_x_on_y_2_on_x_1 = new CallExpr(call_fun_expr_y_fun_var_x_add_y_x_on_y_2, new NumExpr(1));
+
     SECTION("equals") {
         REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(call_fun_expr_x_add_x_1_on_2_copy));
         REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(call_fun_expr_x_add_x_1_on_3) == false);
         REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(add_x_1) == false);
         REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(call_fun_expr_x_add_x_2_on_2) == false);
-    }
-
-    SECTION("interp") {
-        REQUIRE(call_fun_expr_x_add_x_1_on_2->interp()->equals(new NumVal(3)));
     }
 
     auto *call_fun_expr_x_add_x_1_on_2_subst_x_for_2 = call_fun_expr_x_add_x_1_on_2->subst("x", new NumExpr(2));
@@ -1218,18 +1233,356 @@ TEST_CASE("Call Expr") {
     auto *call_fun_expr_x_add_2_1_on_2 = new CallExpr(fun_expr_x_add_2_1, new NumExpr(2));
     auto *call_fun_expr_x_add_x_1_on_2_subst_y_for_2 = call_fun_expr_x_add_x_1_on_2->subst("y", new NumExpr(2));
 
+    auto *add_2_x = new Add(new NumExpr(2), new Var("x"));
+    auto *fun_val_x_add_2_x = new FunVal("x", add_2_x);
+
+    SECTION("interp") {
+        REQUIRE(call_fun_expr_x_add_x_1_on_2->interp()->equals(new NumVal(3)));
+        REQUIRE(call_fun_expr_y_fun_var_x_add_y_x_on_y_2->interp()->equals(fun_val_x_add_2_x));
+        REQUIRE(call_call_fun_expr_y_fun_var_x_add_y_x_on_y_2_on_x_1->interp()->equals(new NumVal(3)));
+    }
 
     SECTION("subst") {
-        REQUIRE(call_fun_expr_x_add_x_1_on_2_subst_x_for_2->equals(call_fun_expr_x_add_2_1_on_2));
+        REQUIRE(call_fun_expr_x_add_x_1_on_2_subst_x_for_2->equals(call_fun_expr_x_add_x_1_on_2));
         REQUIRE(call_fun_expr_x_add_x_1_on_2_subst_y_for_2->equals(call_fun_expr_x_add_x_1_on_2));
     }
 
     SECTION("print") {
-        REQUIRE(call_fun_expr_x_add_x_1_on_2->to_string() == "(_fun(x)(x+1)) (2)");
+        REQUIRE(call_fun_expr_x_add_x_1_on_2->to_string() == "((_fun(x)(x+1))) (2)");
+        REQUIRE(call_call_fun_expr_y_fun_var_x_add_y_x_on_y_2_on_x_1->to_string() == "(((_fun(y)(_fun(x)(y+x)))) (2)) (1)");
     }
 
     SECTION("pretty_print") {
         REQUIRE(call_fun_expr_x_add_x_1_on_2->to_pretty_string() == "(_fun (x)\n"
                                                                     "   x + 1)(2)");
+        REQUIRE(call_call_fun_expr_y_fun_var_x_add_y_x_on_y_2_on_x_1->to_pretty_string() == "(_fun (y)\n"
+                                                                                            "   _fun (x)\n"
+                                                                                            "     y + x)(2)(1)");
+    }
+
+    SECTION("factorial function recusion test") {
+        Expr *factrl_expr = new Let(
+                "factrl",
+                new FunExpr(
+                        "factrl",
+                        new FunExpr(
+                                "x",
+                                new IfExpr(
+                                        new EqExpr(
+                                                new Var("x"),
+                                                new NumExpr(1)
+                                        ),
+                                        new NumExpr(1),
+                                        new Mult(
+                                                new Var("x"),
+                                                new CallExpr(
+                                                        new CallExpr(
+                                                                new Var("factrl"),
+                                                                new Var("factrl")
+                                                        ),
+                                                        new Add(
+                                                                new Var("x"),
+                                                                new NumExpr(-1)
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                new CallExpr(
+                        new CallExpr(
+                                new Var("factrl"),
+                                new Var("factrl")
+                        ),
+                        new NumExpr(10)
+                )
+        );
+
+        REQUIRE(factrl_expr->to_pretty_string() == "_let factrl = _fun (factrl)\n"
+                                                   "                _fun (x)\n"
+                                                   "                  _if x == 1\n"
+                                                   "                  _then 1\n"
+                                                   "                  _else x * factrl(factrl)(x + -1)\n"
+                                                   "_in  factrl(factrl)(10)");
+
+        REQUIRE(factrl_expr->interp()->equals(new NumVal(3628800)));
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+TEST_CASE("parse Fun Expr string") {
+    auto *add_x_1 = new Add(new Var("x"), new NumExpr(1));
+    auto *fun_expr_x_add_x_1 = new FunExpr("x", add_x_1);
+
+    REQUIRE(parse_expression_str("_fun (x)\n"
+                                 "  x + 1")->equals(fun_expr_x_add_x_1));
+
+
+    std::string test_str = "_let factrl = _fun (factrl)\n"
+                           "                _fun (x)\n"
+                           "                  _if x == 1\n"
+                           "                  _then 1\n"
+                           "                  _else x * factrl(factrl)(x + -1)\n"
+                           "_in  factrl(factrl)(10)";
+
+    auto *parsed_expr = parse_expression_str(test_str);
+    auto parsed_expr_pretty_str = parsed_expr->to_pretty_string();
+    auto parsed_expr_str = parsed_expr->to_string();
+    REQUIRE(parsed_expr_pretty_str == test_str);
+    REQUIRE(parsed_expr->equals(parse_expression_str(parsed_expr_pretty_str)));
+    REQUIRE(parsed_expr->equals(parse_expression_str(parsed_expr_str)));
+    REQUIRE(parsed_expr->interp()->equals(new NumVal(3628800)));
+}
+
+
+TEST_CASE("parse Call Expr string") {
+    auto *add_x_1 = new Add(new Var("x"), new NumExpr(1));
+    auto *fun_expr_x_add_x_1 = new FunExpr("x", add_x_1);
+    auto *call_2_on_fun_expr_x_add_x_1 = new CallExpr(fun_expr_x_add_x_1, new NumExpr(2));
+    REQUIRE(parse_expression_str("(_fun (x) x + 1)(2)")->equals(call_2_on_fun_expr_x_add_x_1));
+    REQUIRE(parse_expression_str("(_fun (x)\n"
+                                 "   x + 1)(2)")->equals(call_2_on_fun_expr_x_add_x_1));
+
+    REQUIRE(parse_expression_str("_let f = _fun (x)\n"
+                                 "\t       _fun (y) \n"
+                                 "\t         x*x + y*y \n"
+                                 "_in f(2)(3)")->interp()->equals(new NumVal(13)));
+}
+
+TEST_CASE("quiz function vals") {
+    // 1
+    REQUIRE(parse_expression_str("_let f = _fun (x) x+ 1 \n"
+                                 "_in f(5) ")->interp()->equals(new NumVal(6)));
+
+    // 2
+    REQUIRE(parse_expression_str("_let f = _fun (x)\n"
+                                 "           7\n"
+                                 "_in f(5)")->interp()->equals(new NumVal(7)));
+
+    // 3
+    REQUIRE(parse_expression_str("_let f = _fun (x)\n"
+                                 "           _true\n"
+                                 "_in f(5) ")->interp()->equals(new BoolVal(true)));
+
+    // 4
+    REQUIRE_THROWS_WITH(parse_expression_str("_let f = _fun (x)\n"
+                                             "           x + _true\n"
+                                             "_in f(5) ")->interp(), "add of non-number");
+
+    // 5
+    REQUIRE(parse_expression_str("_let f = _fun (x)\n"
+                                 "           x + _true\n"
+                                 "_in 5 + 1 ")->interp()->equals(new NumVal(6)));
+
+    // 6
+    REQUIRE_THROWS_WITH(parse_expression_str("_let f = _fun (x)\n"
+                                             "           7\n"
+                                             "_in  f(5 + _true)")->interp(), "add of non-number");
+
+    // 7
+    REQUIRE_THROWS_WITH(parse_expression_str("_let f = _fun (x) x+ 1\n"
+                                             "_in f + 5")->interp(), "Addition to a FunVal is not possible");
+
+    // 8
+    REQUIRE(parse_expression_str("_let f = _fun (x) x+ 1 \n"
+                                 "_in _if _false\n"
+                                 "    _then f(5)\n"
+                                 "    _else f(6)")->interp()->equals(new NumVal(7)));
+
+    // 9
+    REQUIRE(parse_expression_str("_let f = _fun (x) x+ 1 \n"
+                                 "_in _let g = _fun (y) y+ 2 \n"
+                                 "_in _if _true\n"
+                                 "    _then f(5)\n"
+                                 "    _else g(5)")->interp()->equals(new NumVal(6)));
+
+    // 10
+    REQUIRE(parse_expression_str("_let f = _fun (x) x+ 1 \n"
+                                 "_in _let g = _fun (y) y+ 2 \n"
+                                 "_in f(g(5)) ")->interp()->equals(new NumVal(8)));
+
+    // 11
+    REQUIRE(parse_expression_str("_let f = _fun (x) x+ 1 \n"
+                                 "_in _let g = _fun (y)\n"
+                                 "              f(y + 2)\n"
+                                 "_in g(5) ")->interp()->equals(new NumVal(8)));
+
+    // 12
+    REQUIRE(parse_expression_str("_let f = _fun (x) x+ 1 \n"
+                                 "_in _let g = _fun (x)\n"
+                                 "              f(2) + x\n"
+                                 "_in g(5) ")->interp()->equals(new NumVal(8)));
+
+    // 13
+    REQUIRE_THROWS_WITH(parse_expression_str("_let f = _fun (x) x+ 1 \n"
+                                             "_in f 5 ")->interp(), "invalid input");
+
+    // 14
+    REQUIRE(parse_expression_str("_let f = _fun (x) x+ 1 \n"
+                                 "_in (f)(5) ")->interp()->equals(new NumVal(6)));
+
+
+
+    // 15
+    auto *add_x_1 = new Add(new Var("x"), new NumExpr(1));
+    auto *fun_val_x_add_x_1 = new FunVal("x", add_x_1);
+    REQUIRE(parse_expression_str("_fun (x) x+ 1 ")->interp()->equals(fun_val_x_add_x_1));
+
+    //16
+    REQUIRE(parse_expression_str("_let f = _fun (x) x+ 1 \n"
+                                 "_in f ")->interp()->equals(fun_val_x_add_x_1));
+
+    // 17
+    REQUIRE(parse_expression_str("(_fun (x)\n"
+                                 "   x + 1)(5)")->interp()->equals(new NumVal(6)));
+
+    // 18
+    REQUIRE(parse_expression_str("_let f = _if _false\n"
+                                 "            _then _fun (x)  \n"
+                                 "                        x+ 1 \n"
+                                 "           _else _fun (x)\n"
+                                 "                       x+ 2\n"
+                                 "_in f(5)")->interp()->equals(new NumVal(7)));
+
+    // 19
+    REQUIRE(parse_expression_str("(_if _false \n"
+                                 "  _then _fun (x)\n"
+                                 "            x+ 1\n"
+                                 "   _else _fun (x)\n"
+                                 "                x + 2)(5)")->interp()->equals(new NumVal(7)));
+
+
+    // 20
+    REQUIRE(parse_expression_str("_let f = _fun (g)\n"
+                                 "           g(5)\n"
+                                 "_in _let g = _fun (y)  \n"
+                                 "             y + 2\n"
+                                 "_in f(g) ")->interp()->equals(new NumVal(7)));
+
+    // 21
+    REQUIRE(parse_expression_str("_let f = _fun (g)\n"
+                                 "           g(5)\n"
+                                 "_in f(_fun (y)\n"
+                                 "        y + 2)")->interp()->equals(new NumVal(7)));
+
+    // 22
+    REQUIRE(parse_expression_str("_let f = _fun (x)\n"
+                                 "           _fun (y)\n"
+                                 "x+ y _in (f(5))(1) ")->interp()->equals(new NumVal(6)));
+
+    // 23
+    REQUIRE(parse_expression_str("_let f = _fun (x)\n"
+                                 "           _fun (y)\n"
+                                 "x+ y _in f(5)(1) ")->interp()->equals(new NumVal(6)));
+
+    // 24
+    REQUIRE(parse_expression_str("_let f = _fun (x)\n"
+                                 "           _fun (g)\n"
+                                 "             g(x + 1)\n"
+                                 "_in _let g = _fun (y)\n"
+                                 "              y+ 2 \n"
+                                 "_in (f(5))(g) ")->interp()->equals(new NumVal(8)));
+
+    // 25
+    REQUIRE(parse_expression_str("_let f = _fun (x)\n"
+                                 "           _fun (g)\n"
+                                 "             g(x + 1)\n"
+                                 "_in _let g = _fun (y)\n"
+                                 "y+ 2 _in f(5)(g)")->interp()->equals(new NumVal(8)));
+
+    // 26
+    REQUIRE(parse_expression_str("_let f = _fun (f)\n"
+                                 "           _fun (x)\n"
+                                 "             _if x == 0\n"
+                                 "             _then 0\n"
+                                 "             _else x + f(f)(x + -1)\n"
+                                 "_in f(f)(3)")->interp()->equals(new NumVal(6)));
+
+
+
+
+    // Q 26 example
+    Var *x = new Var("x");
+    Var *f = new Var("f");
+    FunExpr *q26_expr_rhs = new FunExpr("f", new FunExpr("x", new IfExpr(new EqExpr(x, new NumExpr(0)),
+                                                                         new NumExpr(0),
+                                                                         new Add(x, new CallExpr(new CallExpr(f, f),
+                                                                                                  new Add(x,
+                                                                                                              new NumExpr(
+                                                                                                                      -1))))
+                                                      )
+    ));
+    Let *q26_expr = new Let("f", q26_expr_rhs, new CallExpr(new CallExpr(f, f), new NumExpr(3)));
+
+    REQUIRE(q26_expr->to_pretty_string() == "_let f = _fun (f)\n"
+                                            "           _fun (x)\n"
+                                            "             _if x == 0\n"
+                                            "             _then 0\n"
+                                            "             _else x + f(f)(x + -1)\n"
+                                            "_in  f(f)(3)");
+
+    REQUIRE(q26_expr->interp()->equals(new NumVal(6)));
+}
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TEST_CASE("Fun Val") {
+    auto *add_x_1 = new Add(new Var("x"), new NumExpr(1));
+    auto *fun_var_x_add_x_1 = new FunVal("x", add_x_1);
+    auto *fun_var_x_add_x_1_copy = new FunVal("x", add_x_1);
+
+    auto *num_val_2 = new NumVal(2);
+
+    // (_fun (y) (_fun (x) y + x))
+    auto add_y_x = new Add(new Var("y"), new Var("x"));
+    auto *fun_expr_x_add_y_x = new FunExpr("x", add_y_x);
+    auto *fun_expr_y_fun_var_x_add_y_x = new FunExpr("y", fun_expr_x_add_y_x);
+    auto *fun_var_y_fun_var_x_add_y_x = new FunVal("y", fun_expr_x_add_y_x);
+
+    SECTION("add_to") {
+        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->add_to(num_val_2), "Addition to a FunVal is not possible");
+    }
+
+    SECTION("mult_with") {
+        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->mult_with(num_val_2), "Multiplication with a FunVal is not possible");
+    }
+
+    SECTION("equals") {
+        REQUIRE(fun_var_x_add_x_1->equals(fun_var_x_add_x_1_copy));
+        REQUIRE(fun_var_x_add_x_1->equals(num_val_2) == false);
+    }
+
+    SECTION("to_string") {
+        REQUIRE(fun_var_x_add_x_1->to_string() == "(_fun(x)(x+1))");
+        REQUIRE(fun_var_y_fun_var_x_add_y_x->to_string() == "(_fun(y)(_fun(x)(y+x)))");
+    }
+
+    auto *fun_expr_x_add_x_1 = new FunExpr("x", add_x_1);
+
+    SECTION("to_expr") {
+        REQUIRE(fun_var_x_add_x_1->to_expr()->equals(fun_expr_x_add_x_1));
+        REQUIRE(fun_var_y_fun_var_x_add_y_x->to_expr()->equals(fun_expr_y_fun_var_x_add_y_x));
+    }
+
+    SECTION("is_true") {
+        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->is_true(), "a fun val cannot be interpreted as a bool val");
+        REQUIRE_THROWS_WITH(fun_var_y_fun_var_x_add_y_x->is_true(), "a fun val cannot be interpreted as a bool val");
+    }
+
+    auto *add_2_x = new Add(new NumExpr(2), new Var("x"));
+    auto *fun_val_x_add_2_x = new FunVal("x", add_2_x);
+    auto *fun_var_y_fun_var_x_add_y_x_call_2 = fun_var_y_fun_var_x_add_y_x->call(new NumVal(2));
+
+    SECTION("call") {
+        REQUIRE(fun_var_x_add_x_1->call(new NumVal(3))->equals(new NumVal(4)));
+        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->call(new BoolVal(3)), "Addition to a boolean is not possible");
+        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->call(fun_var_x_add_x_1), "Addition to a FunVal is not possible");
+        REQUIRE(fun_var_y_fun_var_x_add_y_x_call_2->equals(fun_val_x_add_2_x));
+        REQUIRE(fun_var_y_fun_var_x_add_y_x_call_2->call(new NumVal(1))->equals(new NumVal(3)));
     }
 }

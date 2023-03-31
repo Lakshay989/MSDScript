@@ -25,7 +25,7 @@ public:
     virtual bool is_true() = 0;
     virtual PTR(Val) call(PTR(Val) actual_arg) = 0 ;
     
-    virtual ~Val() = default;
+    virtual ~Val() = default;;
     
 } ;
 

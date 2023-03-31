@@ -72,7 +72,7 @@ public:
         this->pretty_print_at(out, precedence_none, false, false, out.tellp());
     }
     
-    virtual ~Expr() = default;
+    virtual ~Expr() = default;;
 };
 
 
@@ -123,7 +123,7 @@ public:
     PTR(Expr) rhs; //!< Right hand side Expression
     
     Mult(PTR(Expr) lhs, PTR(Expr)rhs);
-    bool equals(PTR(Expr)e) ;
+    bool equals(PTR(Expr) e) ;
     PTR(Val) interp();
     //bool has_variable();
     PTR(Expr) subst(std::string s, PTR(Expr) e) ;

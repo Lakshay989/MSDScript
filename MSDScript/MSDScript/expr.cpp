@@ -14,7 +14,7 @@
 
 #include "val.hpp"
 #include "expr.hpp"
-
+#include <utility>
 /**
 * \brief Constructor
 */
@@ -31,11 +31,11 @@ NumExpr::NumExpr(int val)
 */
 bool NumExpr::equals(PTR(Expr) e)
 {
-    NumExpr *n = CAST(NumExpr) (e);
-    if (n == NULL)
+    auto other = CAST(NumExpr)(e);
+    if (other == nullptr)
         return false;
     else
-        return val == n->val;
+        return val == other->val;
 }
 
 
@@ -45,7 +45,7 @@ bool NumExpr::equals(PTR(Expr) e)
 */
 PTR(Val) NumExpr::interp()
 {
-    return new NumVal(this -> val);
+    return NEW(NumVal)(this->val);
 }
 
 
@@ -57,7 +57,7 @@ PTR(Val) NumExpr::interp()
 */
 PTR(Expr) NumExpr::subst(std::string s, PTR(Expr) e)
 {
-    return new NumExpr(this->val) ;
+    return NEW(NumExpr)(this->val) ;
 }
 
 /**
@@ -72,7 +72,7 @@ void NumExpr::print(std::ostream &out) {
 * \brief Prints the expression with more clarity
 * \param [out] out output stream
 */
-//void NumExpr::pretty_print(std::ostream &out) {
+//void (NumExpr)::pretty_print(std::ostream &out) {
 //    this->pretty_print_at(out, precedence_none, false, false, out.tellp());
 //}
 
@@ -101,12 +101,12 @@ Add::Add(PTR(Expr) lhs, PTR(Expr) rhs)
 */
 bool Add::equals(PTR(Expr) e) // Add Equals
 {
-    auto *a = CAST(Add)(e);
-    if (a == NULL)
+    auto other= CAST(Add)(e);
+    if (other == NULL)
         return false;
     else
-        return (lhs->equals(a->lhs)
-                && rhs->equals(a->rhs));
+        return (lhs->equals(other->lhs)
+                && rhs->equals(other->rhs));
 }
 
 
@@ -127,7 +127,7 @@ PTR(Val) Add::interp()
 */
 PTR(Expr) Add::subst(std::string s, PTR(Expr) e)
 {
-    return new Add(lhs->subst(s, e), rhs->subst(s, e));
+    return NEW(Add)(lhs->subst(s, e), rhs->subst(s, e));
 }
 
 
@@ -174,12 +174,12 @@ Mult::Mult(PTR(Expr) lhs, PTR(Expr) rhs)
 * \return boolean value of LHS = RHS
 */
 bool Mult::equals(PTR(Expr) e) { // Mult equals
-  auto *m = CAST(Mult)(e);
-  if (m == NULL)
+  auto other = CAST(Mult)(e);
+  if (other == NULL)
     return false;
   else
-    return (lhs->equals(m->lhs)
-            && rhs->equals(m->rhs));
+    return (lhs->equals(other->lhs)
+            && rhs->equals(other->rhs));
 }
 
 
@@ -201,7 +201,7 @@ PTR(Val) Mult::interp()
 */
 PTR(Expr) Mult::subst(std::string s, PTR(Expr) e)
 {
-    return new Mult(lhs->subst(s, e), rhs->subst(s, e));
+    return NEW (Mult)(lhs->subst(s, e), rhs->subst(s, e));
 }
 
 
@@ -250,11 +250,11 @@ Var::Var(std::string name)
 */
 bool Var::equals(PTR(Expr) e)  // Var equals
 {
-    Var* v = CAST(VAR)(e);
-    if (v == nullptr)
+    Var other = CAST(VAR)(e);
+    if (other == nullptr)
         return false;
     else
-        return name == v->name;
+        return name == other->name;
 }
 
 
@@ -282,7 +282,7 @@ PTR(Expr) Var::subst(std::string s, PTR(Expr) e)
     }
     else
     {
-        return this ;
+        return NEW (Var)(this->name) ;
     }
 }
 
@@ -321,15 +321,15 @@ Let::Let(std::string lhs, PTR(Expr) rhs, PTR(Expr) body)
 */
 bool Let::equals(PTR(Expr) e)
 {
-    Let* let = CAST(LetExpr)(e);
+    auto other = CAST(Let)(e);
     
-    if(let == nullptr)
+    if(other == nullptr)
     {
         return false;
     }
     else
     {
-        return (let->lhs == this->lhs && let->rhs->equals(this->rhs) && let->body->equals(this->body) ) ;
+        return (other->lhs == this->lhs && other->rhs->equals(this->rhs) && other->body->equals(this->body) ) ;
     }
 }
 
@@ -355,11 +355,11 @@ PTR(Expr) Let::subst(std::string subt, PTR(Expr) exp)
 {
     if( this->lhs == subt )
     {
-        return new Let(this->lhs, this->rhs->subst(subt, exp), this->body);
+        return NEW (Let)(this->lhs, this->rhs->subst(subt, exp), this->body);
     }
     else
     {
-        return new Let(this->lhs, this->rhs->subst(subt, exp), this->body->subst(subt, exp));  // ->subst(subt, exp)
+        return NEW (Let)(this->lhs, this->rhs->subst(subt, exp), this->body->subst(subt, exp));  // ->subst(subt, exp)
     }
 }
 
@@ -403,7 +403,7 @@ BoolExpr::BoolExpr(bool rep)
     
 bool BoolExpr::equals(PTR(Expr) e)
 {
-    auto *other = CAST(BoolExpr)(e) ;
+    auto other = CAST(BoolExpr)(e) ;
     if(other == nullptr)
     {
         return false;
@@ -413,13 +413,13 @@ bool BoolExpr::equals(PTR(Expr) e)
 
 PTR(Val) BoolExpr::interp()
 {
-    return new BoolVal(this->rep);
+    return NEW (BoolVal)(this->rep);
 }
 
 
 PTR(Expr) BoolExpr::subst(std::string s, PTR(Expr) e)
 {
-    return new BoolExpr(this->rep) ;
+    return NEW (BoolExpr)(this->rep) ;
 }
 
 void BoolExpr::print(std::ostream &out)
@@ -458,7 +458,7 @@ IfExpr::IfExpr(PTR(Expr) condition, PTR(Expr) then_expr, PTR(Expr) else_expr)
     
 bool IfExpr::equals(PTR(Expr) e)
 {
-    auto *other = CAST(IfExpr)(e);
+    auto other = CAST(IfExpr)(e);
     if (other == nullptr) {
         return false;
     }
@@ -481,13 +481,13 @@ PTR(Expr) IfExpr::subst(std::string s, PTR(Expr) e)
     PTR(Expr) subst_condition = this->condition->subst(s, e);
     PTR(Expr) subst_then_expr = this->then_expr->subst(s, e);
     PTR(Expr) subst_else_expr = this->else_expr->subst(s, e);
-    return new IfExpr(subst_condition, subst_then_expr, subst_else_expr);
+    return NEW (IfExpr)(subst_condition, subst_then_expr, subst_else_expr);
 }
 
 void IfExpr::print(std::ostream &out)
 {
     out << "(_if ";
-    //auto *condition = new BoolVal(this->condition);
+    //auto *condition = NEW BoolVal(this->condition);
     out << this->condition->to_string();
     out << " _then ";
     this->then_expr->print(out);
@@ -523,7 +523,7 @@ EqExpr::EqExpr(PTR(Expr) lhs, PTR(Expr) rhs)
 
 bool EqExpr::equals(PTR(Expr) e)
 {
-    auto *other = CAST(EqExpr)(e);
+    auto other = CAST(EqExpr)(e);
         if (other == nullptr) {
             return false;
         }
@@ -535,14 +535,14 @@ PTR(Val) EqExpr::interp()
     PTR(Val) lhs = this->lhs->interp();
     PTR(Val) rhs = this->rhs->interp();
     bool result = lhs->equals(rhs);
-    return new BoolVal(result);
+    return NEW (BoolVal)(result);
 }
 
 PTR(Expr) EqExpr::subst(std::string s, PTR(Expr) e)
 {
     PTR(Expr) subst_lhs = this->lhs->subst(s, e);
     PTR(Expr) subst_rhs = this->rhs->subst(s, e);
-    return new EqExpr(subst_lhs, subst_rhs);
+    return NEW (EqExpr)(subst_lhs, subst_rhs);
 }
 
 void EqExpr::print(std::ostream &out)
@@ -579,7 +579,7 @@ FunExpr::FunExpr(std::string formal_arg, PTR(Expr) body)
     
 bool FunExpr::equals(PTR(Expr) e)
 {
-    auto *other = CAST(FunExpr)(e);
+    auto other = CAST(FunExpr)(e);
         if (other == nullptr) {
             return false;
         }
@@ -588,15 +588,15 @@ bool FunExpr::equals(PTR(Expr) e)
     
 PTR(Val) FunExpr::interp()
 {
-    return new FunVal(this->formal_arg, this->body);
+    return NEW (FunVal)(this->formal_arg, this->body);
 }
     
 PTR(Expr) FunExpr::subst(std::string s, PTR(Expr) e)
 {
     if(s == this->formal_arg) {
-          return this;
+          return THIS;
       }
-    return new FunExpr(this->formal_arg, this->body->subst(s, e));
+    return NEW (FunExpr)(this->formal_arg, this->body->subst(s, e));
 }
     
 void FunExpr::print(std::ostream &out)
@@ -632,7 +632,7 @@ CallExpr::CallExpr(PTR(Expr) to_be_called, PTR(Expr) actual_arg)
     
 bool CallExpr::equals(PTR(Expr) e)
 {
-    auto *other = CAST(CallExpr)(e);
+    auto other = CAST(CallExpr)(e);
         if (other == nullptr) {
             return false;
         }
@@ -646,9 +646,9 @@ PTR(Val) CallExpr::interp()
     
 PTR(Expr) CallExpr::subst(std::string s, PTR(Expr) e)
 {
-    auto *to_be_called_subst = this->to_be_called->subst(s, e);
-    auto *actual_arg_subst = this->actual_arg->subst(s, e);
-    return new CallExpr(to_be_called_subst, actual_arg_subst);
+    auto to_be_called_subst = this->to_be_called->subst(s, e);
+    auto actual_arg_subst = this->actual_arg->subst(s, e);
+    return NEW (CallExpr)(to_be_called_subst, actual_arg_subst);
     
 }
     

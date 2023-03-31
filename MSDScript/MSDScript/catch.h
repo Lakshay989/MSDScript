@@ -114,7 +114,7 @@ namespace Catch {
 // CATCH_CONFIG_POSIX_SIGNALS : are POSIX signals supported?
 // CATCH_CONFIG_DISABLE_EXCEPTIONS : Are exceptions enabled?
 // ****************
-// Note to maintainers: if new toggles are added please document them
+// Note to maintainers: if NEW toggles are added please document them
 // in configuration.md, too
 // ****************
 
@@ -251,7 +251,7 @@ namespace Catch {
 #  if !defined(__clang__) // Handle Clang masquerading for msvc
 
 // MSVC traditional preprocessor needs some workaround for __VA_ARGS__
-// _MSVC_TRADITIONAL == 0 means new conformant preprocessor
+// _MSVC_TRADITIONAL == 0 means NEW conformant preprocessor
 // _MSVC_TRADITIONAL == 1 means old traditional non-conformant preprocessor
 #    if !defined(_MSVC_TRADITIONAL) || (defined(_MSVC_TRADITIONAL) && _MSVC_TRADITIONAL)
 #      define CATCH_INTERNAL_CONFIG_TRADITIONAL_MSVC_PREPROCESSOR
@@ -974,7 +974,7 @@ auto makeTestInvoker( void(*testAsFunction)() ) noexcept -> ITestInvoker*;
 
 template<typename C>
 auto makeTestInvoker( void (C::*testAsMethod)() ) noexcept -> ITestInvoker* {
-    return new(std::nothrow) TestInvokerAsMethod<C>( testAsMethod );
+    return NEW(std::nothrow) TestInvokerAsMethod<C>( testAsMethod );
 }
 
 struct NameAndTags {
@@ -3051,7 +3051,7 @@ namespace Catch {
         template<typename T>
         ExceptionTranslatorRegistrar( std::string(*translateFunction)( T& ) ) {
             getMutableRegistryHub().registerTranslator
-                ( new ExceptionTranslator<T>( translateFunction ) );
+                ( NEW ExceptionTranslator<T>( translateFunction ) );
         }
     };
 }
@@ -3078,10 +3078,10 @@ namespace Detail {
     class Approx {
     private:
         bool equalityComparisonImpl(double other) const;
-        // Validates the new margin (margin >= 0)
+        // Validates the NEW margin (margin >= 0)
         // out-of-line to avoid including stdexcept in the header
         void setMargin(double margin);
-        // Validates the new epsilon (0 < epsilon < 1)
+        // Validates the NEW epsilon (0 < epsilon < 1)
         // out-of-line to avoid including stdexcept in the header
         void setEpsilon(double epsilon);
 
@@ -3147,22 +3147,22 @@ namespace Detail {
         }
 
         template <typename T, typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
-        Approx& epsilon( T const& newEpsilon ) {
-            double epsilonAsDouble = static_cast<double>(newEpsilon);
+        Approx& epsilon( T const& NEWEpsilon ) {
+            double epsilonAsDouble = static_cast<double>(NEWEpsilon);
             setEpsilon(epsilonAsDouble);
             return *this;
         }
 
         template <typename T, typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
-        Approx& margin( T const& newMargin ) {
-            double marginAsDouble = static_cast<double>(newMargin);
+        Approx& margin( T const& NEWMargin ) {
+            double marginAsDouble = static_cast<double>(NEWMargin);
             setMargin(marginAsDouble);
             return *this;
         }
 
         template <typename T, typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
-        Approx& scale( T const& newScale ) {
-            m_scale = static_cast<double>(newScale);
+        Approx& scale( T const& NEWScale ) {
+            m_scale = static_cast<double>(NEWScale);
             return *this;
         }
 
@@ -3204,7 +3204,7 @@ namespace Catch {
     bool contains( std::string const& s, std::string const& infix );
     void toLowerInPlace( std::string& s );
     std::string toLower( std::string const& s );
-    //! Returns a new string without whitespace at the start/end
+    //! Returns a NEW string without whitespace at the start/end
     std::string trim( std::string const& str );
     //! Returns a substring of the original ref without whitespace. Beware lifetimes!
     StringRef trim(StringRef ref);
@@ -3694,18 +3694,18 @@ namespace Matchers {
                 return "is approx: " + ::Catch::Detail::stringify( m_comparator );
             }
             template <typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
-            ApproxMatcher& epsilon( T const& newEpsilon ) {
-                approx.epsilon(newEpsilon);
+            ApproxMatcher& epsilon( T const& NEWEpsilon ) {
+                approx.epsilon(NEWEpsilon);
                 return *this;
             }
             template <typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
-            ApproxMatcher& margin( T const& newMargin ) {
-                approx.margin(newMargin);
+            ApproxMatcher& margin( T const& NEWMargin ) {
+                approx.margin(NEWMargin);
                 return *this;
             }
             template <typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
-            ApproxMatcher& scale( T const& newScale ) {
-                approx.scale(newScale);
+            ApproxMatcher& scale( T const& NEWScale ) {
+                approx.scale(NEWScale);
                 return *this;
             }
 
@@ -3933,7 +3933,7 @@ namespace Generators {
     namespace pf{
         template<typename T, typename... Args>
         std::unique_ptr<T> make_unique( Args&&... args ) {
-            return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+            return std::unique_ptr<T>(NEW T(std::forward<Args>(args)...));
         }
     }
 
@@ -4410,10 +4410,10 @@ namespace Catch {
     public:
         Option() : nullableValue( nullptr ) {}
         Option( T const& _value )
-        : nullableValue( new( storage ) T( _value ) )
+        : nullableValue( NEW( storage ) T( _value ) )
         {}
         Option( Option const& _other )
-        : nullableValue( _other ? new( storage ) T( *_other ) : nullptr )
+        : nullableValue( _other ? NEW( storage ) T( *_other ) : nullptr )
         {}
 
         ~Option() {
@@ -4424,13 +4424,13 @@ namespace Catch {
             if( &_other != this ) {
                 reset();
                 if( _other )
-                    nullableValue = new( storage ) T( *_other );
+                    nullableValue = NEW( storage ) T( *_other );
             }
             return *this;
         }
         Option& operator = ( T const& _value ) {
             reset();
-            nullableValue = new( storage ) T( _value );
+            nullableValue = NEW( storage ) T( _value );
             return *this;
         }
 
@@ -4809,7 +4809,7 @@ namespace Catch {
 
         TestCase( ITestInvoker* testCase, TestCaseInfo&& info );
 
-        TestCase withName( std::string const& _newName ) const;
+        TestCase withName( std::string const& _NEWName ) const;
 
         void invoke() const;
 
@@ -4927,7 +4927,7 @@ namespace Catch {
                         std::string desc = Detail::getAnnotation( cls, "Description", testCaseName );
                         const char* className = class_getName( cls );
 
-                        getMutableRegistryHub().registerTest( makeTestCase( new OcMethod( cls, selector ), className, NameAndTags( name.c_str(), desc.c_str() ), SourceLineInfo("",0) ) );
+                        getMutableRegistryHub().registerTest( makeTestCase( NEW OcMethod( cls, selector ), className, NameAndTags( name.c_str(), desc.c_str() ), SourceLineInfo("",0) ) );
                         noTestMethods++;
                     }
                 }
@@ -6053,7 +6053,7 @@ namespace Catch {
         class ReporterFactory : public IReporterFactory {
 
             IStreamingReporterPtr create( ReporterConfig const& config ) const override {
-                return std::unique_ptr<T>( new T( config ) );
+                return std::unique_ptr<T>( NEW T( config ) );
             }
 
             std::string getDescription() const override {
@@ -6074,7 +6074,7 @@ namespace Catch {
         class ListenerFactory : public IReporterFactory {
 
             IStreamingReporterPtr create( ReporterConfig const& config ) const override {
-                return std::unique_ptr<T>( new T( config ) );
+                return std::unique_ptr<T>( NEW T( config ) );
             }
             std::string getDescription() const override {
                 return std::string();
@@ -6310,7 +6310,7 @@ namespace Catch {
 
         void writeDeclaration();
 
-        void newlineIfNecessary();
+        void NEWlineIfNecessary();
 
         bool m_tagIsOpen = false;
         bool m_needsNewline = false;
@@ -6717,7 +6717,7 @@ namespace Catch {
                     model(Fun&& fun) : fun(std::move(fun)) {}
                     model(Fun const& fun) : fun(fun) {}
 
-                    model<Fun>* clone() const override { return new model<Fun>(*this); }
+                    model<Fun>* clone() const override { return NEW model<Fun>(*this); }
 
                     void call(Chronometer meter) const override {
                         call(meter, is_callable<Fun(Chronometer)>());
@@ -6739,12 +6739,12 @@ namespace Catch {
 
             public:
                 BenchmarkFunction()
-                    : f(new model<do_nothing>{ {} }) {}
+                    : f(NEW model<do_nothing>{ {} }) {}
 
                 template <typename Fun,
                     typename std::enable_if<!is_related<Fun, BenchmarkFunction>::value, int>::type = 0>
                     BenchmarkFunction(Fun&& fun)
-                    : f(new model<typename std::decay<Fun>::type>(std::forward<Fun>(fun))) {}
+                    : f(NEW model<typename std::decay<Fun>::type>(std::forward<Fun>(fun))) {}
 
                 BenchmarkFunction(BenchmarkFunction&& that)
                     : f(std::move(that.f)) {}
@@ -7175,7 +7175,7 @@ namespace Catch {
                 auto resolution = Detail::estimate_clock_resolution<Clock>(iters);
                 auto cost = Detail::estimate_clock_cost<Clock>(resolution.mean);
 
-                env = new Environment<FloatDuration<Clock>>{ resolution, cost };
+                env = NEW Environment<FloatDuration<Clock>>{ resolution, cost };
                 return *env;
             }
         } // namespace Detail
@@ -7308,8 +7308,8 @@ namespace Catch {
                 auto min_time = env.clock_resolution.mean * Detail::minimum_ticks;
                 auto run_time = std::max(min_time, std::chrono::duration_cast<decltype(min_time)>(cfg.benchmarkWarmupTime()));
                 auto&& test = Detail::run_for_at_least<Clock>(std::chrono::duration_cast<ClockDuration<Clock>>(run_time), 1, fun);
-                int new_iters = static_cast<int>(std::ceil(min_time * test.iterations / test.elapsed));
-                return { new_iters, test.elapsed / test.iterations * new_iters * cfg.benchmarkSamples(), fun, std::chrono::duration_cast<FloatDuration<Clock>>(cfg.benchmarkWarmupTime()), Detail::warmup_iterations };
+                int NEW_iters = static_cast<int>(std::ceil(min_time * test.iterations / test.elapsed));
+                return { NEW_iters, test.elapsed / test.iterations * NEW_iters * cfg.benchmarkSamples(), fun, std::chrono::duration_cast<FloatDuration<Clock>>(cfg.benchmarkWarmupTime()), Detail::warmup_iterations };
             }
 
             template <typename Clock = default_clock>
@@ -7399,12 +7399,12 @@ namespace Catch {
 
                 ObjectStorage(const ObjectStorage& other)
                 {
-                    new(&data) T(other.stored_object());
+                    NEW(&data) T(other.stored_object());
                 }
 
                 ObjectStorage(ObjectStorage&& other)
                 {
-                    new(&data) T(std::move(other.stored_object()));
+                    NEW(&data) T(std::move(other.stored_object()));
                 }
 
                 ~ObjectStorage() { destruct_on_exit<T>(); }
@@ -7412,7 +7412,7 @@ namespace Catch {
                 template <typename... Args>
                 void construct(Args&&... args)
                 {
-                    new (&data) T(std::forward<Args>(args)...);
+                    NEW (&data) T(std::forward<Args>(args)...);
                 }
 
                 template <bool AllowManualDestruction = !Destruct>
@@ -7903,18 +7903,18 @@ namespace Detail {
             || marginComparison(m_value, other, m_epsilon * (m_scale + std::fabs(std::isinf(m_value)? 0 : m_value)));
     }
 
-    void Approx::setMargin(double newMargin) {
-        CATCH_ENFORCE(newMargin >= 0,
-            "Invalid Approx::margin: " << newMargin << '.'
+    void Approx::setMargin(double NEWMargin) {
+        CATCH_ENFORCE(NEWMargin >= 0,
+            "Invalid Approx::margin: " << NEWMargin << '.'
             << " Approx::Margin has to be non-negative.");
-        m_margin = newMargin;
+        m_margin = NEWMargin;
     }
 
-    void Approx::setEpsilon(double newEpsilon) {
-        CATCH_ENFORCE(newEpsilon >= 0 && newEpsilon <= 1.0,
-            "Invalid Approx::epsilon: " << newEpsilon << '.'
+    void Approx::setEpsilon(double NEWEpsilon) {
+        CATCH_ENFORCE(NEWEpsilon >= 0 && NEWEpsilon <= 1.0,
+            "Invalid Approx::epsilon: " << NEWEpsilon << '.'
             << " Approx::epsilon has to be in [0, 1]");
-        m_epsilon = newEpsilon;
+        m_epsilon = NEWEpsilon;
     }
 
 } // end namespace Detail
@@ -8618,17 +8618,17 @@ public:
 
     explicit Column(std::string const& text) { m_strings.push_back(text); }
 
-    auto width(size_t newWidth) -> Column& {
-        assert(newWidth > 0);
-        m_width = newWidth;
+    auto width(size_t NEWWidth) -> Column& {
+        assert(NEWWidth > 0);
+        m_width = NEWWidth;
         return *this;
     }
-    auto indent(size_t newIndent) -> Column& {
-        m_indent = newIndent;
+    auto indent(size_t NEWIndent) -> Column& {
+        m_indent = NEWIndent;
         return *this;
     }
-    auto initialIndent(size_t newIndent) -> Column& {
-        m_initialIndent = newIndent;
+    auto initialIndent(size_t NEWIndent) -> Column& {
+        m_initialIndent = NEWIndent;
         return *this;
     }
 
@@ -8960,11 +8960,11 @@ namespace detail {
 
         ResultValueBase( ResultValueBase const &other ) : ResultBase( other ) {
             if( m_type == ResultBase::Ok )
-                new( &m_value ) T( other.m_value );
+                NEW( &m_value ) T( other.m_value );
         }
 
         ResultValueBase( Type, T const &value ) : ResultBase( Ok ) {
-            new( &m_value ) T( value );
+            NEW( &m_value ) T( value );
         }
 
         auto operator=( ResultValueBase const &other ) -> ResultValueBase & {
@@ -8972,7 +8972,7 @@ namespace detail {
                 m_value.~T();
             ResultBase::operator=(other);
             if( m_type == ResultBase::Ok )
-                new( &m_value ) T( other.m_value );
+                NEW( &m_value ) T( other.m_value );
             return *this;
         }
 
@@ -9322,12 +9322,12 @@ namespace detail {
         }
 
         auto name() const -> std::string { return *m_name; }
-        auto set( std::string const& newName ) -> ParserResult {
+        auto set( std::string const& NEWName ) -> ParserResult {
 
-            auto lastSlash = newName.find_last_of( "\\/" );
+            auto lastSlash = NEWName.find_last_of( "\\/" );
             auto filename = ( lastSlash == std::string::npos )
-                    ? newName
-                    : newName.substr( lastSlash+1 );
+                    ? NEWName
+                    : NEWName.substr( lastSlash+1 );
 
             *m_name = filename;
             if( m_ref )
@@ -9829,7 +9829,7 @@ namespace Catch {
                 ( "skip exception tests" )
             | Opt( config.showInvisibles )
                 ["-i"]["--invisibles"]
-                ( "show invisibles (tabs, newlines)" )
+                ( "show invisibles (tabs, NEWlines)" )
             | Opt( config.outputFilename, "filename" )
                 ["-o"]["--out"]
                 ( "output filename" )
@@ -10335,7 +10335,7 @@ namespace Catch {
 
     void IMutableContext::createContext()
     {
-        currentContext = new Context();
+        currentContext = NEW Context();
     }
 
     void cleanUpContext() {
@@ -10620,7 +10620,7 @@ namespace Catch {
         }
 
         std::unique_ptr<EnumInfo> makeEnumInfo( StringRef enumName, StringRef allValueNames, std::vector<int> const& values ) {
-            std::unique_ptr<EnumInfo> enumInfo( new EnumInfo );
+            std::unique_ptr<EnumInfo> enumInfo( NEW EnumInfo );
             enumInfo->m_name = enumName;
             enumInfo->m_values.reserve( values.size() );
 
@@ -10923,7 +10923,7 @@ namespace Catch {
         if (altStackSize == 0) {
             altStackSize = std::max(static_cast<size_t>(SIGSTKSZ), minStackSizeForErrors);
         }
-        altStackMem = new char[altStackSize]();
+        altStackMem = NEW char[altStackSize]();
     }
 
     FatalConditionHandler::~FatalConditionHandler() {
@@ -12427,7 +12427,7 @@ namespace Catch {
         static auto getInternal() -> Singleton* {
             static Singleton* s_instance = nullptr;
             if( !s_instance ) {
-                s_instance = new Singleton;
+                s_instance = NEW Singleton;
                 addSingleton( s_instance );
             }
             return s_instance;
@@ -13240,7 +13240,7 @@ namespace Catch {
         int run();
 
         clara::Parser const& cli() const;
-        void cli( clara::Parser const& newParser );
+        void cli( clara::Parser const& NEWParser );
         ConfigData& configData();
         Config& config();
     private:
@@ -13311,9 +13311,9 @@ namespace Catch {
             // On older platforms, returning std::unique_ptr<ListeningReporter>
             // when the return type is std::unique_ptr<IStreamingReporter>
             // doesn't compile without a std::move call. However, this causes
-            // a warning on newer platforms. Thus, we have to work around
+            // a warning on NEWer platforms. Thus, we have to work around
             // it a bit and downcast the pointer manually.
-            auto ret = std::unique_ptr<IStreamingReporter>(new ListeningReporter);
+            auto ret = std::unique_ptr<IStreamingReporter>(NEW ListeningReporter);
             auto& multi = static_cast<ListeningReporter&>(*ret);
             auto const& listeners = Catch::getRegistryHub().getReporterRegistry().getListeners();
             for (auto const& listener : listeners) {
@@ -13484,12 +13484,12 @@ namespace Catch {
 #if defined(CATCH_CONFIG_WCHAR) && defined(_WIN32) && defined(UNICODE)
     int Session::applyCommandLine( int argc, wchar_t const * const * argv ) {
 
-        char **utf8Argv = new char *[ argc ];
+        char **utf8Argv = NEW char *[ argc ];
 
         for ( int i = 0; i < argc; ++i ) {
             int bufSize = WideCharToMultiByte( CP_UTF8, 0, argv[i], -1, nullptr, 0, nullptr, nullptr );
 
-            utf8Argv[ i ] = new char[ bufSize ];
+            utf8Argv[ i ] = NEW char[ bufSize ];
 
             WideCharToMultiByte( CP_UTF8, 0, argv[i], -1, utf8Argv[i], bufSize, nullptr, nullptr );
         }
@@ -13526,8 +13526,8 @@ namespace Catch {
     clara::Parser const& Session::cli() const {
         return m_cli;
     }
-    void Session::cli( clara::Parser const& newParser ) {
-        m_cli = newParser;
+    void Session::cli( clara::Parser const& NEWParser ) {
+        m_cli = NEWParser;
     }
     ConfigData& Session::configData() {
         return m_configData;
@@ -13589,7 +13589,7 @@ namespace Catch {
         static auto getSingletons() -> std::vector<ISingleton*>*& {
             static std::vector<ISingleton*>* g_singletons = nullptr;
             if( !g_singletons )
-                g_singletons = new std::vector<ISingleton*>();
+                g_singletons = NEW std::vector<ISingleton*>();
             return g_singletons;
         }
     }
@@ -13725,7 +13725,7 @@ namespace Catch {
             mutable std::ostream m_os;
         public:
             DebugOutStream()
-            :   m_streamBuf( new StreamBufImpl<OutputDebugWriter>() ),
+            :   m_streamBuf( NEW StreamBufImpl<OutputDebugWriter>() ),
                 m_os( m_streamBuf.get() )
             {}
 
@@ -13741,15 +13741,15 @@ namespace Catch {
 
     auto makeStream( StringRef const &filename ) -> IStream const* {
         if( filename.empty() )
-            return new Detail::CoutStream();
+            return NEW Detail::CoutStream();
         else if( filename[0] == '%' ) {
             if( filename == "%debug" )
-                return new Detail::DebugOutStream();
+                return NEW Detail::DebugOutStream();
             else
                 CATCH_ERROR( "Unrecognised stream: '" << filename << "'" );
         }
         else
-            return new Detail::FileStream( filename );
+            return NEW Detail::FileStream( filename );
     }
 
     // This class encapsulates the idea of a pool of ostringstreams that can be reused.
@@ -13760,7 +13760,7 @@ namespace Catch {
 
         auto add() -> std::size_t {
             if( m_unused.empty() ) {
-                m_streams.push_back( std::unique_ptr<std::ostringstream>( new std::ostringstream ) );
+                m_streams.push_back( std::unique_ptr<std::ostringstream>( NEW std::ostringstream ) );
                 return m_streams.size()-1;
             }
             else {
@@ -14159,9 +14159,9 @@ namespace Catch {
 
     TestCase::TestCase( ITestInvoker* testCase, TestCaseInfo&& info ) : TestCaseInfo( std::move(info) ), test( testCase ) {}
 
-    TestCase TestCase::withName( std::string const& _newName ) const {
+    TestCase TestCase::withName( std::string const& _NEWName ) const {
         TestCase other( *this );
-        other.name = _newName;
+        other.name = _NEWName;
         return other;
     }
 
@@ -14591,7 +14591,7 @@ using TestCaseTracking::SectionTracker;
 namespace Catch {
 
     auto makeTestInvoker( void(*testAsFunction)() ) noexcept -> ITestInvoker* {
-        return new(std::nothrow) TestInvokerAsFunction( testAsFunction );
+        return NEW(std::nothrow) TestInvokerAsFunction( testAsFunction );
     }
 
     NameAndTags::NameAndTags( StringRef const& name_ , StringRef const& tags_ ) noexcept : name( name_ ), tags( tags_ ) {}
@@ -15321,7 +15321,7 @@ namespace Catch {
 #define CATCH_CONFIG_UNCAUGHT_EXCEPTIONS_HPP
 
 #if defined(_MSC_VER)
-#  if _MSC_VER >= 1900 // Visual Studio 2015 or newer
+#  if _MSC_VER >= 1900 // Visual Studio 2015 or NEWer
 #    define CATCH_INTERNAL_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS
 #  endif
 #endif
@@ -15648,12 +15648,12 @@ namespace {
         while (!m_tags.empty()) {
             endElement();
         }
-        newlineIfNecessary();
+        NEWlineIfNecessary();
     }
 
     XmlWriter& XmlWriter::startElement( std::string const& name, XmlFormatting fmt ) {
         ensureTagClosed();
-        newlineIfNecessary();
+        NEWlineIfNecessary();
         if (shouldIndent(fmt)) {
             m_os << m_indent;
             m_indent += "  ";
@@ -15678,7 +15678,7 @@ namespace {
             m_os << "/>";
             m_tagIsOpen = false;
         } else {
-            newlineIfNecessary();
+            NEWlineIfNecessary();
             if (shouldIndent(fmt)) {
                 m_os << m_indent;
             }
@@ -15737,7 +15737,7 @@ namespace {
     void XmlWriter::ensureTagClosed() {
         if( m_tagIsOpen ) {
             m_os << '>' << std::flush;
-            newlineIfNecessary();
+            NEWlineIfNecessary();
             m_tagIsOpen = false;
         }
     }
@@ -15750,7 +15750,7 @@ namespace {
         m_os << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     }
 
-    void XmlWriter::newlineIfNecessary() {
+    void XmlWriter::NEWlineIfNecessary() {
         if( m_needsNewline ) {
             m_os << std::endl;
             m_needsNewline = false;
@@ -16446,7 +16446,7 @@ public:
 
 ConsoleReporter::ConsoleReporter(ReporterConfig const& config)
     : StreamingReporterBase(config),
-    m_tablePrinter(new TablePrinter(config.stream(),
+    m_tablePrinter(NEW TablePrinter(config.stream(),
         [&config]() -> std::vector<ColumnInfo> {
         if (config.fullConfig()->benchmarkNoAnalysis())
         {

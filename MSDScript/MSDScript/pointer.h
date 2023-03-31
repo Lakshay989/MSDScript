@@ -10,10 +10,10 @@
 
 #include <memory>
 
-#define USE_PLAIN_POINTERS 1
+#define USE_PLAIN_POINTERS 0
 #if USE_PLAIN_POINTERS
 
-# define NEW(T)    new T
+# define NEW(T)    NEW T
 # define PTR(T)    T*
 # define CAST(T)   dynamic_cast<T*>
 # define CLASS(T)  class T

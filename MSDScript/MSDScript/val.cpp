@@ -17,27 +17,27 @@ NumVal::NumVal(int rep)
 
 PTR(Val) NumVal::add_to(PTR(Val) other_val)
 {
-    NumVal *other_num = CAST(NumVal)(other_val);
+    auto other_num = CAST(NumVal)(other_val);
     if (other_num == nullptr) {
         throw std::runtime_error("add of non-number");
     }
-    int new_val = (unsigned int) this->rep + other_num->rep;
-    return new NumVal(new_val);
+    int NEW_val = (unsigned int) this->rep + other_num->rep;
+    return NEW (NumVal)(NEW_val);
 }
 
 PTR(Val) NumVal::mult_with(PTR(Val) other_val)
 {
-    auto *other_num = CAST(NumVal)(other_val);
+    auto other_num = CAST(NumVal)(other_val);
     if (other_num == nullptr) {
         throw std::runtime_error("mult with non-number");
     }
-    int new_val = (unsigned int) this->rep * other_num->rep;
-    return new NumVal(new_val);
+    int NEW_val = (unsigned int) this->rep * other_num->rep;
+    return NEW (NumVal)(NEW_val);
 }
 
 bool NumVal::equals(PTR(Val) other_val)
 {
-    auto *other_num = CAST(NumVal)(other_val);
+    auto other_num = CAST(NumVal)(other_val);
     if(other_num == nullptr)
     {
         return false;
@@ -53,7 +53,7 @@ std::string NumVal::to_string() {
 }
 
 PTR(Expr) NumVal::to_expr() {
-    return new NumExpr(this->rep);
+    return NEW (NumExpr)(this->rep);
 }
 
 bool NumVal::is_true()
@@ -112,7 +112,7 @@ std::string BoolVal::to_string()
 
 PTR(Expr) BoolVal::to_expr()
 {
-    return new BoolExpr(this->rep) ;
+    return NEW (BoolExpr)(this->rep) ;
 }
 
 bool BoolVal::is_true()
@@ -146,7 +146,7 @@ PTR(Val) FunVal::mult_with(PTR(Val) other_val)
 
 bool FunVal::equals(PTR(Val) other_val)
 {
-    auto *other_fun = CAST(FunVal)(other_val);
+    auto other_fun = CAST(FunVal)(other_val);
         if (other_fun == nullptr) {
             return false;
         }
@@ -160,7 +160,7 @@ std::string FunVal::to_string()
 
 PTR(Expr) FunVal::to_expr()
 {
-    return new FunExpr(this->formal_arg, this->body);
+    return NEW (FunExpr)(this->formal_arg, this->body);
 }
 
 bool FunVal::is_true()

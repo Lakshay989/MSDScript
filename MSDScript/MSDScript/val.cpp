@@ -15,9 +15,9 @@ NumVal::NumVal(int rep)
     this->rep = rep;
 }
 
-Val *NumVal::add_to(Val *other_val)
+PTR(Val) NumVal::add_to(PTR(Val) other_val)
 {
-    NumVal *other_num = dynamic_cast<NumVal *>(other_val);
+    NumVal *other_num = CAST(NumVal)(other_val);
     if (other_num == nullptr) {
         throw std::runtime_error("add of non-number");
     }
@@ -25,9 +25,9 @@ Val *NumVal::add_to(Val *other_val)
     return new NumVal(new_val);
 }
 
-Val *NumVal::mult_with(Val *other_val)
+PTR(Val) NumVal::mult_with(PTR(Val) other_val)
 {
-    auto *other_num = dynamic_cast<NumVal *>(other_val);
+    auto *other_num = CAST(NumVal)(other_val);
     if (other_num == nullptr) {
         throw std::runtime_error("mult with non-number");
     }
@@ -35,9 +35,9 @@ Val *NumVal::mult_with(Val *other_val)
     return new NumVal(new_val);
 }
 
-bool NumVal::equals(Val *other_val)
+bool NumVal::equals(PTR(Val) other_val)
 {
-    auto *other_num = dynamic_cast<NumVal *>(other_val);
+    auto *other_num = CAST(NumVal)(other_val);
     if(other_num == nullptr)
     {
         return false;
@@ -52,7 +52,7 @@ std::string NumVal::to_string() {
     return std::to_string(this->rep);
 }
 
-Expr *NumVal::to_expr() {
+PTR(Expr) NumVal::to_expr() {
     return new NumExpr(this->rep);
 }
 
@@ -62,7 +62,7 @@ bool NumVal::is_true()
     
 }
 
-Val *NumVal::call(Val *actual_arg)
+PTR(Val) NumVal::call(PTR(Val) actual_arg)
 {
     throw std::runtime_error("Cannot call a num val");
 }
@@ -75,19 +75,19 @@ BoolVal::BoolVal(bool rep)
     this->rep = rep ;
 }
 
-Val *BoolVal::add_to(Val *other_val)
+PTR(Val) BoolVal::add_to(PTR(Val) other_val)
 {
     throw std::runtime_error("Addition to a boolean is not possible") ;
 }
 
-Val *BoolVal::mult_with(Val *other_val)
+PTR(Val) BoolVal::mult_with(PTR(Val) other_val)
 {
     throw std::runtime_error("Multiplication with a boolean is not possible") ;
 }
 
-bool BoolVal::equals(Val *other_val)
+bool BoolVal::equals(PTR(Val) other_val)
 {
-    auto other_num = dynamic_cast<BoolVal *>(other_val);
+    auto other_num = CAST(BoolVal)(other_val);
     if(other_num == nullptr)
     {
         return false ;
@@ -110,7 +110,7 @@ std::string BoolVal::to_string()
     }
 }
 
-Expr *BoolVal::to_expr()
+PTR(Expr) BoolVal::to_expr()
 {
     return new BoolExpr(this->rep) ;
 }
@@ -120,7 +120,7 @@ bool BoolVal::is_true()
     return this->rep;
 }
 
-Val *BoolVal::call(Val *actual_arg)
+PTR(Val) BoolVal::call(PTR(Val) actual_arg)
 {
     throw std::runtime_error("Cannot call a bool val");
 }
@@ -128,26 +128,25 @@ Val *BoolVal::call(Val *actual_arg)
 //--------------------------------------------------------------------------------------------------------------
 
 
-FunVal::FunVal(std::string formal_arg, Expr *body)
+FunVal::FunVal(std::string formal_arg, PTR(Expr) body)
 {
     this->formal_arg = formal_arg;
     this->body = body;
 }
 
-
-Val *FunVal::add_to(Val *other_val)
+PTR(Val) FunVal::add_to(PTR(Val) other_val)
 {
     throw std::runtime_error("Addition to a FunVal is not possible");
 }
 
-Val *FunVal::mult_with(Val *other_val)
+PTR(Val) FunVal::mult_with(PTR(Val) other_val)
 {
     throw std::runtime_error("Multiplication with a FunVal is not possible");
 }
 
-bool FunVal::equals(Val *other_val)
+bool FunVal::equals(PTR(Val) other_val)
 {
-    auto *other_fun = dynamic_cast<FunVal *>(other_val);
+    auto *other_fun = CAST(FunVal)(other_val);
         if (other_fun == nullptr) {
             return false;
         }
@@ -159,7 +158,7 @@ std::string FunVal::to_string()
     return this->to_expr()->to_string();
 }
 
-Expr *FunVal::to_expr()
+PTR(Expr) FunVal::to_expr()
 {
     return new FunExpr(this->formal_arg, this->body);
 }
@@ -169,7 +168,7 @@ bool FunVal::is_true()
     throw std::runtime_error("a fun val cannot be interpreted as a bool val");
 }
 
-Val *FunVal::call(Val *actual_arg)
+PTR(Val) FunVal::call(PTR(Val) actual_arg)
 {
     return this->body->subst(this->formal_arg, actual_arg->to_expr())->interp();
 }

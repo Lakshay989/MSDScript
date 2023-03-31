@@ -10,19 +10,22 @@
 
 class Expr ;
 
+#include "pointer.h"
 #include <stdio.h>
 #include <string>
 
-class Val
+CLASS(Val)
 {
 public:
-    virtual Val *add_to(Val *other_val) = 0 ;
-    virtual Val *mult_with(Val *other_val) = 0 ;
-    virtual bool equals(Val *other_val) = 0 ;
+    virtual PTR(Val) add_to(PTR(Val) other_val) = 0 ;
+    virtual PTR(Val) mult_with(PTR(Val) other_val) = 0 ;
+    virtual bool equals(PTR(Val) other_val) = 0 ;
     virtual std::string to_string() = 0;
-    virtual Expr *to_expr() = 0 ;
+    virtual PTR(Expr) to_expr() = 0 ;
     virtual bool is_true() = 0;
-    virtual Val *call(Val *actual_arg) = 0 ;
+    virtual PTR(Val) call(PTR(Val) actual_arg) = 0 ;
+    
+    virtual ~Val() = default;
     
 } ;
 
@@ -35,13 +38,14 @@ public:
     
     NumVal(int rep) ;
     
-    Val *add_to(Val *other_val) ;
-    Val *mult_with(Val *other_val) ;
-    bool equals(Val *other_val) ;
+    PTR(Val) add_to(PTR(Val) other_val) ;
+    PTR(Val) mult_with(PTR(Val) other_val) ;
+    bool equals(PTR(Val) other_val) ;
     std::string to_string() ;
-    Expr *to_expr() ;
+    PTR(Expr) to_expr() ;
     bool is_true() ;
-    Val *call(Val *actual_arg);
+    PTR(Val) call(PTR(Val) actual_arg);
+    
 } ;
 
 class BoolVal : public Val
@@ -53,32 +57,32 @@ public:
     
     BoolVal(bool rep) ;
 
-    Val *add_to(Val *other_val) ;
-    Val *mult_with(Val *other_val) ;
-    bool equals(Val *other_val) ;
+    PTR(Val) add_to(PTR(Val) other_val) ;
+    PTR(Val) mult_with(PTR(Val) other_val) ;
+    bool equals(PTR(Val) other_val) ;
     std::string to_string() ;
-    Expr *to_expr() ;
+    PTR(Expr) to_expr() ;
     bool is_true() ;
-    Val *call(Val *actual_arg);
+    PTR(Val) call(PTR(Val) actual_arg);
 };
 
 class FunVal : public Val
 {
 private:
     std::string formal_arg;
-    Expr *body;
+    PTR(Expr) body;
     
 public:
     
-    FunVal(std::string formal_arg, Expr *body);
+    FunVal(std::string formal_arg, PTR(Expr) body);
 
-    Val *add_to(Val *other_val) ;
-    Val *mult_with(Val *other_val) ;
-    bool equals(Val *other_val) ;
+    PTR(Val) add_to(PTR(Val) other_val) ;
+    PTR(Val) mult_with(PTR(Val) other_val) ;
+    bool equals(PTR(Val) other_val) ;
     std::string to_string() ;
-    Expr *to_expr() ;
+    PTR(Expr) to_expr() ;
     bool is_true() ;
-    Val *call(Val *actual_arg);
+    PTR(Val) call(PTR(Val) actual_arg);
 };
 
 

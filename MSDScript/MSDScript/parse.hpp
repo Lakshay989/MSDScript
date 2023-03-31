@@ -13,27 +13,27 @@
 #include <iostream>
 
 
-Expr *parse_expression(std::istream &in) ;
+PTR(Expr) parse_expression(std::istream &in) ;
 
-Expr *parse_expression_str(std::string str);
+PTR(Expr) parse_expression_str(std::string str);
 
-Expr *parse_num(std::istream &in);
+PTR(Expr) parse_num(std::istream &in);
 
-Expr *parse_addend(std::istream &in);
+PTR(Expr) parse_addend(std::istream &in);
 
-Expr *parse_multicand(std::istream &in);
+PTR(Expr) parse_multicand(std::istream &in);
 
-Expr *parse_variable(std::istream &in);
+PTR(Expr) parse_variable(std::istream &in);
 
-Expr *parse_let(std::istream &in);
+PTR(Expr) parse_let(std::istream &in);
 
-Expr *parse_comprag(std::istream &in);
+PTR(Expr) parse_comprag(std::istream &in);
 
-Expr *parse_if_expr(std::istream &in);
+PTR(Expr) parse_if_expr(std::istream &in);
 
-Expr *parse_inner_expression(std::istream &in);
+PTR(Expr) parse_inner_expression(std::istream &in);
 
-Expr *parse_fun_expr(std::istream &in);
+PTR(Expr) parse_fun_expr(std::istream &in);
 
 void parse_keyword(std::istream &in, std::string expectation);
 

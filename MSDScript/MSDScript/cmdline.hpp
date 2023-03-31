@@ -18,8 +18,8 @@
 #include "catch.h"
 #include "expr.hpp"
 #include "parse.hpp"
-//#include "cmdline.hpp"
 #include "val.hpp"
+#include "pointer.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -47,7 +47,7 @@ void if_test(char* argv[]);
 void if_throw_error(char* argv[]);
 void if_help();
 
-Expr* parse_input();
+PTR(Expr) parse_input();
 
 run_mode_t use_arguments(int argc, char* argv[]) ;
 

@@ -18,7 +18,7 @@ main.o: main.cpp
 cmdline.o: cmdline.cpp cmdline.hpp catch.h
 	$(CXX) $(CFLAGS) -c cmdline.cpp
 
-expr.o: expr.cpp expr.hpp catch.h
+expr.o: expr.cpp expr.hpp catch.h pointer.h
 	$(CXX) $(CFLAGS) -c expr.cpp
 
 tests.o: tests.cpp catch.h 
@@ -27,7 +27,7 @@ tests.o: tests.cpp catch.h
 parse.o: parse.cpp parse.hpp expr.hpp
 	$(CXX) $(CFLAGS) -c parse.cpp
 
-val.o: val.hpp val.cpp expr.hpp
+val.o: val.hpp val.cpp expr.hpp pointer.h
 	$(CXX) $(CFLAGS) -c val.cpp
 
 test_msdscript: $(TESTOBJS)

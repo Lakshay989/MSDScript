@@ -16,6 +16,7 @@
 #include "expr.hpp"
 #include "parse.hpp"
 #include "val.hpp"
+#include "pointer.h"
 
 
 #include <stdio.h>

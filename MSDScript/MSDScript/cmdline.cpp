@@ -21,7 +21,7 @@
 void if_interp()
 {
     //cout << " Handling interp" << endl ;
-    Expr* expr = parse_input();
+    PTR(Expr) expr = parse_input();
     //cout << "Expression entered: " << expr->to_pretty_string() << endl ;
     //cout << "interp value: " ;
     cout << expr->interp()->to_string() << endl; // ->to_string()
@@ -30,7 +30,7 @@ void if_interp()
 void if_print()
 {
     //cout << "Handling print" << endl ;
-    Expr* expr = parse_input();
+    PTR(Expr) expr = parse_input();
     //cout << "Printed expression: ";
     cout<< expr->to_string() << endl ;
 }
@@ -38,7 +38,7 @@ void if_print()
 void if_pretty_print()
 {
     //cout << "Handling pretty print" << endl ;
-    Expr* expr = parse_input();
+    PTR(Expr) expr = parse_input();
     //cout << "Printed expression: " ;
     cout<< expr->to_pretty_string() << endl ;
 }
@@ -62,7 +62,7 @@ void if_help()
     exit(1);
 }
 
-Expr* parse_input()
+PTR(Expr) parse_input()
 {
     std::string input ;
     std::getline(std::cin, input);

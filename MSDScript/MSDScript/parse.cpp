@@ -12,14 +12,14 @@
  <expr> =  <addend>
          | <addend> +  <expr>
  */
-Expr *parse_expression(std::istream &in)
+PTR(Expr) parse_expression(std::istream &in)
 {
-    Expr *comprag = parse_comprag(in) ;
+    PTR(Expr) comprag = parse_comprag(in) ;
     skip_whitespace(in);
         int ch = in.peek();
         if (ch == '=') {
             parse_keyword(in, "==");
-            Expr *second_expr = parse_expression(in);
+            PTR(Expr) second_expr = parse_expression(in);
             comprag = new EqExpr(comprag, second_expr);
             skip_whitespace(in);
             ch = in.peek();
@@ -33,20 +33,20 @@ Expr *parse_expression(std::istream &in)
 }
 
 
-Expr *parse_expression_str(std::string str)
+PTR(Expr) parse_expression_str(std::string str)
 {
     std::stringstream ss(str);
     return parse_expression(ss);
 }
 
-Expr *parse_comprag(std::istream &in)
+PTR(Expr) parse_comprag(std::istream &in)
 {
-    Expr *addend = parse_addend(in);
+    PTR(Expr) addend = parse_addend(in);
     skip_whitespace(in) ;
     char ch = in.peek();
     if(ch == '+'){
         consume(in, '+');
-        Expr *second_expr = parse_comprag(in);
+        PTR(Expr) second_expr = parse_comprag(in);
         addend = new Add(addend, second_expr);
         skip_whitespace(in);
     }
@@ -54,7 +54,7 @@ Expr *parse_comprag(std::istream &in)
 }
 
 
-Expr *parse_num(std::istream &in)
+PTR(Expr) parse_num(std::istream &in)
 {
     unsigned int num = 0;
     bool is_negative = false;
@@ -88,9 +88,9 @@ Expr *parse_num(std::istream &in)
  <addend> = <multicand>
           | <multicand> * <addend>
  */
-Expr *parse_addend(std::istream &in)
+PTR(Expr) parse_addend(std::istream &in)
 {
-    Expr *multicand = parse_multicand(in) ;
+    PTR(Expr) multicand = parse_multicand(in) ;
     skip_whitespace(in);
     int ch = in.peek() ;
     if(ch != '*')
@@ -99,7 +99,7 @@ Expr *parse_addend(std::istream &in)
     }
     consume(in, '*');
     skip_whitespace(in) ;
-    Expr *addend = parse_addend(in);
+    PTR(Expr) addend = parse_addend(in);
     return new Mult(multicand,addend);
 }
 
@@ -111,11 +111,11 @@ Expr *parse_addend(std::istream &in)
                | <variable>
                |  _let  <variable> = <expr> _in <expr>
  */
-Expr *parse_multicand(std::istream &in)
+PTR(Expr) parse_multicand(std::istream &in)
 {
     skip_whitespace(in);
 
-    Expr *expr = parse_inner_expression(in);
+    PTR(Expr) expr = parse_inner_expression(in);
     
     //std::cout << "inner: " << expr->to_string() << "\n";
     skip_whitespace(in);
@@ -123,7 +123,7 @@ Expr *parse_multicand(std::istream &in)
     {
         consume(in, '(');
         skip_whitespace(in);
-        Expr *actual_arg = parse_expression(in);
+        PTR(Expr) actual_arg = parse_expression(in);
         
         skip_whitespace(in);
         consume(in, ')');
@@ -134,7 +134,7 @@ Expr *parse_multicand(std::istream &in)
 }
     
 
-Expr *parse_variable(std::istream &in)
+PTR(Expr) parse_variable(std::istream &in)
 {
     int ch;
     std::string str ;
@@ -153,47 +153,47 @@ Expr *parse_variable(std::istream &in)
     return new Var(str);
 }
 
-Expr *parse_let(std::istream &in)
+PTR(Expr) parse_let(std::istream &in)
 {
     //parse_keyword(in, "_let");
     
     skip_whitespace(in) ;
-    Expr *lhs = parse_variable(in) ;
+    PTR(Expr) lhs = parse_variable(in) ;
     skip_whitespace(in) ;
     parse_keyword(in, "=") ;
     
     skip_whitespace(in);
-    Expr *rhs = parse_comprag(in) ;
+    PTR(Expr) rhs = parse_comprag(in) ;
     skip_whitespace(in) ;
     parse_keyword(in, "_in");
     
     skip_whitespace(in) ;
-    Expr *body = parse_comprag(in) ;
+    PTR(Expr) body = parse_comprag(in) ;
     skip_whitespace(in) ;
     
     return new Let(lhs->to_string(), rhs, body) ;
 }
 
-Expr *parse_if_expr(std::istream &in)
+PTR(Expr) parse_if_expr(std::istream &in)
 {
     skip_whitespace(in);
-    Expr *condition = parse_expression(in);
+    PTR(Expr) condition = parse_expression(in);
     skip_whitespace(in);
     parse_keyword(in, "_then");
     
     skip_whitespace(in);
-    Expr *then_expr = parse_expression(in);
+    PTR(Expr) then_expr = parse_expression(in);
     skip_whitespace(in);
     parse_keyword(in, "_else");
     
     skip_whitespace(in);
-    Expr *else_expr = parse_expression(in);
+    PTR(Expr) else_expr = parse_expression(in);
     skip_whitespace(in);
     
     return new IfExpr(condition, then_expr, else_expr);
 }
 
-Expr *parse_inner_expression(std::istream &in)
+PTR(Expr) parse_inner_expression(std::istream &in)
 {
     skip_whitespace(in) ;
     int ch = in.peek();
@@ -204,7 +204,7 @@ Expr *parse_inner_expression(std::istream &in)
     if (ch == '(')
     {
         consume(in, '(');
-        Expr *sub_expression = parse_expression(in);
+        PTR(Expr) sub_expression = parse_expression(in);
         skip_whitespace(in);
         
         if (in.peek() != ')')
@@ -222,7 +222,7 @@ Expr *parse_inner_expression(std::istream &in)
     
     if (isalpha(ch))
     {
-        Expr *variable = parse_variable(in);
+        PTR(Expr) variable = parse_variable(in);
         skip_whitespace(in);
         return variable;
     }
@@ -259,16 +259,16 @@ Expr *parse_inner_expression(std::istream &in)
     throw std::runtime_error("invalid input");
 }
 
-Expr *parse_fun_expr(std::istream &in)
+PTR(Expr) parse_fun_expr(std::istream &in)
 {
     skip_whitespace(in);
     consume(in, '(');
     skip_whitespace(in);
-    Expr *variable = parse_variable(in);
+    PTR(Expr) variable = parse_variable(in);
     
     skip_whitespace(in);
     consume(in, ')');
-    Expr *body = parse_expression(in);
+    PTR(Expr) body = parse_expression(in);
     
     return new FunExpr(variable->to_string(), body);
 }

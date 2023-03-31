@@ -15,11 +15,9 @@
 #ifndef cmdline_hpp
 #define cmdline_hpp
 //
-#include "catch.h"
-#include "expr.hpp"
-#include "parse.hpp"
-#include "val.hpp"
 #include "pointer.h"
+
+
 
 #include <stdio.h>
 #include <iostream>
@@ -27,6 +25,7 @@
 
 using namespace std ;
 
+class Expr;
 
 typedef enum {
 

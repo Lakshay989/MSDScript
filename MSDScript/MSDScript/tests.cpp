@@ -29,8 +29,8 @@
 //-----------------------------------------------------------------------------------------------------
 TEST_CASE( "equals" ) {
     REQUIRE((NEW(NumExpr)(6))->equals(NEW(NumExpr)(6)));
-    CHECK( (NEW ((NumExpr))(1)))->equals(NEW ((NumExpr))(1)));
-    CHECK( (NEW ((NumExpr))(0))->equals(NEW ((NumExpr))(-0)) );
+    CHECK( (NEW (NumExpr)(1))->equals(NEW (NumExpr)(1)));
+    CHECK( (NEW (NumExpr)(0))->equals(NEW (NumExpr)(-0)));
     CHECK( (NEW (NumExpr)(5))->equals(NEW (NumExpr)(-5)) == false);
     CHECK( ! (NEW (NumExpr) (1))->equals(NEW (NumExpr)(2)) );
 
@@ -118,7 +118,7 @@ TEST_CASE("Test for subst")
     CHECK( (NEW (NumExpr)(10))->subst("MSD", NEW (NumExpr)(3))
           ->equals(NEW (NumExpr)(10)) );
     CHECK( (NEW (Var)("CS6014"))->subst("MSD", NEW (NumExpr)(3))
-          ->equals(NEW NEW("CS6014")) );
+          ->equals( NEW (Var)("CS6014")) );
     CHECK( (NEW (Var)("MSD"))->subst("MSD", NEW (NumExpr)(3) )
           ->equals(NEW (NumExpr)(3) ) );
     CHECK( (NEW (Add)(NEW (NumExpr)(2), NEW (Var)("MSD")))->subst("MSD", NEW (NumExpr)(3))
@@ -1389,7 +1389,7 @@ TEST_CASE("quiz function vals") {
 
     // 7
     REQUIRE_THROWS_WITH(parse_expression_str("_let f = _fun (x) x+ 1\n"
-                                             "_in f + 5")->interp(), "Addition to a (FunVal) is not possible");
+                                             "_in f + 5")->interp(), "Addition to a FunVal is not possible");
 
     // 8
     REQUIRE(parse_expression_str("_let f = _fun (x) x+ 1 \n"
@@ -1520,7 +1520,7 @@ TEST_CASE("quiz function vals") {
                                                                                                                       -1))))
                                                       )
     ));
-    (Let) q26_expr = NEW (Let)("f", q26_expr_rhs, NEW (CallExpr)(NEW (CallExpr)(f, f), NEW (NumExpr)(3)));
+    auto q26_expr = NEW (Let)("f", q26_expr_rhs, NEW (CallExpr)(NEW (CallExpr)(f, f), NEW (NumExpr)(3)));
 
     REQUIRE(q26_expr->to_pretty_string() == "_let f = _fun (f)\n"
                                             "           _fun (x)\n"
@@ -1550,11 +1550,11 @@ TEST_CASE("Fun Val") {
     auto fun_var_y_fun_var_x_add_y_x = NEW (FunVal)("y", fun_expr_x_add_y_x);
 
     SECTION("add_to") {
-        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->add_to(num_val_2), "Addition to a (FunVal) is not possible");
+        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->add_to(num_val_2), "Addition to a FunVal is not possible");
     }
 
     SECTION("mult_with") {
-        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->mult_with(num_val_2), "Multiplication with a (FunVal) is not possible");
+        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->mult_with(num_val_2), "Multiplication with a FunVal is not possible");
     }
 
     SECTION("equals") {
@@ -1586,7 +1586,7 @@ TEST_CASE("Fun Val") {
     SECTION("call") {
         REQUIRE(fun_var_x_add_x_1->call(NEW (NumVal)(3))->equals(NEW (NumVal)(4)));
         REQUIRE_THROWS_WITH(fun_var_x_add_x_1->call(NEW (BoolVal)(3)), "Addition to a boolean is not possible");
-        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->call(fun_var_x_add_x_1), "Addition to a (FunVal) is not possible");
+        REQUIRE_THROWS_WITH(fun_var_x_add_x_1->call(fun_var_x_add_x_1), "Addition to a FunVal is not possible");
         REQUIRE(fun_var_y_fun_var_x_add_y_x_call_2->equals(fun_val_x_add_2_x));
         REQUIRE(fun_var_y_fun_var_x_add_y_x_call_2->call(NEW (NumVal)(1))->equals(NEW (NumVal)(3)));
     }

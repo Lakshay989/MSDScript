@@ -14,7 +14,10 @@
 
 #define CATCH_CONFIG_RUNNER
 
-
+#include "expr.hpp"
+#include "val.hpp"
+#include "catch.h"
+#include "parse.hpp"
 #include "cmdline.hpp"
 
 

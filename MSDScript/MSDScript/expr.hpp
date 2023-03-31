@@ -72,7 +72,7 @@ public:
         this->pretty_print_at(out, precedence_none, false, false, out.tellp());
     }
     
-    virtual ~Expr() = default;;
+    virtual ~Expr() = default;
 };
 
 

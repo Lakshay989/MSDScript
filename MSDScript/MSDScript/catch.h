@@ -114,7 +114,7 @@ namespace Catch {
 // CATCH_CONFIG_POSIX_SIGNALS : are POSIX signals supported?
 // CATCH_CONFIG_DISABLE_EXCEPTIONS : Are exceptions enabled?
 // ****************
-// Note to maintainers: if NEW toggles are added please document them
+// Note to maintainers: if new toggles are added please document them
 // in configuration.md, too
 // ****************
 
@@ -251,7 +251,7 @@ namespace Catch {
 #  if !defined(__clang__) // Handle Clang masquerading for msvc
 
 // MSVC traditional preprocessor needs some workaround for __VA_ARGS__
-// _MSVC_TRADITIONAL == 0 means NEW conformant preprocessor
+// _MSVC_TRADITIONAL == 0 means new conformant preprocessor
 // _MSVC_TRADITIONAL == 1 means old traditional non-conformant preprocessor
 #    if !defined(_MSVC_TRADITIONAL) || (defined(_MSVC_TRADITIONAL) && _MSVC_TRADITIONAL)
 #      define CATCH_INTERNAL_CONFIG_TRADITIONAL_MSVC_PREPROCESSOR
@@ -974,7 +974,7 @@ auto makeTestInvoker( void(*testAsFunction)() ) noexcept -> ITestInvoker*;
 
 template<typename C>
 auto makeTestInvoker( void (C::*testAsMethod)() ) noexcept -> ITestInvoker* {
-    return NEW(std::nothrow) TestInvokerAsMethod<C>( testAsMethod );
+    return new(std::nothrow) TestInvokerAsMethod<C>( testAsMethod );
 }
 
 struct NameAndTags {
@@ -3051,7 +3051,7 @@ namespace Catch {
         template<typename T>
         ExceptionTranslatorRegistrar( std::string(*translateFunction)( T& ) ) {
             getMutableRegistryHub().registerTranslator
-                ( NEW ExceptionTranslator<T>( translateFunction ) );
+                ( new ExceptionTranslator<T>( translateFunction ) );
         }
     };
 }
@@ -3078,10 +3078,10 @@ namespace Detail {
     class Approx {
     private:
         bool equalityComparisonImpl(double other) const;
-        // Validates the NEW margin (margin >= 0)
+        // Validates the new margin (margin >= 0)
         // out-of-line to avoid including stdexcept in the header
         void setMargin(double margin);
-        // Validates the NEW epsilon (0 < epsilon < 1)
+        // Validates the new epsilon (0 < epsilon < 1)
         // out-of-line to avoid including stdexcept in the header
         void setEpsilon(double epsilon);
 
@@ -3204,7 +3204,7 @@ namespace Catch {
     bool contains( std::string const& s, std::string const& infix );
     void toLowerInPlace( std::string& s );
     std::string toLower( std::string const& s );
-    //! Returns a NEW string without whitespace at the start/end
+    //! Returns a new string without whitespace at the start/end
     std::string trim( std::string const& str );
     //! Returns a substring of the original ref without whitespace. Beware lifetimes!
     StringRef trim(StringRef ref);
@@ -3933,7 +3933,7 @@ namespace Generators {
     namespace pf{
         template<typename T, typename... Args>
         std::unique_ptr<T> make_unique( Args&&... args ) {
-            return std::unique_ptr<T>(NEW T(std::forward<Args>(args)...));
+            return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
         }
     }
 
@@ -4410,10 +4410,10 @@ namespace Catch {
     public:
         Option() : nullableValue( nullptr ) {}
         Option( T const& _value )
-        : nullableValue( NEW( storage ) T( _value ) )
+        : nullableValue( new( storage ) T( _value ) )
         {}
         Option( Option const& _other )
-        : nullableValue( _other ? NEW( storage ) T( *_other ) : nullptr )
+        : nullableValue( _other ? new( storage ) T( *_other ) : nullptr )
         {}
 
         ~Option() {
@@ -4424,13 +4424,13 @@ namespace Catch {
             if( &_other != this ) {
                 reset();
                 if( _other )
-                    nullableValue = NEW( storage ) T( *_other );
+                    nullableValue = new( storage ) T( *_other );
             }
             return *this;
         }
         Option& operator = ( T const& _value ) {
             reset();
-            nullableValue = NEW( storage ) T( _value );
+            nullableValue = new( storage ) T( _value );
             return *this;
         }
 
@@ -4927,7 +4927,7 @@ namespace Catch {
                         std::string desc = Detail::getAnnotation( cls, "Description", testCaseName );
                         const char* className = class_getName( cls );
 
-                        getMutableRegistryHub().registerTest( makeTestCase( NEW OcMethod( cls, selector ), className, NameAndTags( name.c_str(), desc.c_str() ), SourceLineInfo("",0) ) );
+                        getMutableRegistryHub().registerTest( makeTestCase( new OcMethod( cls, selector ), className, NameAndTags( name.c_str(), desc.c_str() ), SourceLineInfo("",0) ) );
                         noTestMethods++;
                     }
                 }
@@ -6053,7 +6053,7 @@ namespace Catch {
         class ReporterFactory : public IReporterFactory {
 
             IStreamingReporterPtr create( ReporterConfig const& config ) const override {
-                return std::unique_ptr<T>( NEW T( config ) );
+                return std::unique_ptr<T>( new T( config ) );
             }
 
             std::string getDescription() const override {
@@ -6074,7 +6074,7 @@ namespace Catch {
         class ListenerFactory : public IReporterFactory {
 
             IStreamingReporterPtr create( ReporterConfig const& config ) const override {
-                return std::unique_ptr<T>( NEW T( config ) );
+                return std::unique_ptr<T>( new T( config ) );
             }
             std::string getDescription() const override {
                 return std::string();
@@ -6717,7 +6717,7 @@ namespace Catch {
                     model(Fun&& fun) : fun(std::move(fun)) {}
                     model(Fun const& fun) : fun(fun) {}
 
-                    model<Fun>* clone() const override { return NEW model<Fun>(*this); }
+                    model<Fun>* clone() const override { return new model<Fun>(*this); }
 
                     void call(Chronometer meter) const override {
                         call(meter, is_callable<Fun(Chronometer)>());
@@ -6739,12 +6739,12 @@ namespace Catch {
 
             public:
                 BenchmarkFunction()
-                    : f(NEW model<do_nothing>{ {} }) {}
+                    : f(new model<do_nothing>{ {} }) {}
 
                 template <typename Fun,
                     typename std::enable_if<!is_related<Fun, BenchmarkFunction>::value, int>::type = 0>
                     BenchmarkFunction(Fun&& fun)
-                    : f(NEW model<typename std::decay<Fun>::type>(std::forward<Fun>(fun))) {}
+                    : f(new model<typename std::decay<Fun>::type>(std::forward<Fun>(fun))) {}
 
                 BenchmarkFunction(BenchmarkFunction&& that)
                     : f(std::move(that.f)) {}
@@ -7175,7 +7175,7 @@ namespace Catch {
                 auto resolution = Detail::estimate_clock_resolution<Clock>(iters);
                 auto cost = Detail::estimate_clock_cost<Clock>(resolution.mean);
 
-                env = NEW Environment<FloatDuration<Clock>>{ resolution, cost };
+                env = new Environment<FloatDuration<Clock>>{ resolution, cost };
                 return *env;
             }
         } // namespace Detail
@@ -7399,12 +7399,12 @@ namespace Catch {
 
                 ObjectStorage(const ObjectStorage& other)
                 {
-                    NEW(&data) T(other.stored_object());
+                    new(&data) T(other.stored_object());
                 }
 
                 ObjectStorage(ObjectStorage&& other)
                 {
-                    NEW(&data) T(std::move(other.stored_object()));
+                    new(&data) T(std::move(other.stored_object()));
                 }
 
                 ~ObjectStorage() { destruct_on_exit<T>(); }
@@ -7412,7 +7412,7 @@ namespace Catch {
                 template <typename... Args>
                 void construct(Args&&... args)
                 {
-                    NEW (&data) T(std::forward<Args>(args)...);
+                    new (&data) T(std::forward<Args>(args)...);
                 }
 
                 template <bool AllowManualDestruction = !Destruct>
@@ -8960,11 +8960,11 @@ namespace detail {
 
         ResultValueBase( ResultValueBase const &other ) : ResultBase( other ) {
             if( m_type == ResultBase::Ok )
-                NEW( &m_value ) T( other.m_value );
+                new( &m_value ) T( other.m_value );
         }
 
         ResultValueBase( Type, T const &value ) : ResultBase( Ok ) {
-            NEW( &m_value ) T( value );
+            new( &m_value ) T( value );
         }
 
         auto operator=( ResultValueBase const &other ) -> ResultValueBase & {
@@ -8972,7 +8972,7 @@ namespace detail {
                 m_value.~T();
             ResultBase::operator=(other);
             if( m_type == ResultBase::Ok )
-                NEW( &m_value ) T( other.m_value );
+                new( &m_value ) T( other.m_value );
             return *this;
         }
 
@@ -10335,7 +10335,7 @@ namespace Catch {
 
     void IMutableContext::createContext()
     {
-        currentContext = NEW Context();
+        currentContext = new Context();
     }
 
     void cleanUpContext() {
@@ -10620,7 +10620,7 @@ namespace Catch {
         }
 
         std::unique_ptr<EnumInfo> makeEnumInfo( StringRef enumName, StringRef allValueNames, std::vector<int> const& values ) {
-            std::unique_ptr<EnumInfo> enumInfo( NEW EnumInfo );
+            std::unique_ptr<EnumInfo> enumInfo( new EnumInfo );
             enumInfo->m_name = enumName;
             enumInfo->m_values.reserve( values.size() );
 
@@ -10923,7 +10923,7 @@ namespace Catch {
         if (altStackSize == 0) {
             altStackSize = std::max(static_cast<size_t>(SIGSTKSZ), minStackSizeForErrors);
         }
-        altStackMem = NEW char[altStackSize]();
+        altStackMem = new char[altStackSize]();
     }
 
     FatalConditionHandler::~FatalConditionHandler() {
@@ -12427,7 +12427,7 @@ namespace Catch {
         static auto getInternal() -> Singleton* {
             static Singleton* s_instance = nullptr;
             if( !s_instance ) {
-                s_instance = NEW Singleton;
+                s_instance = new Singleton;
                 addSingleton( s_instance );
             }
             return s_instance;
@@ -13313,7 +13313,7 @@ namespace Catch {
             // doesn't compile without a std::move call. However, this causes
             // a warning on NEWer platforms. Thus, we have to work around
             // it a bit and downcast the pointer manually.
-            auto ret = std::unique_ptr<IStreamingReporter>(NEW ListeningReporter);
+            auto ret = std::unique_ptr<IStreamingReporter>(new ListeningReporter);
             auto& multi = static_cast<ListeningReporter&>(*ret);
             auto const& listeners = Catch::getRegistryHub().getReporterRegistry().getListeners();
             for (auto const& listener : listeners) {
@@ -13484,12 +13484,12 @@ namespace Catch {
 #if defined(CATCH_CONFIG_WCHAR) && defined(_WIN32) && defined(UNICODE)
     int Session::applyCommandLine( int argc, wchar_t const * const * argv ) {
 
-        char **utf8Argv = NEW char *[ argc ];
+        char **utf8Argv = new char *[ argc ];
 
         for ( int i = 0; i < argc; ++i ) {
             int bufSize = WideCharToMultiByte( CP_UTF8, 0, argv[i], -1, nullptr, 0, nullptr, nullptr );
 
-            utf8Argv[ i ] = NEW char[ bufSize ];
+            utf8Argv[ i ] = new char[ bufSize ];
 
             WideCharToMultiByte( CP_UTF8, 0, argv[i], -1, utf8Argv[i], bufSize, nullptr, nullptr );
         }
@@ -13589,7 +13589,7 @@ namespace Catch {
         static auto getSingletons() -> std::vector<ISingleton*>*& {
             static std::vector<ISingleton*>* g_singletons = nullptr;
             if( !g_singletons )
-                g_singletons = NEW std::vector<ISingleton*>();
+                g_singletons = new std::vector<ISingleton*>();
             return g_singletons;
         }
     }
@@ -13725,7 +13725,7 @@ namespace Catch {
             mutable std::ostream m_os;
         public:
             DebugOutStream()
-            :   m_streamBuf( NEW StreamBufImpl<OutputDebugWriter>() ),
+            :   m_streamBuf( new StreamBufImpl<OutputDebugWriter>() ),
                 m_os( m_streamBuf.get() )
             {}
 
@@ -13741,15 +13741,15 @@ namespace Catch {
 
     auto makeStream( StringRef const &filename ) -> IStream const* {
         if( filename.empty() )
-            return NEW Detail::CoutStream();
+            return new Detail::CoutStream();
         else if( filename[0] == '%' ) {
             if( filename == "%debug" )
-                return NEW Detail::DebugOutStream();
+                return new Detail::DebugOutStream();
             else
                 CATCH_ERROR( "Unrecognised stream: '" << filename << "'" );
         }
         else
-            return NEW Detail::FileStream( filename );
+            return new Detail::FileStream( filename );
     }
 
     // This class encapsulates the idea of a pool of ostringstreams that can be reused.
@@ -13760,7 +13760,7 @@ namespace Catch {
 
         auto add() -> std::size_t {
             if( m_unused.empty() ) {
-                m_streams.push_back( std::unique_ptr<std::ostringstream>( NEW std::ostringstream ) );
+                m_streams.push_back( std::unique_ptr<std::ostringstream>( new std::ostringstream ) );
                 return m_streams.size()-1;
             }
             else {
@@ -14591,7 +14591,7 @@ using TestCaseTracking::SectionTracker;
 namespace Catch {
 
     auto makeTestInvoker( void(*testAsFunction)() ) noexcept -> ITestInvoker* {
-        return NEW(std::nothrow) TestInvokerAsFunction( testAsFunction );
+        return new(std::nothrow) TestInvokerAsFunction( testAsFunction );
     }
 
     NameAndTags::NameAndTags( StringRef const& name_ , StringRef const& tags_ ) noexcept : name( name_ ), tags( tags_ ) {}
@@ -16446,7 +16446,7 @@ public:
 
 ConsoleReporter::ConsoleReporter(ReporterConfig const& config)
     : StreamingReporterBase(config),
-    m_tablePrinter(NEW TablePrinter(config.stream(),
+    m_tablePrinter(new TablePrinter(config.stream(),
         [&config]() -> std::vector<ColumnInfo> {
         if (config.fullConfig()->benchmarkNoAnalysis())
         {

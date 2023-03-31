@@ -250,7 +250,7 @@ Var::Var(std::string name)
 */
 bool Var::equals(PTR(Expr) e)  // Var equals
 {
-    Var other = CAST(VAR)(e);
+    auto other = CAST(Var)(e);
     if (other == nullptr)
         return false;
     else

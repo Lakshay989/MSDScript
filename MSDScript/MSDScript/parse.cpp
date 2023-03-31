@@ -20,7 +20,7 @@ PTR(Expr) parse_expression(std::istream &in)
         if (ch == '=') {
             parse_keyword(in, "==");
             PTR(Expr) second_expr = parse_expression(in);
-            comprag = NEW EqExpr(comprag, second_expr);
+            comprag = NEW (EqExpr)(comprag, second_expr);
             skip_whitespace(in);
             ch = in.peek();
         }
@@ -47,7 +47,7 @@ PTR(Expr) parse_comprag(std::istream &in)
     if(ch == '+'){
         consume(in, '+');
         PTR(Expr) second_expr = parse_comprag(in);
-        addend = NEW Add(addend, second_expr);
+        addend = NEW (Add)(addend, second_expr);
         skip_whitespace(in);
     }
     return addend;
@@ -100,7 +100,7 @@ PTR(Expr) parse_addend(std::istream &in)
     consume(in, '*');
     skip_whitespace(in) ;
     PTR(Expr) addend = parse_addend(in);
-    return NEW Mult(multicand,addend);
+    return NEW (Mult)(multicand,addend);
 }
 
 
@@ -127,7 +127,7 @@ PTR(Expr) parse_multicand(std::istream &in)
         
         skip_whitespace(in);
         consume(in, ')');
-        expr = NEW CallExpr(expr, actual_arg);
+        expr = NEW (CallExpr)(expr, actual_arg);
     }
         return expr;
 
@@ -150,7 +150,7 @@ PTR(Expr) parse_variable(std::istream &in)
     {
         throw std::runtime_error("unexpected character in variable");
     }
-    return NEW Var(str);
+    return NEW (Var)(str);
 }
 
 PTR(Expr) parse_let(std::istream &in)
@@ -171,7 +171,7 @@ PTR(Expr) parse_let(std::istream &in)
     PTR(Expr) body = parse_comprag(in) ;
     skip_whitespace(in) ;
     
-    return NEW Let(lhs->to_string(), rhs, body) ;
+    return NEW (Let)(lhs->to_string(), rhs, body) ;
 }
 
 PTR(Expr) parse_if_expr(std::istream &in)
@@ -190,7 +190,7 @@ PTR(Expr) parse_if_expr(std::istream &in)
     PTR(Expr) else_expr = parse_expression(in);
     skip_whitespace(in);
     
-    return NEW IfExpr(condition, then_expr, else_expr);
+    return NEW (IfExpr)(condition, then_expr, else_expr);
 }
 
 PTR(Expr) parse_inner_expression(std::istream &in)
@@ -237,12 +237,12 @@ PTR(Expr) parse_inner_expression(std::istream &in)
         
         else if (next_keyword == "_false")
         {
-            return NEW BoolExpr(false);
+            return NEW (BoolExpr)(false);
         }
         
         else if (next_keyword == "_true")
         {
-            return NEW BoolExpr(true);
+            return NEW (BoolExpr)(true);
         }
         
         else if (next_keyword == "_if")
@@ -270,7 +270,7 @@ PTR(Expr) parse_fun_expr(std::istream &in)
     consume(in, ')');
     PTR(Expr) body = parse_expression(in);
     
-    return NEW FunExpr(variable->to_string(), body);
+    return NEW (FunExpr)(variable->to_string(), body);
 }
 
 void parse_keyword(std::istream &in, std::string expectation)

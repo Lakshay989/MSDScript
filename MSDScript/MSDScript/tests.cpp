@@ -446,7 +446,7 @@ TEST_CASE(" Tests for (Let) class written by me")
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-TEST_CASE("Pretty Print examples_Kevin") //Created from assignment examples
+TEST_CASE("Pretty Print examples") //Created from assignment examples
 
 {
     std::stringstream out("");
@@ -480,7 +480,7 @@ TEST_CASE("Pretty Print examples_Kevin") //Created from assignment examples
 
 }
 
-TEST_CASE("pretty_print_let_mine_some_reuse_of_kevin_triple_nested_let") {
+TEST_CASE("pretty_print_let_triple_nested_let") {
     auto tripleNestedLet = NEW (Let)("x", NEW (NumExpr)(1),
                                    NEW (Let)("y", NEW (NumExpr)(1),
                                            NEW (Mult)(NEW (Add)(NEW (Var)("x"), NEW (Var)("y")), NEW (Var)("z"))));
@@ -537,6 +537,7 @@ TEST_CASE("pretty_print_let_mine_some_reuse_of_kevin_triple_nested_let") {
                == "(2 * _let x = 5\n"
                   "     _in  x + 1) * 3");
     }
+    
     // A _let needs parentheses when it is nested immediately as the right argument of an unparenthesized *
     // where _let would have needed parentheses in the surrounding context
     // (that is, if the _let used in place of the whole * would need parentheses,
@@ -1108,11 +1109,9 @@ TEST_CASE("Call Expr") {
         REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(call_fun_expr_x_add_x_2_on_2) == false);
     }
 
-    //auto call_fun_expr_x_add_x_1_on_2_subst_x_for_2 = call_fun_expr_x_add_x_1_on_2->subst("x", NEW (NumExpr)(2));
     auto add_2_1 = NEW (Add)(NEW (NumExpr)(2), NEW (NumExpr)(1));
     auto fun_expr_x_add_2_1 = NEW (FunExpr)("x", add_2_1);
     auto call_fun_expr_x_add_2_1_on_2 = NEW (CallExpr)(fun_expr_x_add_2_1, NEW (NumExpr)(2));
-    //auto call_fun_expr_x_add_x_1_on_2_subst_y_for_2 = call_fun_expr_x_add_x_1_on_2->subst("y", NEW (NumExpr)(2));
 
     auto add_2_x = NEW (Add)(NEW (NumExpr)(2), NEW (Var)("x"));
     auto fun_val_x_add_2_x = NEW (FunVal)("x", add_2_x);

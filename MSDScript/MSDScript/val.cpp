@@ -159,7 +159,7 @@ bool FunVal::equals(PTR(Val) other_val)
 
 std::string FunVal::to_string()
 {
-    return "function_expr";
+    return "[function]";
 }
 
 PTR(Expr) FunVal::to_expr()

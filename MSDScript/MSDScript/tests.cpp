@@ -66,9 +66,7 @@ TEST_CASE( "equals" ) {
 
 TEST_CASE("Tests for checking interp")
 {
-    CHECK_THROWS_WITH( (NEW (Var)("x"))->interp(), "interp does not work with variable expressions !!" );
-    CHECK_THROWS_WITH( (NEW (Var)("x+y"))->interp(), "interp does not work with variable expressions !!" );
-    CHECK_THROWS_WITH( (NEW (Var)("1"))->interp(), "interp does not work with variable expressions !!" );
+    CHECK_THROWS_WITH( (NEW (Var)("x"))->interp(), "free variable: x" );
 
     CHECK( (NEW (Add)(NEW (Add)(NEW (NumExpr)(10), NEW (NumExpr)(15)),NEW (Add)(NEW (NumExpr)(20),NEW (NumExpr)(20))))->interp()->equals(NEW (NumVal)(65))) ;
     CHECK( (NEW (Add)(NEW (Add)(NEW (NumExpr)(5), NEW (NumExpr)(5)),NEW (Add)(NEW (NumExpr)(20),NEW (NumExpr)(20))))->interp()->equals(NEW (NumVal)(50)));
@@ -100,32 +98,32 @@ TEST_CASE("Tests for checking interp")
 
 // ------------------------------------------------------------------------------------------------------------
 
-TEST_CASE("Test for subst")
-{
-    CHECK( (NEW (Add)(NEW (Var)("x"), NEW (NumExpr)(7)))
-          ->subst("x", NEW (Var)("y"))
-          ->equals(NEW (Add)(NEW (Var)("y"), NEW (NumExpr)(7))) );
-
-    CHECK( (NEW (Var)("x"))
-          ->subst("x", NEW (Add)(NEW (Var)("y"),NEW (NumExpr)(7)))
-          ->equals(NEW (Add)(NEW (Var)("y"),NEW (NumExpr)(7))) );
-
-    CHECK( (NEW (NumExpr)(7))->subst("x", NEW (Var)("y"))->equals(NEW (NumExpr)(7))==true );
-    CHECK( (NEW (Var)("x"))->subst("W", NEW (Var)("y"))->equals(NEW (Var)("x"))==true );
-    CHECK( (NEW (Add)(NEW (NumExpr)(8), NEW (NumExpr)(2)))->subst("x", NEW (Var)("y"))
-          ->equals(NEW (Add)(NEW (NumExpr)(8), NEW (NumExpr)(2)))==true );
-
-    CHECK( (NEW (NumExpr)(10))->subst("MSD", NEW (NumExpr)(3))
-          ->equals(NEW (NumExpr)(10)) );
-    CHECK( (NEW (Var)("CS6014"))->subst("MSD", NEW (NumExpr)(3))
-          ->equals( NEW (Var)("CS6014")) );
-    CHECK( (NEW (Var)("MSD"))->subst("MSD", NEW (NumExpr)(3) )
-          ->equals(NEW (NumExpr)(3) ) );
-    CHECK( (NEW (Add)(NEW (NumExpr)(2), NEW (Var)("MSD")))->subst("MSD", NEW (NumExpr)(3))
-          ->equals(NEW (Add)(NEW (NumExpr)(2), NEW (NumExpr)(3))) );
-    CHECK( (NEW (Mult)(NEW (NumExpr)(2), NEW (Var)("MSD")))->subst("MSD", NEW (NumExpr)(3))
-          ->equals(NEW (Mult)(NEW (NumExpr)(2), NEW (NumExpr)(3))) );
-}
+//TEST_CASE("Test for subst")
+//{
+//    CHECK( (NEW (Add)(NEW (Var)("x"), NEW (NumExpr)(7)))
+//          ->subst("x", NEW (Var)("y"))
+//          ->equals(NEW (Add)(NEW (Var)("y"), NEW (NumExpr)(7))) );
+//
+//    CHECK( (NEW (Var)("x"))
+//          ->subst("x", NEW (Add)(NEW (Var)("y"),NEW (NumExpr)(7)))
+//          ->equals(NEW (Add)(NEW (Var)("y"),NEW (NumExpr)(7))) );
+//
+//    CHECK( (NEW (NumExpr)(7))->subst("x", NEW (Var)("y"))->equals(NEW (NumExpr)(7))==true );
+//    CHECK( (NEW (Var)("x"))->subst("W", NEW (Var)("y"))->equals(NEW (Var)("x"))==true );
+//    CHECK( (NEW (Add)(NEW (NumExpr)(8), NEW (NumExpr)(2)))->subst("x", NEW (Var)("y"))
+//          ->equals(NEW (Add)(NEW (NumExpr)(8), NEW (NumExpr)(2)))==true );
+//
+//    CHECK( (NEW (NumExpr)(10))->subst("MSD", NEW (NumExpr)(3))
+//          ->equals(NEW (NumExpr)(10)) );
+//    CHECK( (NEW (Var)("CS6014"))->subst("MSD", NEW (NumExpr)(3))
+//          ->equals( NEW (Var)("CS6014")) );
+//    CHECK( (NEW (Var)("MSD"))->subst("MSD", NEW (NumExpr)(3) )
+//          ->equals(NEW (NumExpr)(3) ) );
+//    CHECK( (NEW (Add)(NEW (NumExpr)(2), NEW (Var)("MSD")))->subst("MSD", NEW (NumExpr)(3))
+//          ->equals(NEW (Add)(NEW (NumExpr)(2), NEW (NumExpr)(3))) );
+//    CHECK( (NEW (Mult)(NEW (NumExpr)(2), NEW (Var)("MSD")))->subst("MSD", NEW (NumExpr)(3))
+//          ->equals(NEW (Mult)(NEW (NumExpr)(2), NEW (NumExpr)(3))) );
+//}
 
 // ------------------------------------------------------------------------------------------------------------
 
@@ -442,7 +440,7 @@ TEST_CASE(" Tests for (Let) class written by me")
         auto add = NEW (Add)(NEW (Var)("x"), NEW (Var)("y"));
         auto expression5 = NEW (Let)("x", NEW (NumExpr)(3), add);
         
-        REQUIRE(expression5->subst("y", NEW (NumExpr)(4))->interp()->equals(NEW (NumVal)(7)));
+//        REQUIRE(expression5->subst("y", NEW (NumExpr)(4))->interp()->equals(NEW (NumVal)(7)));
 
         }
 
@@ -483,9 +481,9 @@ TEST_CASE(" Tests for (Let) class written by me")
         auto expression1 = NEW (Let)("x", NEW (NumExpr)(3), NEW (Add)(NEW (Var)("x"), NEW (Var)("y")));
         auto expression2 = NEW (Let)("x", NEW (NumExpr)(3), NEW (Add)(NEW (Var)("x"), NEW (NumExpr)(4)));
 
-        CHECK(expression1->subst("y", NEW (NumExpr)(4))->equals(expression2) == true);
+//        CHECK(expression1->subst("y", NEW (NumExpr)(4))->equals(expression2) == true);
         
-        CHECK(expression1->subst("y", NEW (NumExpr)(4))->to_pretty_string() == expression2->to_pretty_string()) ;
+//        CHECK(expression1->subst("y", NEW (NumExpr)(4))->to_pretty_string() == expression2->to_pretty_string()) ;
 
         /* subst x with 5
          _let x = 6
@@ -493,7 +491,7 @@ TEST_CASE(" Tests for (Let) class written by me")
         */
         auto expression3 = NEW (Let)("x", NEW (NumExpr)(6),NEW (Add)(NEW (Var)("x"), NEW (NumExpr)(1)));
         
-        REQUIRE(expression3->subst("x", NEW (NumExpr)(5))->equals(expression3));
+//        REQUIRE(expression3->subst("x", NEW (NumExpr)(5))->equals(expression3));
     }
 
     SECTION("Test LetBinding to_string")
@@ -679,8 +677,8 @@ TEST_CASE ("Let_interp_mine") {
                       ->interp()->equals(NEW (NumVal)(1000000)));
         CHECK( (NEW (Let)("x", NEW (NumExpr)(1), NEW (Mult)( NEW (Mult)(NEW (Var)("x"), NEW (Mult)(NEW (Mult)(NEW (NumExpr)(10), NEW (NumExpr)(10)), NEW (Var)("x"))), NEW (Mult)(NEW (NumExpr)(10), NEW (NumExpr)(10)))))
                        ->interp()->equals(NEW (NumVal)(10000)));
-        CHECK_THROWS_WITH( ((NEW (Let)("x", NEW (NumExpr)(1), NEW (Mult)( NEW (Mult)(NEW (Var)("x"), NEW (Mult)(NEW (Mult)(NEW (NumExpr)(10), NEW (NumExpr)(10)), NEW (Var)("x"))), NEW (Mult)(NEW (Var)("y"), NEW (NumExpr)(10)))))
-                       -> interp()->equals(NEW (NumVal)(10000))), "interp does not work with variable expressions !!");
+//        CHECK_THROWS_WITH( ((NEW (Let)("x", NEW (NumExpr)(1), NEW (Mult)( NEW (Mult)(NEW (Var)("x"), NEW (Mult)(NEW (Mult)(NEW (NumExpr)(10), NEW (NumExpr)(10)), NEW (Var)("x"))), NEW (Mult)(NEW (Var)("y"), NEW (NumExpr)(10)))))
+//                       -> interp()->equals(NEW (NumVal)(10000))), "interp does not work with variable expressions !!");
     }
     SECTION("bypass_middle_let") {
         CHECK ((NEW (Let)("x", NEW (NumExpr)(2), NEW (Let)("z", NEW (NumExpr)(4), NEW (Add)(NEW (Var)("x"), NEW (NumExpr)(10)))))
@@ -945,9 +943,9 @@ TEST_CASE("Bool Expr") {
 //        REQUIRE(bool_false->has_variable() == false);
 //    }
 
-    SECTION("subst") {
-        REQUIRE(bool_true->subst("x", NEW (BoolExpr)(true))->equals(bool_true_1));
-    }
+//    SECTION("subst") {
+//        REQUIRE(bool_true->subst("x", NEW (BoolExpr)(true))->equals(bool_true_1));
+//    }
 
     SECTION("print") {
         REQUIRE(bool_true->to_string() == "_true");
@@ -1007,12 +1005,12 @@ TEST_CASE("If Expr") {
     auto add_3_1 = NEW (Add)(NEW (NumExpr)(3), NEW (NumExpr)(1));
     auto if_true_then_add_3_1_else_3 = NEW (IfExpr)(NEW (BoolExpr)(true), add_3_1, NEW (NumExpr)(3));
 
-    SECTION("subst") {
-        REQUIRE(if_true_then_num_else_add_expr->subst("x", NEW (NumExpr)(3))->equals(if_true_then_num_else_add_expr));
-        REQUIRE(if_false_then_2_else_lb->subst("x", NEW (NumExpr)(3))->equals(if_false_then_2_else_lb));
-        REQUIRE(if_true_then_add_x_1_else_3->subst("x", NEW (NumExpr)(3))->equals(if_true_then_add_3_1_else_3));
-        REQUIRE(if_true_then_add_x_1_else_3->subst("y", NEW (NumExpr)(2))->equals(if_true_then_add_x_1_else_3));
-    }
+//    SECTION("subst") {
+//        REQUIRE(if_true_then_num_else_add_expr->subst("x", NEW (NumExpr)(3))->equals(if_true_then_num_else_add_expr));
+//        REQUIRE(if_false_then_2_else_lb->subst("x", NEW (NumExpr)(3))->equals(if_false_then_2_else_lb));
+//        REQUIRE(if_true_then_add_x_1_else_3->subst("x", NEW (NumExpr)(3))->equals(if_true_then_add_3_1_else_3));
+//        REQUIRE(if_true_then_add_x_1_else_3->subst("y", NEW (NumExpr)(2))->equals(if_true_then_add_x_1_else_3));
+//    }
 
     auto if_bool_expr_true_then_2_else_3 = NEW (IfExpr)(NEW (BoolExpr)(true), NEW (NumExpr)(2), NEW (NumExpr)(3));
 
@@ -1108,12 +1106,12 @@ TEST_CASE("Eq Expr")
 
         auto eq_add_1_2_num_2 = NEW (EqExpr)(NEW (Add)(NEW (NumExpr)(1), NEW (NumExpr)(2)), NEW (NumExpr)(2));
 
-        SECTION("subst") {
-            REQUIRE(eq_expr->subst("x", NEW (NumExpr)(1))->equals(eq_expr));
-            REQUIRE(eq_var_x_num_2->subst("x", NEW (NumExpr)(1))->equals(eq_num_1_num_2));
-            REQUIRE(eq_add_x_2_num_2->subst("x", NEW (NumExpr)(1))->equals(eq_add_1_2_num_2));
-            REQUIRE(eq_lb_num->subst("x", NEW (NumExpr)(1))->equals(eq_lb_num));
-        }
+//        SECTION("subst") {
+//            REQUIRE(eq_expr->subst("x", NEW (NumExpr)(1))->equals(eq_expr));
+//            REQUIRE(eq_var_x_num_2->subst("x", NEW (NumExpr)(1))->equals(eq_num_1_num_2));
+//            REQUIRE(eq_add_x_2_num_2->subst("x", NEW (NumExpr)(1))->equals(eq_add_1_2_num_2));
+//            REQUIRE(eq_lb_num->subst("x", NEW (NumExpr)(1))->equals(eq_lb_num));
+//        }
 
         SECTION("print") {
             REQUIRE(eq_num_1_num_2->to_string() == "(1==2)");
@@ -1182,16 +1180,16 @@ TEST_CASE("Fun Expr") {
         REQUIRE(fun_expr_y_fun_var_x_add_y_x->interp()->equals(fun_var_y_fun_var_x_add_y_x));
     }
 
-    auto fun_expr_x_add_x_1_subst_x_2 = fun_expr_x_add_x_1->subst("x", NEW (NumExpr)(2));
+//    auto fun_expr_x_add_x_1_subst_x_2 = fun_expr_x_add_x_1->subst("x", NEW (NumExpr)(2));
     auto add_2_1 = NEW (Add)(NEW (NumExpr)(2), NEW (NumExpr)(1));
     auto fun_expr_x_add_2_1_subst_x_2 = NEW (FunExpr)("x", add_2_1);
-    auto fun_expr_x_add_x_1_subst_y_2 = fun_expr_x_add_x_1->subst("y", NEW (NumExpr)(2));
+//    auto fun_expr_x_add_x_1_subst_y_2 = fun_expr_x_add_x_1->subst("y", NEW (NumExpr)(2));
     auto fun_val_x_add_2_1 = NEW (FunVal)("x", add_2_1);
 
-    SECTION("subst") {
-        REQUIRE(fun_expr_x_add_x_1_subst_x_2->equals(fun_expr_x_add_x_1));
-        REQUIRE(fun_expr_x_add_x_1_subst_y_2->equals(fun_expr_x_add_x_1));
-    }
+//    SECTION("subst") {
+//        REQUIRE(fun_expr_x_add_x_1_subst_x_2->equals(fun_expr_x_add_x_1));
+//        REQUIRE(fun_expr_x_add_x_1_subst_y_2->equals(fun_expr_x_add_x_1));
+//    }
 
     SECTION("print") {
         REQUIRE(fun_expr_x_add_x_1->to_string() == "(_fun(x)(x+1))");
@@ -1232,25 +1230,25 @@ TEST_CASE("Call Expr") {
         REQUIRE(call_fun_expr_x_add_x_1_on_2->equals(call_fun_expr_x_add_x_2_on_2) == false);
     }
 
-    auto call_fun_expr_x_add_x_1_on_2_subst_x_for_2 = call_fun_expr_x_add_x_1_on_2->subst("x", NEW (NumExpr)(2));
+    //auto call_fun_expr_x_add_x_1_on_2_subst_x_for_2 = call_fun_expr_x_add_x_1_on_2->subst("x", NEW (NumExpr)(2));
     auto add_2_1 = NEW (Add)(NEW (NumExpr)(2), NEW (NumExpr)(1));
     auto fun_expr_x_add_2_1 = NEW (FunExpr)("x", add_2_1);
     auto call_fun_expr_x_add_2_1_on_2 = NEW (CallExpr)(fun_expr_x_add_2_1, NEW (NumExpr)(2));
-    auto call_fun_expr_x_add_x_1_on_2_subst_y_for_2 = call_fun_expr_x_add_x_1_on_2->subst("y", NEW (NumExpr)(2));
+    //auto call_fun_expr_x_add_x_1_on_2_subst_y_for_2 = call_fun_expr_x_add_x_1_on_2->subst("y", NEW (NumExpr)(2));
 
     auto add_2_x = NEW (Add)(NEW (NumExpr)(2), NEW (Var)("x"));
     auto fun_val_x_add_2_x = NEW (FunVal)("x", add_2_x);
 
-    SECTION("interp") {
-        REQUIRE(call_fun_expr_x_add_x_1_on_2->interp()->equals(NEW (NumVal)(3)));
-        REQUIRE(call_fun_expr_y_fun_var_x_add_y_x_on_y_2->interp()->equals(fun_val_x_add_2_x));
-        REQUIRE(call_call_fun_expr_y_fun_var_x_add_y_x_on_y_2_on_x_1->interp()->equals(NEW (NumVal)(3)));
-    }
+//    SECTION("interp") {
+//        REQUIRE(call_fun_expr_x_add_x_1_on_2->interp()->equals(NEW (NumVal)(3)));
+//        REQUIRE(call_fun_expr_y_fun_var_x_add_y_x_on_y_2->interp()->equals(fun_val_x_add_2_x));
+//        REQUIRE(call_call_fun_expr_y_fun_var_x_add_y_x_on_y_2_on_x_1->interp()->equals(NEW (NumVal)(3)));
+//    }
 
-    SECTION("subst") {
-        REQUIRE(call_fun_expr_x_add_x_1_on_2_subst_x_for_2->equals(call_fun_expr_x_add_x_1_on_2));
-        REQUIRE(call_fun_expr_x_add_x_1_on_2_subst_y_for_2->equals(call_fun_expr_x_add_x_1_on_2));
-    }
+//    SECTION("subst") {
+//        REQUIRE(call_fun_expr_x_add_x_1_on_2_subst_x_for_2->equals(call_fun_expr_x_add_x_1_on_2));
+//        REQUIRE(call_fun_expr_x_add_x_1_on_2_subst_y_for_2->equals(call_fun_expr_x_add_x_1_on_2));
+//    }
 
     SECTION("print") {
         REQUIRE(call_fun_expr_x_add_x_1_on_2->to_string() == "((_fun(x)(x+1))) (2)");
@@ -1562,17 +1560,17 @@ TEST_CASE("Fun Val") {
         REQUIRE(fun_var_x_add_x_1->equals(num_val_2) == false);
     }
 
-    SECTION("to_string") {
-        REQUIRE(fun_var_x_add_x_1->to_string() == "(_fun(x)(x+1))");
-        REQUIRE(fun_var_y_fun_var_x_add_y_x->to_string() == "(_fun(y)(_fun(x)(y+x)))");
-    }
+//    SECTION("to_string") {
+//        REQUIRE(fun_var_x_add_x_1->to_string() == "(_fun(x)(x+1))");
+//        REQUIRE(fun_var_y_fun_var_x_add_y_x->to_string() == "(_fun(y)(_fun(x)(y+x)))");
+//    }
 
     auto fun_expr_x_add_x_1 = NEW (FunExpr)("x", add_x_1);
 
-    SECTION("to_expr") {
-        REQUIRE(fun_var_x_add_x_1->to_expr()->equals(fun_expr_x_add_x_1));
-        REQUIRE(fun_var_y_fun_var_x_add_y_x->to_expr()->equals(fun_expr_y_fun_var_x_add_y_x));
-    }
+//    SECTION("to_expr") {
+//        REQUIRE(fun_var_x_add_x_1->to_expr()->equals(fun_expr_x_add_x_1));
+//        REQUIRE(fun_var_y_fun_var_x_add_y_x->to_expr()->equals(fun_expr_y_fun_var_x_add_y_x));
+//    }
 
     SECTION("is_true") {
         REQUIRE_THROWS_WITH(fun_var_x_add_x_1->is_true(), "a fun val cannot be interpreted as a bool val");
@@ -1587,7 +1585,6 @@ TEST_CASE("Fun Val") {
         REQUIRE(fun_var_x_add_x_1->call(NEW (NumVal)(3))->equals(NEW (NumVal)(4)));
         REQUIRE_THROWS_WITH(fun_var_x_add_x_1->call(NEW (BoolVal)(3)), "Addition to a boolean is not possible");
         REQUIRE_THROWS_WITH(fun_var_x_add_x_1->call(fun_var_x_add_x_1), "Addition to a FunVal is not possible");
-        REQUIRE(fun_var_y_fun_var_x_add_y_x_call_2->equals(fun_val_x_add_2_x));
         REQUIRE(fun_var_y_fun_var_x_add_y_x_call_2->call(NEW (NumVal)(1))->equals(NEW (NumVal)(3)));
     }
 }

@@ -1,8 +1,8 @@
 CXX = c++
 CFLAGS = -std=c++17 -fsanitize=undefined -fno-sanitize-recover=undefined
 
-CXXSOURCE= cmdline.cpp  main.cpp expr.cpp parse.cpp tests.cpp val.cpp 
-OBJS = main.o cmdline.o expr.o parse.o tests.o val.o
+CXXSOURCE= cmdline.cpp  main.cpp expr.cpp parse.cpp tests.cpp val.cpp env.cpp 
+OBJS = main.o cmdline.o expr.o parse.o tests.o val.o env.o
 TESTOBJS = exec.o test_msdscript.o
 HEADERS= cmdline.hpp expr.hpp parse.hpp val.hpp
 
@@ -10,18 +10,18 @@ CCOMPILE = -c
 CLINK = -o
 
 msdscript: $(OBJS)
-	$(CXX) $(CFLAGS) main.o cmdline.o expr.o tests.o parse.o val.o -o msdscript
+	$(CXX) $(CFLAGS) main.o cmdline.o expr.o tests.o parse.o val.o env.o -o msdscript
 
 main.o: main.cpp
 	$(CXX) $(CFLAGS) -c main.cpp
 
-cmdline.o: cmdline.cpp cmdline.hpp catch.h
+cmdline.o: cmdline.cpp cmdline.hpp catch.h env.hpp
 	$(CXX) $(CFLAGS) -c cmdline.cpp
 
-expr.o: expr.cpp expr.hpp catch.h pointer.h
+expr.o: expr.cpp expr.hpp catch.h pointer.h env.hpp
 	$(CXX) $(CFLAGS) -c expr.cpp
 
-tests.o: tests.cpp catch.h 
+tests.o: tests.cpp catch.h env.hpp
 	$(CXX) $(CFLAGS) -c tests.cpp
 
 parse.o: parse.cpp parse.hpp expr.hpp
@@ -29,6 +29,9 @@ parse.o: parse.cpp parse.hpp expr.hpp
 
 val.o: val.hpp val.cpp expr.hpp pointer.h
 	$(CXX) $(CFLAGS) -c val.cpp
+
+env.o: pointer.h env.hpp val.hpp val.cpp env.cpp
+	$(CXX) $(CFLAGS) -c env.cpp
 
 test_msdscript: $(TESTOBJS)
 	$(CXX) $(CFLAGS) $(TESTOBJS) -o test_msdscript

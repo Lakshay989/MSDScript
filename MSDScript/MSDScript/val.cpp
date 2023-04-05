@@ -9,6 +9,7 @@
 
 #include "expr.hpp"
 #include "val.hpp"
+#include "env.hpp"
 
 NumVal::NumVal(int rep)
 {
@@ -21,7 +22,7 @@ PTR(Val) NumVal::add_to(PTR(Val) other_val)
     if (other_num == nullptr) {
         throw std::runtime_error("add of non-number");
     }
-    int NEW_val = (unsigned int) this->rep + other_num->rep;
+    int NEW_val = (unsigned) this->rep + (unsigned) other_num->rep;
     return NEW (NumVal)(NEW_val);
 }
 
@@ -31,7 +32,7 @@ PTR(Val) NumVal::mult_with(PTR(Val) other_val)
     if (other_num == nullptr) {
         throw std::runtime_error("mult with non-number");
     }
-    int NEW_val = (unsigned int) this->rep * other_num->rep;
+    int NEW_val = (unsigned) this->rep * (unsigned) other_num->rep;
     return NEW (NumVal)(NEW_val);
 }
 
@@ -128,10 +129,15 @@ PTR(Val) BoolVal::call(PTR(Val) actual_arg)
 //--------------------------------------------------------------------------------------------------------------
 
 
-FunVal::FunVal(std::string formal_arg, PTR(Expr) body)
+FunVal::FunVal(std::string formal_arg, PTR(Expr) body, PTR(Env) env)
 {
+    if(env == nullptr)
+    {
+        env = Env::empty ;
+    }
     this->formal_arg = formal_arg;
     this->body = body;
+    this->env = std::move(env);
 }
 
 PTR(Val) FunVal::add_to(PTR(Val) other_val)
@@ -155,7 +161,8 @@ bool FunVal::equals(PTR(Val) other_val)
 
 std::string FunVal::to_string()
 {
-    return this->to_expr()->to_string();
+    //return this->to_expr()->to_string();
+    return "function_expr";
 }
 
 PTR(Expr) FunVal::to_expr()
@@ -170,5 +177,6 @@ bool FunVal::is_true()
 
 PTR(Val) FunVal::call(PTR(Val) actual_arg)
 {
-    return this->body->subst(this->formal_arg, actual_arg->to_expr())->interp();
+    return this->body->interp(NEW(ExtendedEnv)(this->formal_arg, actual_arg, this->env));
+    //return this->body->subst(this->formal_arg, actual_arg->to_expr())->interp();
 }

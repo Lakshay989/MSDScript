@@ -9,6 +9,7 @@
 #define val_hpp
 
 class Expr ;
+class Env ;
 
 //CLASS(Expr);
 
@@ -73,10 +74,11 @@ class FunVal : public Val
 private:
     std::string formal_arg;
     PTR(Expr) body;
+    PTR(Env) env ;
     
 public:
     
-    FunVal(std::string formal_arg, PTR(Expr) body);
+    FunVal(std::string formal_arg, PTR(Expr) body, PTR(Env) env = nullptr);
 
     PTR(Val) add_to(PTR(Val) other_val) ;
     PTR(Val) mult_with(PTR(Val) other_val) ;

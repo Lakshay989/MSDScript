@@ -14,6 +14,7 @@
 
 #include "val.hpp"
 #include "expr.hpp"
+#include "env.hpp"
 #include <utility>
 /**
 * \brief Constructor
@@ -43,7 +44,7 @@ bool NumExpr::equals(PTR(Expr) e)
 * \brief This function interprets the value of the integer
 * \return integer value of the number
 */
-PTR(Val) NumExpr::interp()
+PTR(Val) NumExpr::interp(PTR(Env) env)
 {
     return NEW(NumVal)(this->val);
 }
@@ -55,10 +56,10 @@ PTR(Val) NumExpr::interp()
 * \param e second argument, Expression
 * \return Expression which is modified if combination of sub expressions was possible
 */
-PTR(Expr) NumExpr::subst(std::string s, PTR(Expr) e)
-{
-    return NEW(NumExpr)(this->val) ;
-}
+//PTR(Expr) NumExpr::subst(std::string s, PTR(Expr) e)
+//{
+//    return NEW(NumExpr)(this->val) ;
+//}
 
 /**
 * \brief Prints the expression
@@ -114,9 +115,13 @@ bool Add::equals(PTR(Expr) e) // Add Equals
 * \brief This function interprets the value of the expression
 * \return integer value of the computed expression
 */
-PTR(Val) Add::interp()
+PTR(Val) Add::interp(PTR(Env) env)
 {
-    return lhs->interp()->add_to(rhs->interp()) ;
+    if(env == nullptr) {
+         env = Env::empty;
+     }
+    return this->lhs->interp(env)->add_to(this->rhs->interp(env));
+    
 }
 
 /**
@@ -125,10 +130,10 @@ PTR(Val) Add::interp()
 * \param e second argument, Expression
 * \return Expression which is modified if combination of sub expressions was possible
 */
-PTR(Expr) Add::subst(std::string s, PTR(Expr) e)
-{
-    return NEW(Add)(lhs->subst(s, e), rhs->subst(s, e));
-}
+//PTR(Expr) Add::subst(std::string s, PTR(Expr) e)
+//{
+//    return NEW(Add)(lhs->subst(s, e), rhs->subst(s, e));
+//}
 
 
 /**
@@ -187,9 +192,14 @@ bool Mult::equals(PTR(Expr) e) { // Mult equals
 * \brief This function interprets the value of the expression
 * \return integer value of the computed expression
 */
-PTR(Val) Mult::interp()
+PTR(Val) Mult::interp(PTR(Env) env)
 {
-    return lhs->interp()->mult_with( rhs->interp() );
+    if(env == nullptr)
+    {
+        env = Env::empty ;
+    }
+    return this->lhs->interp(env)->mult_with(this->rhs->interp(env));
+    
 }
 
 
@@ -199,10 +209,10 @@ PTR(Val) Mult::interp()
 * \param e second argument, Expressiont
 * \return Expression which is modified if combination of sub expressions was possible
 */
-PTR(Expr) Mult::subst(std::string s, PTR(Expr) e)
-{
-    return NEW (Mult)(lhs->subst(s, e), rhs->subst(s, e));
-}
+//PTR(Expr) Mult::subst(std::string s, PTR(Expr) e)
+//{
+//    return NEW (Mult)(lhs->subst(s, e), rhs->subst(s, e));
+//}
 
 
 /**
@@ -262,9 +272,13 @@ bool Var::equals(PTR(Expr) e)  // Var equals
 * \brief This function interprets the value of the Variable
 * \return error message as value of the variable cannot be iterpreted
 */
-PTR(Val) Var::interp()
+PTR(Val) Var::interp(PTR(Env) env)
 {
-    throw std::runtime_error("interp does not work with variable expressions !!");
+    if(env == nullptr)
+    {
+        env = Env::empty ;
+    }
+    return env->lookup(this->name);
 }
 
 
@@ -274,17 +288,17 @@ PTR(Val) Var::interp()
 * \param e second argument, Expressiont
 * \return Expression which is modified if combination of sub expressions was possible
 */
-PTR(Expr) Var::subst(std::string s, PTR(Expr) e)
-{
-    if(name == s)
-    {
-        return e ;
-    }
-    else
-    {
-        return NEW (Var)(this->name) ;
-    }
-}
+//PTR(Expr) Var::subst(std::string s, PTR(Expr) e)
+//{
+//    if(name == s)
+//    {
+//        return e ;
+//    }
+//    else
+//    {
+//        return NEW (Var)(this->name) ;
+//    }
+//}
 
 
 /**
@@ -338,10 +352,15 @@ bool Let::equals(PTR(Expr) e)
 * \brief This function interprets the value of the Variable
 * \return value of the variable assigned using Let
 */
-PTR(Val) Let::interp() // More Testing rhs->interp()
+PTR(Val) Let::interp( PTR(Env) env) // More Testing rhs->interp()
 {
-    PTR(Expr) rhs_after_interp = rhs->interp()->to_expr();
-    return this->body->subst(this->lhs, rhs_after_interp)->interp();
+    if(env == nullptr) {
+    env = Env::empty;
+    }
+    PTR(Val) rhs_val = this->rhs->interp(env);
+    PTR(Env) new_env = NEW(ExtendedEnv)(lhs, rhs_val, env);
+    return body->interp(new_env);
+
 }
 
 
@@ -351,17 +370,17 @@ PTR(Val) Let::interp() // More Testing rhs->interp()
 * \param exp second argument, Expression
 * \return Expression which is modified if combination of sub expressions was possible
 */
-PTR(Expr) Let::subst(std::string subt, PTR(Expr) exp)
-{
-    if( this->lhs == subt )
-    {
-        return NEW (Let)(this->lhs, this->rhs->subst(subt, exp), this->body);
-    }
-    else
-    {
-        return NEW (Let)(this->lhs, this->rhs->subst(subt, exp), this->body->subst(subt, exp));  // ->subst(subt, exp)
-    }
-}
+//PTR(Expr) Let::subst(std::string subt, PTR(Expr) exp)
+//{
+//    if( this->lhs == subt )
+//    {
+//        return NEW (Let)(this->lhs, this->rhs->subst(subt, exp), this->body);
+//    }
+//    else
+//    {
+//        return NEW (Let)(this->lhs, this->rhs->subst(subt, exp), this->body->subst(subt, exp));  // ->subst(subt, exp)
+//    }
+//}
 
 
 /**
@@ -411,16 +430,16 @@ bool BoolExpr::equals(PTR(Expr) e)
     return  this->rep == other->rep;
 }
 
-PTR(Val) BoolExpr::interp()
+PTR(Val) BoolExpr::interp(PTR(Env) env)
 {
     return NEW (BoolVal)(this->rep);
 }
 
 
-PTR(Expr) BoolExpr::subst(std::string s, PTR(Expr) e)
-{
-    return NEW (BoolExpr)(this->rep) ;
-}
+//PTR(Expr) BoolExpr::subst(std::string s, PTR(Expr) e)
+//{
+//    return NEW (BoolVal)(this->rep) ;
+//}
 
 void BoolExpr::print(std::ostream &out)
 {
@@ -466,23 +485,30 @@ bool IfExpr::equals(PTR(Expr) e)
            this->else_expr->equals(other->else_expr);
 }
 
-PTR(Val) IfExpr::interp()
+PTR(Val) IfExpr::interp(PTR(Env) env)
 {
-    if (this->condition->interp()->is_true()) {
-        return this->then_expr->interp();
-    } else {
-        return this->else_expr->interp();
+    if(env == nullptr) {
+        env = Env::empty;
+    }
+    PTR(Val) condition_val = this->condition->interp(env);
+    
+    if (condition_val->is_true()) {
+        return this->then_expr->interp(env);
+    }
+    else
+    {
+        return this->else_expr->interp(env);
     }
 }
 
 
-PTR(Expr) IfExpr::subst(std::string s, PTR(Expr) e)
-{
-    PTR(Expr) subst_condition = this->condition->subst(s, e);
-    PTR(Expr) subst_then_expr = this->then_expr->subst(s, e);
-    PTR(Expr) subst_else_expr = this->else_expr->subst(s, e);
-    return NEW (IfExpr)(subst_condition, subst_then_expr, subst_else_expr);
-}
+//PTR(Expr) IfExpr::subst(std::string s, PTR(Expr) e)
+//{
+//    PTR(Expr) subst_condition = this->condition->subst(s, e);
+//    PTR(Expr) subst_then_expr = this->then_expr->subst(s, e);
+//    PTR(Expr) subst_else_expr = this->else_expr->subst(s, e);
+//    return NEW (IfExpr)(subst_condition, subst_then_expr, subst_else_expr);
+//}
 
 void IfExpr::print(std::ostream &out)
 {
@@ -530,20 +556,26 @@ bool EqExpr::equals(PTR(Expr) e)
         return this->lhs->equals(other->lhs) && this->rhs->equals(other->rhs);
 }
 
-PTR(Val) EqExpr::interp()
+PTR(Val) EqExpr::interp(PTR(Env) env)
 {
-    PTR(Val) lhs = this->lhs->interp();
-    PTR(Val) rhs = this->rhs->interp();
+    if(env == nullptr)
+    {
+        env = Env::empty;
+    }
+    
+    PTR(Val) lhs = this->lhs->interp(env);
+    PTR(Val) rhs = this->rhs->interp(env);
+    
     bool result = lhs->equals(rhs);
     return NEW (BoolVal)(result);
 }
 
-PTR(Expr) EqExpr::subst(std::string s, PTR(Expr) e)
-{
-    PTR(Expr) subst_lhs = this->lhs->subst(s, e);
-    PTR(Expr) subst_rhs = this->rhs->subst(s, e);
-    return NEW (EqExpr)(subst_lhs, subst_rhs);
-}
+//PTR(Expr) EqExpr::subst(std::string s, PTR(Expr) e)
+//{
+//    PTR(Expr) subst_lhs = this->lhs->subst(s, e);
+//    PTR(Expr) subst_rhs = this->rhs->subst(s, e);
+//    return NEW (EqExpr)(subst_lhs, subst_rhs);
+//}
 
 void EqExpr::print(std::ostream &out)
 {
@@ -586,18 +618,23 @@ bool FunExpr::equals(PTR(Expr) e)
         return this->formal_arg == other->formal_arg && this->body->equals(other->body);
 }
     
-PTR(Val) FunExpr::interp()
+PTR(Val) FunExpr::interp(PTR(Env) env)
 {
-    return NEW (FunVal)(this->formal_arg, this->body);
+    if(env == nullptr)
+    {
+        env = Env::empty ;
+    }
+    
+    return NEW (FunVal)(this->formal_arg, this->body, env);
 }
     
-PTR(Expr) FunExpr::subst(std::string s, PTR(Expr) e)
-{
-    if(s == this->formal_arg) {
-          return THIS;
-      }
-    return NEW (FunExpr)(this->formal_arg, this->body->subst(s, e));
-}
+//PTR(Expr) FunExpr::subst(std::string s, PTR(Expr) e)
+//{
+//    if(s == this->formal_arg) {
+//          return THIS;
+//      }
+//    return NEW (FunExpr)(this->formal_arg, this->body->subst(s, e));
+//}
     
 void FunExpr::print(std::ostream &out)
 {
@@ -639,18 +676,21 @@ bool CallExpr::equals(PTR(Expr) e)
         return this->to_be_called->equals(other->to_be_called) && this->actual_arg->equals(other->actual_arg);
 }
     
-PTR(Val) CallExpr::interp()
+PTR(Val) CallExpr::interp(PTR(Env) env)
 {
-    return this->to_be_called->interp()->call(this->actual_arg->interp());
+    if(env == nullptr)
+    {
+        env = Env::empty ;
+    }
+    return this->to_be_called->interp(env)->call(this->actual_arg->interp(env));
 }
     
-PTR(Expr) CallExpr::subst(std::string s, PTR(Expr) e)
-{
-    auto to_be_called_subst = this->to_be_called->subst(s, e);
-    auto actual_arg_subst = this->actual_arg->subst(s, e);
-    return NEW (CallExpr)(to_be_called_subst, actual_arg_subst);
-    
-}
+//PTR(Expr) CallExpr::subst(std::string s, PTR(Expr) e)
+//{
+//    auto to_be_called_subst = this->to_be_called->subst(s, e);
+//    auto actual_arg_subst = this->actual_arg->subst(s, e);
+//    return NEW (CallExpr)(to_be_called_subst, actual_arg_subst);
+//}
     
 void CallExpr::print(std::ostream &out)
 {

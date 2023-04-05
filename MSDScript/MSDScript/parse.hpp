@@ -8,9 +8,11 @@
 #ifndef parse_hpp
 #define parse_hpp
 
-#include "expr.hpp"
+class Expr;
+
 #include <stdio.h>
 #include <iostream>
+#include "pointer.h"
 
 
 PTR(Expr) parse_expression(std::istream &in) ;

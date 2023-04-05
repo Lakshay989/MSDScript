@@ -23,26 +23,19 @@
 
 void if_interp()
 {
-    //cout << " Handling interp" << endl ;
     auto expr = parse_input();
-    //cout << "Expression entered: " << expr->to_pretty_string() << endl ;
-    //cout << "interp value: " ;
     cout << expr->interp()->to_string() << endl; // ->to_string()
 }
 
 void if_print()
 {
-    //cout << "Handling print" << endl ;
     auto expr = parse_input();
-    //cout << "Printed expression: ";
     cout<< expr->to_string() << endl ;
 }
 
 void if_pretty_print()
 {
-    //cout << "Handling pretty print" << endl ;
     auto expr = parse_input();
-    //cout << "Printed expression: " ;
     cout<< expr->to_pretty_string() << endl ;
 }
 
@@ -72,16 +65,6 @@ PTR(Expr) parse_input()
     std::stringstream ss(input);
     return parse_expression(ss);
 }
-//    Expr *expr;
-//        try {
-//            expr = parse_expression(std::cin);
-//        } catch (std::runtime_error &err) {
-//            std::cerr << "Runtime error: " << err.what();
-//            std::exit(1);
-//        }
-//        return expr;
-
-
 
 /**
 * \brief Identifies the argument given ahead of running the executable

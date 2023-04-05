@@ -46,14 +46,8 @@ public:
     
     virtual PTR(Val) interp(PTR(Env) env = nullptr) = 0 ; // This function interprets the value of the expression/variable.
     
-//    virtual bool has_variable() = 0 ; // This function determines if the the expression consists of a variable or not.
-    
-//    virtual PTR(Expr) subst(std::string s, PTR(Expr) e) = 0; // This function substitutes the expression with the combination of sub-expressions if possible.
-    
     virtual void print(std::ostream &out) = 0; // This function prints the expression.
-    
-   // virtual void pretty_print(std::ostream &out) = 0; // This is an extenstion of the print function with minor changes.
-    
+        
     virtual void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position = 0) = 0; // Helper for pretty_print()
     
     std::string to_string() {
@@ -87,10 +81,7 @@ public:
     explicit NumExpr(int val);
     bool equals(PTR(Expr) e) ;
     PTR(Val) interp(PTR(Env) env = nullptr);
-    //bool has_variable();
-    //PTR(Expr) subst(std::string s, PTR(Expr) e) ;
     void print(std::ostream &out);
-    //void pretty_print(std::ostream &out);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
@@ -106,10 +97,7 @@ public:
     Add(PTR(Expr) lhs, PTR(Expr) rhs);
     bool equals(PTR(Expr) e) ;
     PTR(Val) interp(PTR(Env) env = nullptr);
-    //bool has_variable();
-    //PTR(Expr) subst(std::string s, PTR(Expr) e) ;
     void print(std::ostream &out);
-   // void pretty_print(std::ostream &out);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
     
 };
@@ -126,10 +114,7 @@ public:
     Mult(PTR(Expr) lhs, PTR(Expr)rhs);
     bool equals(PTR(Expr) e) ;
     PTR(Val) interp(PTR(Env) env = nullptr);
-    //bool has_variable();
-    //PTR(Expr) subst(std::string s, PTR(Expr) e) ;
     void print(std::ostream &out);
-    //void pretty_print(std::ostream &out);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
@@ -145,10 +130,7 @@ public:
     
     bool equals(PTR(Expr) e);
     PTR(Val) interp(PTR(Env) env = nullptr);
-    //bool has_variable();
-    //PTR(Expr) subst(std::string s, PTR(Expr) e) ;
     void print(std::ostream &out);
-    //void pretty_print(std::ostream &out);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
@@ -167,10 +149,7 @@ public:
     
     bool equals(PTR(Expr) e);
     PTR(Val) interp(PTR(Env) env = nullptr);
-    //bool has_variable();
-    //PTR(Expr) subst(std::string s, PTR(Expr) e) ;
     void print(std::ostream &out);
-    //void pretty_print(std::ostream &out);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
     
 };
@@ -183,10 +162,7 @@ public:
     
     bool equals(PTR(Expr) e);
     PTR(Val) interp(PTR(Env) env = nullptr);
-    //bool has_variable();
-    //PTR(Expr) subst(std::string s, PTR(Expr) e);
     void print(std::ostream &out);
-    //void pretty_print(std::ostream &out);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
@@ -200,14 +176,9 @@ public:
 
     //IfExpr(bool condition, Expr *then_expr, Expr *else_expr);
     IfExpr(PTR(Expr) condition, PTR(Expr) then_expr, PTR(Expr) else_expr);
-    
     bool equals(PTR(Expr) e);
-
     PTR(Val) interp(PTR(Env) env = nullptr);
-   // bool has_variable();
-   // PTR(Expr) subst(std::string s, PTR(Expr) e);
     void print(std::ostream &out);
-    //void pretty_print(std::ostream &out);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
@@ -219,13 +190,9 @@ public:
     PTR(Expr) rhs;
 
     EqExpr(PTR(Expr) lhs, PTR(Expr) rhs);
-
     bool equals(PTR(Expr) e);
     PTR(Val) interp(PTR(Env) env = nullptr);
-    //bool has_variable();
-    //PTR(Expr) subst(std::string s, PTR(Expr) e);
     void print(std::ostream &out);
-    //void pretty_print(std::ostream &out);
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
@@ -238,15 +205,9 @@ public:
     PTR(Expr) body;
     
     FunExpr(std::string formal_arg, PTR(Expr) body);
-    
     bool equals(PTR(Expr) e);
-    
     PTR(Val) interp(PTR(Env) env = nullptr);
-    
-    //PTR(Expr) subst(std::string s, PTR(Expr) e);
-    
     void print(std::ostream &out);
-    
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
 };
 
@@ -258,17 +219,10 @@ public:
     PTR(Expr) actual_arg;
     
     CallExpr(PTR(Expr) to_be_called, PTR(Expr) actual_arg);
-    
     bool equals(PTR(Expr) e);
-    
     PTR(Val) interp(PTR(Env) env = nullptr);
-    
-    //PTR(Expr) subst(std::string s, PTR(Expr) e);
-    
     void print(std::ostream &out);
-    
     void pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position);
-    
 };
     
 #endif /* expr_hpp */

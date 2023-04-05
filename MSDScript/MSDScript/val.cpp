@@ -68,7 +68,6 @@ PTR(Val) NumVal::call(PTR(Val) actual_arg)
     throw std::runtime_error("Cannot call a num val");
 }
 
-
 //--------------------------------------------------------------------------------------------------------------
 
 BoolVal::BoolVal(bool rep)
@@ -128,7 +127,6 @@ PTR(Val) BoolVal::call(PTR(Val) actual_arg)
 
 //--------------------------------------------------------------------------------------------------------------
 
-
 FunVal::FunVal(std::string formal_arg, PTR(Expr) body, PTR(Env) env)
 {
     if(env == nullptr)
@@ -161,7 +159,6 @@ bool FunVal::equals(PTR(Val) other_val)
 
 std::string FunVal::to_string()
 {
-    //return this->to_expr()->to_string();
     return "function_expr";
 }
 
@@ -178,5 +175,4 @@ bool FunVal::is_true()
 PTR(Val) FunVal::call(PTR(Val) actual_arg)
 {
     return this->body->interp(NEW(ExtendedEnv)(this->formal_arg, actual_arg, this->env));
-    //return this->body->subst(this->formal_arg, actual_arg->to_expr())->interp();
 }

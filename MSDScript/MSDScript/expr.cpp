@@ -49,18 +49,6 @@ PTR(Val) NumExpr::interp(PTR(Env) env)
     return NEW(NumVal)(this->val);
 }
 
-
-/**
-* \brief This function substitutes the expression with the combination of sub-expressions if possible.
-* \param s first argument, string which can be replaced as a part of the expression
-* \param e second argument, Expression
-* \return Expression which is modified if combination of sub expressions was possible
-*/
-//PTR(Expr) NumExpr::subst(std::string s, PTR(Expr) e)
-//{
-//    return NEW(NumExpr)(this->val) ;
-//}
-
 /**
 * \brief Prints the expression
 * \param [out] out output stream
@@ -68,14 +56,6 @@ PTR(Val) NumExpr::interp(PTR(Env) env)
 void NumExpr::print(std::ostream &out) {
     out << std::to_string(val);
 }
-
-/**
-* \brief Prints the expression with more clarity
-* \param [out] out output stream
-*/
-//void (NumExpr)::pretty_print(std::ostream &out) {
-//    this->pretty_print_at(out, precedence_none, false, false, out.tellp());
-//}
 
 void NumExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool parenthesis_let_or_fun, bool parenthesis_eq, int position) {
     out << std::to_string(val);
@@ -123,18 +103,6 @@ PTR(Val) Add::interp(PTR(Env) env)
     return this->lhs->interp(env)->add_to(this->rhs->interp(env));
     
 }
-
-/**
-* \brief This function substitutes the expression with the combination of sub-expressions if possible.
-* \param s first argument, string which can be replaced as a part of the expression
-* \param e second argument, Expression
-* \return Expression which is modified if combination of sub expressions was possible
-*/
-//PTR(Expr) Add::subst(std::string s, PTR(Expr) e)
-//{
-//    return NEW(Add)(lhs->subst(s, e), rhs->subst(s, e));
-//}
-
 
 /**
 * \brief Prints the expression
@@ -202,19 +170,6 @@ PTR(Val) Mult::interp(PTR(Env) env)
     
 }
 
-
-/**
-* \brief This function substitutes the expression with the combination of sub-expressions if possible.
-* \param s first argument, string which can be replaced as a part of the expression
-* \param e second argument, Expressiont
-* \return Expression which is modified if combination of sub expressions was possible
-*/
-//PTR(Expr) Mult::subst(std::string s, PTR(Expr) e)
-//{
-//    return NEW (Mult)(lhs->subst(s, e), rhs->subst(s, e));
-//}
-
-
 /**
 * \brief Prints the expression
 * \param [out] out output stream
@@ -281,26 +236,6 @@ PTR(Val) Var::interp(PTR(Env) env)
     return env->lookup(this->name);
 }
 
-
-/**
-* \brief This function substitutes the expression with the combination of sub-expressions if possible.
-* \param s first argument, string which can be replaced as a part of the expression
-* \param e second argument, Expressiont
-* \return Expression which is modified if combination of sub expressions was possible
-*/
-//PTR(Expr) Var::subst(std::string s, PTR(Expr) e)
-//{
-//    if(name == s)
-//    {
-//        return e ;
-//    }
-//    else
-//    {
-//        return NEW (Var)(this->name) ;
-//    }
-//}
-
-
 /**
 * \brief Prints the expression
 * \param [out] out output stream
@@ -363,26 +298,6 @@ PTR(Val) Let::interp( PTR(Env) env) // More Testing rhs->interp()
 
 }
 
-
-/**
-* \brief This function substitutes the expression with the combination of sub-expressions if possible.
-* \param subt first argument, string which can be replaced as a part of the expression
-* \param exp second argument, Expression
-* \return Expression which is modified if combination of sub expressions was possible
-*/
-//PTR(Expr) Let::subst(std::string subt, PTR(Expr) exp)
-//{
-//    if( this->lhs == subt )
-//    {
-//        return NEW (Let)(this->lhs, this->rhs->subst(subt, exp), this->body);
-//    }
-//    else
-//    {
-//        return NEW (Let)(this->lhs, this->rhs->subst(subt, exp), this->body->subst(subt, exp));  // ->subst(subt, exp)
-//    }
-//}
-
-
 /**
 * \brief Prints the expression
 * \param [out] out output stream
@@ -435,11 +350,6 @@ PTR(Val) BoolExpr::interp(PTR(Env) env)
     return NEW (BoolVal)(this->rep);
 }
 
-
-//PTR(Expr) BoolExpr::subst(std::string s, PTR(Expr) e)
-//{
-//    return NEW (BoolVal)(this->rep) ;
-//}
 
 void BoolExpr::print(std::ostream &out)
 {
@@ -501,15 +411,6 @@ PTR(Val) IfExpr::interp(PTR(Env) env)
     }
 }
 
-
-//PTR(Expr) IfExpr::subst(std::string s, PTR(Expr) e)
-//{
-//    PTR(Expr) subst_condition = this->condition->subst(s, e);
-//    PTR(Expr) subst_then_expr = this->then_expr->subst(s, e);
-//    PTR(Expr) subst_else_expr = this->else_expr->subst(s, e);
-//    return NEW (IfExpr)(subst_condition, subst_then_expr, subst_else_expr);
-//}
-
 void IfExpr::print(std::ostream &out)
 {
     out << "(_if ";
@@ -570,13 +471,6 @@ PTR(Val) EqExpr::interp(PTR(Env) env)
     return NEW (BoolVal)(result);
 }
 
-//PTR(Expr) EqExpr::subst(std::string s, PTR(Expr) e)
-//{
-//    PTR(Expr) subst_lhs = this->lhs->subst(s, e);
-//    PTR(Expr) subst_rhs = this->rhs->subst(s, e);
-//    return NEW (EqExpr)(subst_lhs, subst_rhs);
-//}
-
 void EqExpr::print(std::ostream &out)
 {
     out << "(";
@@ -628,14 +522,6 @@ PTR(Val) FunExpr::interp(PTR(Env) env)
     return NEW (FunVal)(this->formal_arg, this->body, env);
 }
     
-//PTR(Expr) FunExpr::subst(std::string s, PTR(Expr) e)
-//{
-//    if(s == this->formal_arg) {
-//          return THIS;
-//      }
-//    return NEW (FunExpr)(this->formal_arg, this->body->subst(s, e));
-//}
-    
 void FunExpr::print(std::ostream &out)
 {
     out << "(_fun(" << this->formal_arg << ")";
@@ -684,13 +570,6 @@ PTR(Val) CallExpr::interp(PTR(Env) env)
     }
     return this->to_be_called->interp(env)->call(this->actual_arg->interp(env));
 }
-    
-//PTR(Expr) CallExpr::subst(std::string s, PTR(Expr) e)
-//{
-//    auto to_be_called_subst = this->to_be_called->subst(s, e);
-//    auto actual_arg_subst = this->actual_arg->subst(s, e);
-//    return NEW (CallExpr)(to_be_called_subst, actual_arg_subst);
-//}
     
 void CallExpr::print(std::ostream &out)
 {
